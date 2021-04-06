@@ -1,49 +1,51 @@
 package com.intea.controller;
 
+import com.intea.domain.dto.MembersDTO;
 import com.intea.service.MemberService;
 import com.intea.util.SecurityUtils;
 import com.intea.util.UiUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/user")
 public class MemberController extends UiUtils {
 
-    private final MemberService mService;
+    private final MemberService memberService;
     private final SecurityUtils sUtils;
 
     //회원가입 get
-    @GetMapping("signup")
+    @GetMapping("user/signup")
     public String getSignup() {
         return "user/member/join";
     }
 
     //로그인 get
-    @GetMapping("signin")
+    @GetMapping("user/signin")
     public String getLogin() {
         return "user/member/login";
     }
 
     // 로그아웃 결과 페이지
-    @GetMapping("/user/signout")
+    @GetMapping("user/signout")
     public void logout() {
     }
 
-/*    //회원가입 post
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/join", method = {RequestMethod.POST, RequestMethod.GET})
-    public Map<String, Object> postSignup(@RequestBody(required = false) MemberEntity param) {
-        Map<String, Object> returnValue = new HashMap<>();
-        returnValue.put("result", mService.insMember(param));
+    @PostMapping("user/join")
+    public String signup(@ModelAttribute @Valid MembersDTO dto, RedirectAttributes ra) {
+        memberService.signup(dto);
 
-        return returnValue;
+        ra.addFlashAttribute("success", "회원가입 완료! 환영합니다!");
+
+        return "redirect:/user/signin";
     }
 
-    //아이디 중복체크
+/*    //아이디 중복체크
     @GetMapping(value = "/chkId/{userId}")
     @ResponseBody
     public Map<String, Object> ajaxChkId(MemberEntity param) {
