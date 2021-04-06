@@ -1,6 +1,5 @@
 package com.intea.domain.entity;
 
-import com.intea.paging.PaginationInfo;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;

@@ -1,12 +1,15 @@
 package com.intea.domain.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @ToString
 @Entity
 public class Cart extends CommonEntity {

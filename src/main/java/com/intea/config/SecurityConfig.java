@@ -36,21 +36,20 @@ import javax.sql.DataSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final MemberService memberService;
     private final UserDetailsService userDetailsService;
     private final DataSource dataSource;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
+    protected void configure(HttpSecurity security) throws Exception {
+        security
                 .authorizeRequests()
                 .antMatchers("/user/**").hasAnyAuthority("MEMBER", "ADMIN")
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/products").hasAnyAuthority("ADMIN")
+//                .antMatchers(HttpMethod.POST, "/products").hasAnyAuthority("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/user/signin"))
                 .accessDeniedPage("/denied")
                 .and()
                 .formLogin()
@@ -61,23 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/user/signout")
                 .logoutSuccessUrl("/")
-                .deleteCookies("JSESSIONID")
-                .invalidateHttpSession(true)
-                .and()
-                .headers().frameOptions().disable()
-                .and()
-                .csrf()
-                .and()
-                .sessionManagement()
-                .maximumSessions(1)
-                .expiredUrl("/")
-                .sessionRegistry(sessionRegistry());
-
-        http.rememberMe()
-                .key("remember-me")
-                .userDetailsService(userDetailsService)
-                .tokenRepository(getJDBCRepository())
-                .tokenValiditySeconds(60*60*24);
+                .invalidateHttpSession(true);
     }
 
     private PersistentTokenRepository getJDBCRepository() {

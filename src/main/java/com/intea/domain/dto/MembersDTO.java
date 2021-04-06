@@ -1,7 +1,6 @@
 package com.intea.domain.dto;
 
 import com.intea.constant.Verify;
-import com.intea.domain.CommonEntity;
 import com.intea.domain.entity.Members;
 import lombok.*;
 
@@ -9,7 +8,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -44,7 +42,7 @@ public class MembersDTO {
     @Size(max = 50, message = "상세 주소를 알맞게 입력해주세요.")
     private String de_address;
     private Verify verify;
-    private String delete_yn;
+    private Character delete_yn;
 
     public Members toEntity() {
         return Members.builder()
@@ -56,7 +54,7 @@ public class MembersDTO {
                 .address(this.getAddress())
                 .de_address(this.getDe_address())
                 .verify(this.getVerify())
-                .delete_yn("N")
+                .delete_yn(this.getDelete_yn())
                 .build();
     }
 }

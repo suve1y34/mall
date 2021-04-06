@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Component
 public class SecurityUtils {
-    public static Long getLoginMemPk(HttpServletRequest req) {
+/*    public static Long getLoginMemPk(HttpServletRequest req) {
         return getLoginMemPk(req.getSession());
     }
 
@@ -45,5 +45,5 @@ public class SecurityUtils {
 
     public String getHashPw(String pw, String cryptPw) {
         return BCrypt.hashpw(pw, cryptPw);
-    }
+    }*/
 }

@@ -1,7 +1,6 @@
 package com.intea.util;
 
 import com.intea.constant.Method;
-import com.intea.paging.Criteria;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,14 +25,5 @@ public class UiUtils {
     }
 
 
-    public Map<String, Object> getPagingParams(Criteria cri) {
-        Map<String, Object> param = new LinkedHashMap<>();
-        param.put("currentPageNo", cri.getCurrentPageNo());
-        param.put("recordsPerPage", cri.getRecordsPerPage());
-        param.put("pageSize", cri.getPageSize());
-        param.put("searchKeyword", cri.getSearchKeyword());
-
-        return param;
-    }
 
 }

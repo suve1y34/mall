@@ -1,19 +1,27 @@
 package com.intea.config;
 
-import com.intea.domain.entity.Members;
-import org.springframework.security.core.authority.AuthorityUtils;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
 public class SecurityUser extends User {
     private static final long serialVersionUID = 1L;
-    private Members members;
 
-    public SecurityUser(Members members) {
-        super(members.getMem_id(), "{noop}" + members.getPw(),
-                AuthorityUtils.createAuthorityList(members.getVerify().toString()));
+    public SecurityUser(User user) {
+        super(user.getUsername(), user.getPassword(), makeGrantedAuthority(user.getAuthorities().toString()));
     }
 
-    public Members getMembers() {
-        return members;
+    private static List<GrantedAuthority> makeGrantedAuthority(String authorities){
+        List<GrantedAuthority> list = new ArrayList<>();
+        list.add(new SimpleGrantedAuthority(authorities));
+
+        return list;
     }
 }

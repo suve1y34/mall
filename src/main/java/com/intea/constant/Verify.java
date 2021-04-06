@@ -1,17 +1,15 @@
 package com.intea.constant;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum Verify {
 
-    ADMIN("관리자"),
-    MEMBER("일반회원");
+    MEMBER("MEMBER", "일반 사용자"),
+    ADMIN("ADMIN", "관리자");
 
-    private String verify;
-
-    Verify(String verify) {
-        this.verify = verify;
-    }
-
-    public String getValue() {
-        return verify;
-    }
+    private final String key;
+    private final String title;
 }
