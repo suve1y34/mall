@@ -20,18 +20,30 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/user")
 public class MemberController extends UiUtils {
 
     private final MemberService mService;
     private final SecurityUtils sUtils;
 
     //회원가입 get
-    @GetMapping("user/signup")
+    @GetMapping("signup")
     public String getSignup() {
         return "user/member/join";
     }
 
-    //회원가입 post
+    //로그인 get
+    @GetMapping("signin")
+    public String getLogin() {
+        return "user/member/login";
+    }
+
+    // 로그아웃 결과 페이지
+    @GetMapping("/user/signout")
+    public void logout() {
+    }
+
+/*    //회원가입 post
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/join", method = {RequestMethod.POST, RequestMethod.GET})
@@ -51,11 +63,7 @@ public class MemberController extends UiUtils {
         return returnValue;
     }
     
-    //로그인 get
-    @GetMapping("user/signin")
-    public String getLogin() {
-        return "user/member/login";
-    }
+
 
     //로그인 post
     @ResponseBody
@@ -68,13 +76,7 @@ public class MemberController extends UiUtils {
         return returnValue;
     }
     
-    // 로그아웃 결과 페이지
-    @GetMapping("/user/signout")
-    public String logout(HttpSession hs) {
-        mService.signout(hs);
 
-        return "redirect:/";
-    }
     
     // 내 정보 페이지
     @GetMapping("/user/modify")
@@ -170,5 +172,5 @@ public class MemberController extends UiUtils {
         hs.invalidate();
 
         return showMessageWithRedirect("탈퇴가 완료되었습니다.", "/", Method.GET, null, model);
-    }
+    }*/
 }

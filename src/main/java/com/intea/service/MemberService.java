@@ -1,21 +1,40 @@
 package com.intea.service;
 
+import com.intea.config.SecurityUser;
 import com.intea.constant.Const;
 import com.intea.domain.MemberEntity;
+import com.intea.domain.entity.Members;
+import com.intea.domain.repository.MembersRepository;
 import com.intea.mapper.MemberMapper;
 import com.intea.util.SecurityUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class MemberService {
-    private MemberMapper mMapper;
+public class MemberService implements UserDetailsService {
+    private MembersRepository membersRepo;
+
+    @Override
+    public UserDetails loadUserByUsername(String mem_id) throws UsernameNotFoundException {
+        Optional<Members> optional = membersRepo.findById(mem_id);
+        if(!optional.isPresent()) {
+            throw new UsernameNotFoundException(mem_id + " 사용자 없음");
+        } else {
+            Members members = optional.get();
+            return new SecurityUser(members);
+        }
+    }
+/*    private MemberMapper mMapper;
     private PasswordEncoder pwEncoder;
     private SecurityUtils sUtils;
 
@@ -116,5 +135,5 @@ public class MemberService {
 
     public void delMember(MemberEntity param) {
         mMapper.delMember(param);
-    }
+    }*/
 }

@@ -26,11 +26,6 @@ public class AdminController extends UiUtils {
     private final ProductService pService;
     private final FileUtils fileUtils;
 
-    //admin 메인화면
-    @GetMapping("admin/main")
-    public String getMain() {
-        return "user/admin/ad-index";
-    }
 
     //상품등록화면 받아오기
     @GetMapping(value = "admin/pd-regmod")

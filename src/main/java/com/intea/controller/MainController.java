@@ -19,4 +19,10 @@ public class MainController {
 
         return "/index";
     }
+
+    //admin 메인화면
+    @GetMapping("admin/main")
+    public String getMain() {
+        return "user/admin/ad-index";
+    }
 }

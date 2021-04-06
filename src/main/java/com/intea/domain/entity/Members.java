@@ -1,12 +1,10 @@
 package com.intea.domain.entity;
 
+import com.intea.constant.Verify;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @ToString
@@ -26,6 +24,9 @@ public class Members extends CommonEntity {
     private String address;
     private String de_address;
     private String birth;
-    private String verify;
+
+    @Enumerated(EnumType.STRING)
+    private Verify verify;
+
     private String delete_yn;
 }
