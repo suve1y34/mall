@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 @Data
 @ToString
-@Entity
+@Entity(name = "p_category")
 public class Category {
     @Id
     private Long i_category;
