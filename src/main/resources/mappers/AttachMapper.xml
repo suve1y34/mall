@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.intea.mapper.AttachMapper">
+
+    <sql id="attachColumns">
+        i_file, i_product, thumb_img, img_url, original_name, save_name, size, delete_yn, insert_time, delete_time
+    </sql>
+
+    <resultMap id="attachMap" type="AttachEntity">
+        <id property="i_file" column="i_file"/>
+        <result property="i_product" column="i_product"/>
+        <result property="thumb_img" column="thumb_img"/>
+        <result property="img_url" column="img_url"/>
+        <result property="original_name" column="original_name"/>
+        <result property="save_name" column="save_name"/>
+        <result property="size" column="size"/>
+        <result property="delete_yn" column="delete_yn"/>
+        <result property="insert_time" column="insert_time"/>
+        <result property="delete_time" column="delete_time"/>
+    </resultMap>
+
+
+    <insert id="insAttach" parameterType="list">
+        INSERT INTO pd_attach (
+                <include refid="attachColumns"/>
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+             #{item.i_file}, #{item.i_product}, #{item.thumb_img}, #{item.img_url}, #{item.original_name}, #{item.save_name}
+             , #{item.size}, 'N', NOW(), NULL
+            )
+        </foreach>
+    </insert>
+
+    <select id="selAttachDetail" parameterType="long" resultMap="attachMap">
+        SELECT
+            <include refid="attachColumns"/>
+        FROM pd_attach
+        WHERE delete_yn = 'N'
+        AND i_file = #{i_file}
+    </select>
+
+    <update id="delAttach" parameterType="long">
+        UPDATE pd_attach
+        SET delete_yn = 'Y', delete_time = NOW()
+        WHERE i_product = #{i_product}
+    </update>
+
+    <select id="selAttachList" parameterType="long" resultMap="attachMap">
+        SELECT <include refid="attachColumns"/>
+        FROM pd_attach
+        WHERE delete_yn = 'N'
+        AND i_product = #{i_product}
+    </select>
+
+    <select id="selAttachTotalCnt" parameterType="long" resultType="int">
+        SELECT COUNT(*)
+        FROM pd_attach
+        WHERE delete_yn = 'N'
+        AND i_product = #{i_product}
+    </select>
+
+    <update id="undeleteAttach" parameterType="list">
+        UPDATE pd_attach
+        SET delete_yn = 'N'
+        WHERE i_file IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

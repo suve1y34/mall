@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- Sidebar -->
+<div id="sidebar" th:fragment="site-nav">
+    <div class="inner">
+
+        <!-- Search -->
+<!--        <section id="search" class="alt">
+            <form method="get" th:action="@{/product/all}" th:onsubmit="return searchPd(this)" role="form">
+                <input type="hidden" name="currentPageNo" th:value="1"/>
+                <input type="hidden" name="recordsPerPage" th:value="${param.recordsPerPage}">
+                <input type="hidden" name="pageSize" th:value="${param.pageSize}">
+                <input type="text" id="mainSearchKeyword" name="searchKeyword" class="form-control" th:value="${param.searchKeyword}" placeholder="상품명 검색">
+                <button type="button" class="button primary small" onclick="searchPd(null)"></button>
+            </form>
+        </section>-->
+
+        <!-- Menu -->
+        <nav id="menu">
+            <header class="major">
+                <h2>CATEGORY</h2>
+            </header>
+            <ul>
+                <li>
+                    <span class="opener">키친&테이블</span>
+                    <ul>
+                        <li><a th:href="@{/product/list(i_ct=11)}">컵</a></li>
+                        <li><a th:href="@{/product/list(i_ct=12)}">그릇, 저장용기</a></li>
+                        <li><a th:href="@{/product/list(i_ct=13)}">텀블러</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="opener">차(tea)</span>
+                    <ul>
+                        <li><a href="#">전체보기</a></li>
+                        <li><a th:href="@{/product/list(i_ct=21)}">클래식 홍차</a></li>
+                        <li><a th:href="@{/product/list(i_ct=22)}">가향차</a></li>
+                        <li><a th:href="@{/product/list(i_ct=23)}">허브&프루츠</a></li>
+                        <li><a th:href="@{/product/list(i_ct=24)}">선물세트</a></li>
+                        <li><a th:href="@{/product/list(i_ct=25)}">인스턴트 밀크티</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="opener">커피&코코아</span>
+                    <ul>
+                        <li><a href="#">전체보기</a></li>
+                        <li><a href="#">커피</a></li>
+                        <li><a href="#">코코아</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="opener">홍차 용품</span>
+                    <ul>
+                        <li><a href="#">전체보기</a></li>
+                        <li><a href="#">각종 티 도구</a></li>
+                        <li><a href="#">티 향신료</a></li>
+                        <li><a href="#">소분, 보관용품</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="opener">간식거리</span>
+                    <ul>
+                        <li><a href="#">전체보기</a></li>
+                    </ul>
+                </li>
+                <li></li>
+                <li><a th:href="@{/board/qna/list}">고객센터</a></li>
+                <li><a th:href="@{/board/review/list}">리뷰</a></li>
+            </ul>
+        </nav>
+
+        <!-- Section -->
+        <section>
+            <header class="major">
+                <h2>CONTACT</h2>
+            </header>
+            <ul class="contact">
+                <li class="icon solid fa-envelope"><a href="#">suve1y34@gmail.com</a></li>
+                <li class="icon solid fa-phone">010-9758-0122</li>
+                <li class="icon solid fa-home">대구광역시 동구 동촌동<br />
+                    어쩌구, 저쩌구</li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </footer>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function movePage(uri, queryString) {
+            location.href = uri.qeuryString;
+        }
+
+        function searchPd(form) {
+            /*[- 드롭다운이 아닌 메인 검색 키워드로 검색했을 때 -]*/
+            if (isEmpty(form) == true) {
+                var searchKeyword = document.getElementById("mainSearchKeyword");
+                if (isEmpty(searchKeyword.value) == true) {
+                    alert("키워드를 입력해 주세요.");
+                    searchKeyword.focus();
+                    return false;
+                }
+
+                form = document.getElementById("searchForm");
+                form.searchKeyword.value = searchKeyword.value;
+                form.submit();
+            }
+
+            if (isEmpty(form.searchKeyword.value) == true) {
+                alert("키워드를 입력해 주세요.");
+                form.searchKeyword.focus();
+                return false;
+            }
+        }
+        /*[- end of function -]*/
+
+        /*]]>*/
+        }
+    </script>
+</th:block>
+</html>

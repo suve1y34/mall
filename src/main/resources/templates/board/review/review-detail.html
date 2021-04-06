@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+    <th:block layout:fragment="modal">
+        <div id="commentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="modalContent" class="col-form-label">내용</label>
+                                <textarea id="modalContent" class="form-control" placeholder="내용을 입력해 주세요."></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnModalCancel" class="btn btn-default waves-effect waves-light" data-dismiss="modal">취소하기</button>
+                        <button type="button" id="btnCommentUpdate" class="btn btn-primary waves-effect waves-light" onclick="updateComment()">수정하기</button>
+                        <button type="button" id="btnCommentDelete" class="btn btn-danger waves-effect waves-light">삭제하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <!-- Section -->
+    <section>
+        <header class="main">
+            <h2>QnA</h2>
+        </header>
+    </section>
+    <section>
+        <div class="row">
+            <div class="table-wrapper">
+                <form th:object="${board}">
+                    <table class="col-12">
+                        <thead>
+                        <tr>
+                            <th><p th:text="*{title}"></th>
+                            <th>연송잉</th>
+                            <th><p th:text="*{#temporals.format( insert_time, 'yyyy-MM-dd' )}"></p></th>
+                            <th>2</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <p th:text="*{content}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--                <div th:if="${loginUser.getI_mem() == data.getI_mem()}"></div>-->
+                    <a th:href="@{/board/qna/reg( idx=${board.i_board} )}" class="button">수정</a>
+                    <button type="button" class="button" th:onclick="deleteBoard([[ ${board.i_board} ]])">삭제</button>
+
+                    <a href="" class="button primary">답글달기</a>
+                </form>
+
+            </div>
+        </div>
+        <th:block layout:fragment="add-content">
+            <div class="box-content">
+                <div class="card-content">
+                    <div class="clearfix">
+                        <h4 class="box-title pull-left">Comment</h4>
+                        <!-- /.box-title -->
+                    </div>
+
+                    <form class="form-horizontal form-view">
+                        <div class="input-group margin-bottom-20">
+                            <input type="text" id="content" class="form-control" />
+                            <div class="input-group-btn">
+                                <button type="button" class="btn waves-effect waves-light" th:onclick="insertComment([[ ${board.i_board} ]])">
+                                    <i class="fa fa-commenting" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <ul class="notice-list"></ul>
+                    </form>
+                </div>
+                <!-- /.card-content -->
+            </div>
+            <!-- /.box-content -->
+        </th:block>
+    </section>
+</th:layout>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        $(function() {
+            printCommentList();
+        });
+
+        function openModal(idx, content) {
+
+            $("#commentModal").modal("toggle");
+
+            document.getElementById("modalContent").value = content;
+
+            document.getElementById("btnCommentUpdate").setAttribute("onclick", "updateComment("+ idx +")");
+            document.getElementById("btnCommentDelete").setAttribute("onclick", "deleteComment("+ idx +")");
+        }
+
+        function insertComment(i_board) {
+
+            var content = document.getElementById("content");
+            if (isEmpty(content.value) == true) {
+                content.setAttribute("placeholder", "댓글을 입력해 주세요.");
+                content.focus();
+                return false;
+            }
+
+            var uri = /*[[ @{/comments} ]]*/;
+            var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "POST"};
+            var params = {"i_board": i_board, "content": content.value};
+
+            $.ajax({
+                url: uri,
+                type: "POST",
+                headers: headers,
+                dataType: "json",
+                data: JSON.stringify(params),
+                success: function(response) {
+                    if (response.result == false) {
+                        alert("댓글 등록에 실패하였습니다.");
+                        return false;
+                    }
+
+                    printCommentList();
+                    content.value = "";
+                },
+                error: function(xhr, status, error) {
+                    alert("에러가 발생하였습니다.");
+                    return false;
+                }
+            });
+        }
+        /*[- end of function -]*/
+
+        function updateComment(idx) {
+
+            var writer = document.getElementById("modalWriter");
+            var content = document.getElementById("modalContent");
+
+            var uri = [[ @{/comments/} ]] + idx;
+            var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "PATCH"};
+            var params = {"idx": idx, "writer": writer.value, "content": content.value};
+
+            $.ajax({
+                url: uri,
+                type: "PATCH",
+                headers: headers,
+                dataType: "json",
+                data: JSON.stringify(params),
+                success: function(response) {
+                    if (response.result == false) {
+                        alert("댓글 수정에 실패하였습니다.");
+                        return false;
+                    }
+
+                    printCommentList();
+                    $("#commentModal").modal("hide");
+                },
+                error: function(xhr, status, error) {
+                    alert("에러가 발생하였습니다.");
+                    return false;
+                }
+            });
+        }
+        /*[- end of function -]*/
+
+        function deleteComment(idx) {
+
+            if (!confirm('댓글을 삭제하시겠어요?')) {
+                return false;
+            }
+
+            var uri = [[ @{/comments/} ]] + idx;
+            var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "DELETE"};
+
+            $.ajax({
+                url: uri,
+                type: "DELETE",
+                headers: headers,
+                dataType: "json",
+                success: function(response) {
+                    if (response.result == false) {
+                        alert("댓글 삭제에 실패하였습니다.");
+                        return false;
+                    }
+
+                    printCommentList();
+                    $("#commentModal").modal("hide");
+                },
+                error: function(xhr, status, error) {
+                    alert("에러가 발생하였습니다.");
+                    return false;
+                }
+            });
+        }
+
+        function printCommentList() {
+
+            var uri = /*[[ @{/comments/} + ${board.i_board} ]]*/;
+
+            $.get(uri, function(response) {
+                if (isEmpty(response) == false) {
+                    var commentsHtml = "";
+
+                    $(response.commentList).each(function(idx, comment) {
+                        commentsHtml += `
+								<li>
+									<span class="desc">${comment.content}</span>
+									<span class="time">${moment(comment.insert_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+									<button type="button" onclick="openModal(${comment.i_cmt}, '${comment.content}' )" class="btn btn-xs btn-circle"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></button>
+								</li>
+							`;
+                    });
+
+                    $(".notice-list").html(commentsHtml);
+                }
+            }, "json");
+        }
+        /*[- end of function -]*/
+
+        function deleteBoard(idx, queryString) {
+
+            if (confirm(idx + "번 게시글을 삭제할까요?")) {
+                var uri = /*[[ @{/board/review/del} ]]*/;
+                var html = "";
+
+                html += '<form name="dataForm" action="'+uri+'" method="post">';
+                html += '<input type="hidden" name="idx" value="'+idx+'" />';
+
+                /*[- 쿼리 스트링을 오브젝트 형태로 변환 -]*/
+                queryString = new URLSearchParams(queryString);
+                queryString.forEach(function(value, key) {
+                    if (isEmpty(value) == false) {
+                        html += '<input type="hidden" name="' + key + '" value="' + value + '" />';
+                    }
+                });
+
+                html += '</form>';
+
+                $("body").append(html);
+                document.dataForm.submit();
+            }
+        }
+        /*[- end of function -]*/
+
+        /*]]>*/
+    </script>
+</th:block>
+</html>

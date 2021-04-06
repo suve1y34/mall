@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intea.mapper.QnaMapper">
+    <sql id="qnaColumns">
+        i_board, i_mem, title, content, secret_yn, delete_yn, insert_time, update_time, delete_time
+    </sql>
+
+    <sql id="insQnaColumns">
+        i_mem, title, content, secret_yn, delete_yn, insert_time, update_time, delete_time
+    </sql>
+
+    <resultMap id="qnaMap" type="BoardDTO">
+        <id property="i_board" column="i_board"/>
+        <result property="i_mem" column="i_mem"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="secret_yn" column="secret_yn"/>
+        <result property="delete_yn" column="delete_yn"/>
+        <result property="insert_time" column="insert_time"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <!-- 글 등록 -->
+    <insert id="insQna" parameterType="BoardDTO">
+        INSERT INTO qna (
+        <include refid="insQnaColumns"/>
+        ) VALUES (
+        #{i_mem}, #{title}, #{content}, IFNULL(#{secret_yn}, 'Y'), 'N', NOW(), NULL, NULL
+        )
+    </insert>
+
+    <!-- 글 상세화면 -->
+    <select id="selQnaDetail" resultMap="qnaMap">
+        SELECT
+        <include refid="qnaColumns"/>
+        FROM qna
+        WHERE delete_yn = 'N'
+        AND i_board = #{i_board}
+    </select>
+
+    <!-- 글 리스트 -->
+    <select id="selQnaList" parameterType="BoardDto" resultMap="qnaMap">
+        SELECT
+        <include refid="qnaColumns"/>
+        FROM qna
+        WHERE delete_yn = 'N'
+        ORDER BY
+        i_board DESC,
+        insert_time DESC
+    </select>
+
+    <!-- 글 갯수 -->
+    <select id="selQnaTotalCnt" parameterType="BoardDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM qna
+        WHERE delete_yn = 'N'
+        <include refid="CommonMapper.search"/>
+    </select>
+
+    <!-- 글 수정 -->
+    <update id="updQna" parameterType="BoardDTO">
+        UPDATE qna
+        SET
+            update_time = NOW()
+            , title = #{title}
+            , content = #{content}
+        WHERE
+            i_board = #{i_board}
+    </update>
+
+    <!-- 글 삭제 -->
+    <update id="delQna" parameterType="long">
+        UPDATE qna
+        SET delete_yn = 'Y'
+          , delete_time = NOW()
+        WHERE
+              i_board = #{i_board}
+    </update>
+</mapper>

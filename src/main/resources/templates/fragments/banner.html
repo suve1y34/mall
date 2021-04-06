@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<section id="banner" th:fragment="site-banner">
+    <div class="content">
+        <header>
+            <th:block th:if="${session.loginUser == null}">
+                <h1>안녕하세요, IN-TEA 입니다.</h1>
+            </th:block>
+            <th:block th:unless="${session.loginUser == null}">
+                <h1>환영합니다.</h1>
+            </th:block>
+
+            <p>A free and fully responsive site template</p>
+        </header>
+        <p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. Pellentesque sapien ac quam. Lorem ipsum dolor sit nullam.</p>
+        <ul class="actions">
+            <li><a href="#" class="button big">About Us</a></li>
+        </ul>
+    </div>
+    <span class="image object">
+        <img src="images/tea-1090672_1920.jpg" alt="" />
+    </span>
+</section>
+</html>

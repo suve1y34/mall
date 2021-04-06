@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">							<!-- Section -->
+	<section>
+		<header class="main">
+			<h1>ADMIN PAGE</h1>
+		</header>
+		<div class="row gtr-200">
+			<div class="col-6 col-12-medium">
+				<ul class="alt">
+					<li><a th:href="@{/admin/pd-regmod}">상품 관리</a></li>
+					<li><a th:href="@{/product/all}">상품 목록</a></li>
+					<li><a th:href="@{/admin/order/all}">주문 관리</a></li>
+					<li><a th:href="@{/admin/member/all}">회원 관리</a></li>
+					<li><a th:href="@{/board/review/list}">리뷰 게시판 관리</a></li>
+					<li><a th:href="@{/board/qna/list}">고객센터 게시판 관리</a></li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</th:layout>
+</html>

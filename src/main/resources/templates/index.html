@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+	<section th:replace="fragments/banner :: site-banner"></section>
+	<!-- Section -->
+	<section>
+		<header class="major">
+			<h2>New</h2>
+		</header>
+		<div class="box alt">
+			<div class="row gtr-50 gtr-uniform" th:if="${not #lists.isEmpty( newProductList )}" th:each="row : ${newProductList}">
+				<div class="col-3">
+					<a th:href="@{/product/view(p=${row.i_product})}">
+						<span class="image fit">
+							<img th:src="${row.img_url}" alt="" />
+							<div th:text="${row.p_nm}"></div>
+							<div th:text="${row.price}"></div>
+						</span>
+					</a>
+				</div>
+			</div>
+			<div th:unless="${not #lists.isEmpty( newProductList )}">
+				<div colspan="5">조회된 결과가 없습니다.</div>
+			</div>
+			<div class="more-button">
+				<ul class="actions">
+					<li><a th:href="@{/product/all}" class="button">VIEW MORE</a></li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</th:layout>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+    <!-- Section -->
+    <section>
+        <header class="main">
+            <h2>비밀번호 변경</h2>
+        </header>
+        <form id="changePwForm" th:action="@{/changePw}" method="post">
+            <fieldset>
+                <input type="hidden" name="mem_id" th:value="${ data.mem_id }">
+                <div class="col-6 col-12-xsmall">
+                    <label for="pw">변경 비밀번호</label>
+                    <input type="password" name="pw" id="pw" placeholder="새로 변경할 비밀번호 입력">
+                </div>
+                <div class="col-6 col-12-xsmall">
+                    <label for="pwRe">변경 비밀번호 확인</label>
+                    <input type="password" name="pw_re" id="pwRe" placeholder="비밀번호 확인">
+                </div>
+                <input class="button primary" type="submit" value="변경" onclick="chkPwForm()">
+            </fieldset>
+
+            <a href="#" class="button">BACK</a>
+        </form>
+    </section>
+</th:layout>
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:block layout:fragment="script">
+	<script th:inline="javascript">
+
+		/*<![CDATA[*/
+		function regMyinfo(form) {
+			var result = (
+					isValid(form.postCode, "우편번호", null, null)
+					&& isValid(form.address, "도로명주소", null, null)
+					&& isValid(form.de_address, "상세주소", null, null)
+					&& isValid(form.phone, "연락처", null, null)
+					&& isValid(form.birth, "생일", null, null)
+			);
+
+			if(result == false) {
+				return false;
+			}
+
+			var idx = /*[[ ${product.i_product} ]]*/;
+			if(isEmpty(idx) == false) {
+				var queryString = /*[[ ${param.makeQueryString(param.currentPageNo)} ]]*/;
+
+				/*[- 쿼리 스트링을 오브젝트 형태로 변환 -]*/
+				queryString = new URLSearchParams(queryString);
+				queryString.forEach(function(value, key) {
+					if (isEmpty(value) == false) {
+						$(form).append('<input type="hidden" name="' + key + '" value="' + value + '" />');
+					}
+				});
+			}
+		}
+		/*]]>*/
+		/*[- end of function -]*/
+	</script>
+</th:block>
+<th:layout layout:fragment="main">
+<!-- Section -->
+	<section>
+		<header class="main">
+			<h2>My Info</h2>
+			<a href="" class="button">Orders</a>
+			<a href="myinfo.html" class="button">My Page</a>
+		</header>
+		<form id="myForm" name="myForm" th:action="@{/user/upd}" method="post" enctype="multipart/form-data" th:object="${member}">
+			<input type="hidden" name="i_mem" id="i_mem" th:value="${member.i_mem}">
+			<h3>기본 정보</h3>
+			<div class="table-wrapper">
+				<table>
+					<tr>
+						<th>아이디</th>
+						<td><input id="memberId" name="mem_id" th:value="${session.loginUser.mem_id}" readonly></td>
+					</tr>
+					<tr>
+						<th>이름</th>
+						<td><input id="memberNm" name="nm" th:value="${session.loginUser.nm}" readonly></td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td>
+							<input type="text" name="postCode" id="postCode" th:value="${member.postCode}" placeholder="우편번호">
+							<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+							<input type="text" name="address" id="address" th:value="${member.address}" placeholder="주소">
+							<input type="text" name="de_address" id="de_address" th:value="${member.de_address}" placeholder="상세주소">
+							<input type="text" id="extraAddress" class="d_form" placeholder="참고항목">
+							<div id="wrap" style="display: none; border: 1px solid; width: 500px; height: 466px; margin: 5px 0px; position: relative;">
+								<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor: pointer; position: absolute; right: 0px; top:-1px; z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>연락처</th>
+						<td><input type="text" name="phone" id="memberPhone" th:value="${member.phone}" class="col-6"></td>
+					</tr>
+					<tr>
+						<th>이메일</th>
+						<td><input type="email" name="email" id="memberEmail" th:value="${session.loginUser.email}" readonly></td>
+					</tr>
+				</table>
+			</div>
+			<h3>추가 정보</h3>
+			<div class="table-wrapper">
+				<table>
+					<tr>
+						<th>생일</th>
+						<td th:if="${member.birth == null}">
+							<input type="date" id="memBirth" name="birth">
+						</td>
+						<td th:unless="${member.birth == null}">
+							<input type="date" id="memberBirth" name="birth" th:value="${member.birth}">
+						</td>
+					</tr>
+				</table>
+			</div>
+			<ul class="actions small">
+				<li>
+					<button type="submit" class="button primary small">정보수정</button>
+					<a href="#" class="button small">뒤로가기</a>
+				</li>
+			</ul>
+		</form>
+		<button type="button" class="btn-delete">탈퇴</button>
+
+	</section>
+</th:layout>
+
+</html>

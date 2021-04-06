@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="fragments/head :: head"></head>
+    <body class="is-preload">
+    <div id="wrapper">
+        <div id="main">
+            <div class="inner">
+                <header th:replace="fragments/header :: site-header"></header>
+
+                <th:block layout:fragment="main"></th:block>
+                <div th:replace="fragments/side :: site-nav"></div>
+            </div>
+        </div>
+    </div>
+    <!-- javascript -->
+
+
+    <script type="text/javascript" src="/js/ckeditor.js"></script>
+    <script type="text/javascript" src="/js/postCode.js"></script>
+    <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/26.0.0/classic/ckeditor.js"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
+    <script type="text/javascript" th:src="@{/js/member.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+    <script type="text/javascript" src="/js/modal.js"></script>
+    <script type="text/javascript" src="/js/moment.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/browser.min.js"></script>
+    <script type="text/javascript" src="/js/breakpoints.min.js"></script>
+    <script type="text/javascript" src="/js/util.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+    </body>
+</html>

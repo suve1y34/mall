@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+    <!-- Section -->
+    <section>
+        <header class="main">
+            <h1>회원 탈퇴</h1>
+        </header>
+        <form id="loginForm" th:object="${member}" method="post">
+            <div class="row gtr-uniform">
+                <label for="userId">아이디</label>
+                <div class="col-3 col-12-xsmall">
+                    <input type="text" name="mem_id" id="userId" th:value="${member.mem_id}" placeholder="press your ID">
+                </div>
+                <label for="userPw">비밀번호</label>
+                <div class="col-3" col-12-xsmall>
+                    <input type="password" name="pw" id="userPw" th:value="${member.pw}" placeholder="press your PASSWORD">
+                </div>
+                <div id="errMsg"></div>
+            </div>
+            <div class="col-6 col-12-medium">
+                <ul class="actions">
+                    <li><button type="submit">탈퇴</button></li>
+                </ul>
+            </div>
+        </form>
+
+    </section>
+</th:layout>
+</html>

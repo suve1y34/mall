@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+	<section>
+		<header class="main">
+			<h2>MY PAGE</h2>
+			<a href="" class="button primay">Orders</a>
+			<a href="myinfo.html" class="button primay">My Info</a>
+			</table>
+		</header>
+
+		<div class="row gtr-200">
+			<div class="table-wrapper">
+				<table>
+					<thead>
+					<tr>
+						<th>주문일자(주문번호)</th>
+						<th>상품정보</th>
+						<th>구매금액</th>
+						<th>주문처리상태</th>
+						<th>취소/교환/반품</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:if="${not #lists.isEmpty( orderList )}" th:each="row : ${orderList}">
+						<td>
+							<p th:text="${row.order_time}"></p>
+							<p th:text="${row.i_order}"></p>
+							<a th:href="@{/orderView}" class="button small">상세보기</a>
+						</td>
+						<td th:text="${row.p_nm}">웅앵커피 X 3<br>[옵션:다크]</td>
+						<td th:text="${row.price}">9,860 원</td>
+						<td th:text="${row.delivery}"><a href="#" class="button small">구매후기</a></td>
+						<td>-</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<ul class="pagination">
+				<li><span class="button disabled">Prev</span></li>
+				<li><a href="#" class="page active">1</a></li>
+				<li><a href="#" class="page">2</a></li>
+				<li><a href="#" class="page">3</a></li>
+				<li><span>...</span></li>
+				<li><a href="#" class="page">8</a></li>
+				<li><a href="#" class="page">9</a></li>
+				<li><a href="#" class="page">10</a></li>
+				<li><a href="#" class="button">Next</a></li>
+			</ul>
+		</div>
+	</section>
+</th:layout>
+</html>

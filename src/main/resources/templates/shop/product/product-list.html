@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<script th:inline="javascript">
+	var productListObj = {
+
+		getProductList : function(obj) {
+			var category = [[${param.ct_level}]][0];
+
+			$.ajax({
+				type: "GET",
+				url: "/product/"+"ct/"+ct_level,
+				contentType: "application/json",
+				success: function(data) {
+					console.log(data);
+
+					var productList = data.productList.content,
+							$productList = $(".products .product-list");
+
+					//상품 리스트 비우기
+					$productList.empty();
+
+					//상품 리스트 뿌리기
+					if(productList.length > 0) {
+						productList.forEach(function(element) {
+							var pdDiv =
+									"<div class='col-3'>" +
+									"<a href='/product/view(p='" + element.i_product + ")>" +
+									"<span class='image fit'>" +
+									"<img src='>" + element.title_img + "'/>" +
+									"<div>" + element.p_nm + "</div>" +
+									"<div>" + element.price + "</div>" +
+									"</a>"
+
+							$(".products .product-list").append(pdDiv);
+						})
+					}
+
+				}
+			})
+		}
+	}
+</script>
+
+<th:layout layout:fragment="main">
+	<!-- Section -->
+	<section>
+		<header class="main">
+			<div class="row-gtr-200">
+				<div class="col-6 col-12-medium">
+					<ul class="actions">
+						<a th:href="@{/admin/pd-regmod}" class="button primary">pd reg</a>
+					</ul>
+				</div>
+			</div>
+		</header>
+		<div class="box alt">
+			<div class="row gtr-50 gtr-uniform products">
+				<div class="product-list"></div>
+			</div>
+
+<!--			<th:block layout:fragment="paging">
+				<nav th:replace="fragments/paging :: pagination"></nav>
+			</th:block>-->
+		</div>
+	</section>
+</th:layout>
+</html>

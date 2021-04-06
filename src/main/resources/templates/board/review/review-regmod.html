@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+	<!-- Section -->
+	<section>
+		<header class="main">
+			<h2>글쓰기</h2>
+		</header>
+		<form method="post" enctype="multipart/form-data" th:action="@{/board/qna/reg.do}" th:object="${board}" onsubmit="return registerBoard(this)">
+			<div class="row gtr-uniform">
+				<input type="hidden" th:if="*{i_board != null and i_board > 0}" th:field="*{i_board}">
+				<div class="col-12">
+					<input type="text" th:field="*{title}" id="demo-name" value="" placeholder="제목" />
+				</div>
+				<!-- Break -->
+				<div class="col-4 col-12-small">
+					<input type="radio" id="demo-priority-low" name="demo-priority" checked>
+					<label for="demo-priority-low">만족</label>
+				</div>
+				<div class="col-4 col-12-small">
+					<input type="radio" id="demo-priority-normal" name="demo-priority">
+					<label for="demo-priority-normal">보통</label>
+				</div>
+				<div class="col-4 col-12-small">
+					<input type="radio" id="demo-priority-high" name="demo-priority">
+					<label for="demo-priority-high">불만족</label>
+				</div>
+				<!-- Break -->
+				<div class="col-12">
+					<textarea th:field="*{content}" id="demo-message" placeholder="내용을 입력하세요" rows="6"></textarea>
+				</div>
+				<!-- Break -->
+				<div class="col-12">
+					<ul class="actions">
+						<li><button type="submit" class="button primary">WRITE</button></li>
+						<li><a th:href="@{/board/review/list}" class="button"></a></li>
+					</ul>
+				</div>
+			</div>
+		</form>
+	</section>
+</th:layout>
+<script>
+	/*<![CDATA[*/
+
+	function registerBoard(form) {
+
+		var result = (
+				isValid(form.title, "제목", null, null)
+				&& isValid(form.content, "내용", null, null)
+		);
+
+		if ( result == false ) {
+			return false;
+		}
+
+		var idx = /*[[ ${board.i_board} ]]*/;
+		if (isEmpty(i_board) == false) {
+			var queryString = /*[[ ${param.makeQueryString(param.currentPageNo)} ]]*/;
+
+			/*[- 쿼리 스트링을 오브젝트 형태로 변환 -]*/
+			queryString = new URLSearchParams(queryString);
+			queryString.forEach(function(value, key) {
+				if (isEmpty(value) == false) {
+					$(form).append('<input type="hidden" name="' + key + '" value="' + value + '" />');
+				}
+			});
+		}
+	}
+	/*]]>*/
+	/*[- end of function -]*/
+</script>
+</html>

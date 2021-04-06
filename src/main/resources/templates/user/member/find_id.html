@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+    <!-- Section -->
+    <section>
+        <header class="main">
+            <h2>아이디 찾기</h2>
+        </header>
+        <form id="findIdForm" action="/" method="post">
+            <fieldset>
+                <p>아이디는 가입시 입력하신 이메일을 통해 찾으실 수 있습니다.</p>
+                <p class="showResult" style="font-size: 1.2rem;font-weight: bold;" th:if="${result == 1}">회원님의 아이디는 ${id} 입니다.</p>
+                <p class="showResult" style="font-size: 1.2rem;font-weight: bold;" th:unless="${result ==1}">일치하는 정보가 존재하지 않습니다.</p>
+                <p class="showResult" id="showResult" style="font-size: 1.2rem;font-weight: bold;"></p>
+                <div class="col-6 col-12-xsmall">
+                    <label for="nm">이름</label>
+                    <input type="text" name="nm" id="nm" placeholder="이름">
+                </div>
+                <div class="col-6 col-12-xsmall">
+                    <label for="email">이메일</label>
+                    <input type="email" name="email" id="email" placeholder="email@example.com">
+                </div>
+                <input class="findIdBtn button primary" type="button" value="확인" onclick="findId()">
+                <script>
+                    var findIdBtn = document.getElementsByClassName('findIdBtn')
+                    var findIdForm = document.querySelector('#findIdForm')
+                    var showResult = document.querySelector('#showResult')
+                    function findId(){
+                        const nm = findIdForm.nm.value
+                        const email = findIdForm.email.value
+
+                        if(nm.length == 0){
+                            alert("이름을 입력해 주세요.")
+                        }else if(email.length == 0){
+                            alert("이메일을 입력해 주세요.")
+                        }else{
+                            axios.post(`/ajaxFindId`, {
+                                nm: nm,
+                                email: email
+                            }).then(function(res){
+                                if(res.data.length != 0){
+                                    showResult.innerText = "회원님의 아이디는 '" + res.data + "' 입니다."
+                                }else{
+                                    showResult.innerText = "입력하신 정보를 다시 확인해주세요."
+                                }
+                            })
+                        }
+                    }
+            </script>
+            </fieldset>
+
+            <a href="#" class="button">BACK</a>
+        </form>
+    </section>
+</th:layout>
+
+</html>

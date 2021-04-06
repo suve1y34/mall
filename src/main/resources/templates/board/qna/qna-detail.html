@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+    <!-- Section -->
+    <section>
+        <header class="main">
+            <h2>QnA</h2>
+        </header>
+    </section>
+    <section>
+        <div class="row">
+            <div class="table-wrapper">
+                <form th:object="${board}">
+                    <table class="col-12">
+                        <thead>
+                        <tr>
+                            <th><p th:text="*{title}"></th>
+                            <th>연송잉</th>
+                            <th><p th:text="*{#temporals.format( insert_time, 'yyyy-MM-dd' )}"></p></th>
+                            <th>2</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <p th:text="*{content}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+<!--                <div th:if="${loginUser.getI_mem() == data.getI_mem()}"></div>-->
+                    <a th:href="@{/board/qna/reg( idx=${board.i_board} )}" class="button">수정</a>
+                    <button type="button" class="button" th:onclick="deleteBoard([[ ${board.i_board} ]])">삭제</button>
+
+                    <a href="" class="button primary">답글달기</a>
+                </form>
+
+            </div>
+        </div>
+    </section>
+</th:layout>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        function deleteBoard(idx) {
+
+            if (confirm(idx + "번 게시글을 삭제할까요?")) {
+                var uri = /*[[ @{/board/qna/del} ]]*/;
+                var html = "";
+
+                html += '<form name="dataForm" action="'+uri+'" method="post">';
+                html += '<input type="hidden" name="idx" value="'+i_board+'" />';
+                html += '</form>';
+
+                $("body").append(html);
+                document.dataForm.submit();
+            }
+        }
+        /*[- end of function -]*/
+
+        /*]]>*/
+    </script>
+</th:block>
+</html>
