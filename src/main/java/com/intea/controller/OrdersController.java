@@ -1,6 +1,7 @@
 package com.intea.controller;
 
 import com.intea.domain.*;
+import com.intea.domain.dto.MembersDTO;
 import com.intea.service.OrdersService;
 import com.intea.util.SecurityUtils;
 import com.intea.util.UiUtils;
@@ -31,7 +32,7 @@ public class OrdersController extends UiUtils {
     //주문하기
     @RequestMapping(value = "/cart/order", method = RequestMethod.POST)
     public String order(HttpServletRequest req, OrdersEntity order, OrdersDetailEntity d_order) {
-        MemberEntity loginMem = sUtils.getLoginMem(req);
+        MembersDTO loginMem = sUtils.getLoginMem(req);
         Long i_mem = loginMem.getI_mem();
 
         Calendar cal = Calendar.getInstance();
@@ -62,7 +63,7 @@ public class OrdersController extends UiUtils {
     //특정 회원 주문 목록
     @RequestMapping(value = "/member/orderList", method = RequestMethod.GET)
     public String getOrderList(HttpServletRequest req, OrdersListDTO param, Model model) {
-        MemberEntity loginMem = sUtils.getLoginMem(req);
+        MembersDTO loginMem = sUtils.getLoginMem(req);
         Long i_mem = loginMem.getI_mem();
 
         param.setI_mem(i_mem);
@@ -78,7 +79,7 @@ public class OrdersController extends UiUtils {
     @GetMapping("/orderView")
     public String getOrderDetail(HttpServletRequest req, @RequestParam("n") String i_order,
                                  OrdersListDTO param, Model model) {
-        MemberEntity loginMem = sUtils.getLoginMem(req);
+        MembersDTO loginMem = sUtils.getLoginMem(req);
         Long i_mem = loginMem.getI_mem();
 
         param.setI_mem(i_mem);

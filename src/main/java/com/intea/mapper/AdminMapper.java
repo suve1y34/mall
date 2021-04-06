@@ -1,6 +1,6 @@
 package com.intea.mapper;
 
-import com.intea.domain.MemberEntity;
+import com.intea.domain.dto.MembersDTO;
 import com.intea.domain.OrdersDetailEntity;
 import com.intea.domain.OrdersEntity;
 import com.intea.domain.ProductEntity;
@@ -24,6 +24,6 @@ public interface AdminMapper {
     public OrdersDetailEntity changeStock_sub(OrdersDetailEntity param);
     public int changeStock(ProductEntity param);
 
-    public List<MemberEntity> selMemberList(MemberEntity param);
-    public int selMemberTotalCnt(MemberEntity param);
+    public List<MembersDTO> selMemberList(MembersDTO param);
+    public int selMemberTotalCnt(MembersDTO param);
 }

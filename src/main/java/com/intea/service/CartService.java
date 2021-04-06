@@ -2,7 +2,7 @@ package com.intea.service;
 
 import com.intea.constant.Const;
 import com.intea.domain.CartEntity;
-import com.intea.domain.MemberEntity;
+import com.intea.domain.dto.MembersDTO;
 import com.intea.domain.ShopDTO;
 import com.intea.mapper.CartMapper;
 import com.intea.util.SecurityUtils;
@@ -23,7 +23,7 @@ public class CartService {
     }
 
     public int insCart(CartEntity param, HttpServletRequest req) {
-        MemberEntity loginMem = sUtils.getLoginMem(req);
+        MembersDTO loginMem = sUtils.getLoginMem(req);
 
         int result = cartMapper.insCart(param);
 

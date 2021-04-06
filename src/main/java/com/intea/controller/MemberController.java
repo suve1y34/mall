@@ -1,22 +1,11 @@
 package com.intea.controller;
 
-import com.intea.constant.Const;
-import com.intea.constant.Method;
-import com.intea.domain.MemberEntity;
 import com.intea.service.MemberService;
 import com.intea.util.SecurityUtils;
 import com.intea.util.UiUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller

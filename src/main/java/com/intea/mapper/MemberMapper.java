@@ -1,6 +1,6 @@
 package com.intea.mapper;
 
-import com.intea.domain.MemberEntity;
+import com.intea.domain.dto.MembersDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -11,13 +11,13 @@ public interface MemberMapper {
         회원정보보기 / 수정
      */
     
-    public int insMember(MemberEntity param);
-    public MemberEntity selMember(MemberEntity param);
-    public MemberEntity selMyInfo(MemberEntity param);
-    public int updMyInfo(MemberEntity param);
+    public int insMember(MembersDTO param);
+    public MembersDTO selMember(MembersDTO param);
+    public MembersDTO selMyInfo(MembersDTO param);
+    public int updMyInfo(MembersDTO param);
 
-    public MemberEntity findMemId(MemberEntity param);
-    public MemberEntity findMemPw(MemberEntity param);
-    public int updMemPw(MemberEntity param);
-    public void delMember(MemberEntity param);
+    public MembersDTO findMemId(MembersDTO param);
+    public MembersDTO findMemPw(MembersDTO param);
+    public int updMemPw(MembersDTO param);
+    public void delMember(MembersDTO param);
 }

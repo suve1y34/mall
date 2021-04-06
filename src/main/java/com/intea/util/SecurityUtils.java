@@ -1,7 +1,7 @@
 package com.intea.util;
 
 import com.intea.constant.Const;
-import com.intea.domain.MemberEntity;
+import com.intea.domain.dto.MembersDTO;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
@@ -17,17 +17,17 @@ public class SecurityUtils {
     }
 
     public static Long getLoginMemPk(HttpSession hs) {
-        MemberEntity loginMem = (MemberEntity)hs.getAttribute(Const.LOGIN_USER);
+        MembersDTO loginMem = (MembersDTO)hs.getAttribute(Const.LOGIN_USER);
         return loginMem == null ? 0 : loginMem.getI_mem();
     }
 
-    public static MemberEntity getLoginMem(HttpServletRequest req) {
+    public static MembersDTO getLoginMem(HttpServletRequest req) {
         HttpSession hs = req.getSession();
-        return (MemberEntity)hs.getAttribute(Const.LOGIN_USER);
+        return (MembersDTO)hs.getAttribute(Const.LOGIN_USER);
     }
 
-    public static MemberEntity getLoginMem(HttpSession hs) {
-        return (MemberEntity)hs.getAttribute(Const.LOGIN_USER);
+    public static MembersDTO getLoginMem(HttpSession hs) {
+        return (MembersDTO)hs.getAttribute(Const.LOGIN_USER);
     }
 
     public static void isLogin(HttpSession hs, HttpServletResponse res

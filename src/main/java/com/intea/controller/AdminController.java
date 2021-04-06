@@ -2,6 +2,7 @@ package com.intea.controller;
 
 import com.intea.constant.Method;
 import com.intea.domain.*;
+import com.intea.domain.dto.MembersDTO;
 import com.intea.service.AdminService;
 import com.intea.service.ProductService;
 import com.intea.util.FileUtils;
@@ -100,8 +101,8 @@ public class AdminController extends UiUtils {
 
     //회원 전체 리스트
     @GetMapping("admin/member/all")
-    public String openMemberList(@ModelAttribute("param") MemberEntity param, Model model) {
-        List<MemberEntity> memList = aService.selMemberList(param);
+    public String openMemberList(@ModelAttribute("param") MembersDTO param, Model model) {
+        List<MembersDTO> memList = aService.selMemberList(param);
         model.addAttribute("list", memList);
 
         return "user/admin/ad-members";

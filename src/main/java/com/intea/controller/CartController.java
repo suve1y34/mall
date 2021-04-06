@@ -2,7 +2,7 @@ package com.intea.controller;
 
 import com.intea.constant.Const;
 import com.intea.domain.CartEntity;
-import com.intea.domain.MemberEntity;
+import com.intea.domain.dto.MembersDTO;
 import com.intea.domain.ShopDTO;
 import com.intea.service.CartService;
 import com.intea.util.SecurityUtils;
@@ -25,7 +25,7 @@ public class CartController {
     @ResponseBody
     @RequestMapping(value = "/cart/{i_mem}/cart", method = RequestMethod.POST)
     public void addCart(@PathVariable("i_mem") Long i_mem, CartEntity param, HttpServletRequest req, Model model) {
-        MemberEntity loginMem = sUtils.getLoginMem(req);
+        MembersDTO loginMem = sUtils.getLoginMem(req);
         param.setI_mem(loginMem.getI_mem());
 
         List<CartEntity> list = new ArrayList<>();
@@ -50,7 +50,7 @@ public class CartController {
     //카트화면
     @GetMapping("/order/cart")
     public void getCartList(HttpServletRequest req, Model model) {
-        MemberEntity loginMem = sUtils.getLoginMem(req);
+        MembersDTO loginMem = sUtils.getLoginMem(req);
         Long i_mem = loginMem.getI_mem();
 
         List<ShopDTO> cartList = cartService.selCartList(i_mem);
@@ -61,7 +61,7 @@ public class CartController {
     //카드 삭제
     @PostMapping("/cart/delete")
     public int delCart(@RequestParam(value = "chbox[]")List<String> chArr, CartEntity param, HttpServletRequest req) {
-        MemberEntity loginMem = sUtils.getLoginMem(req);
+        MembersDTO loginMem = sUtils.getLoginMem(req);
         Long i_mem = loginMem.getI_mem();
 
         int result = 0;

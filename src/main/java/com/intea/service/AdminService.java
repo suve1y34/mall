@@ -2,6 +2,7 @@ package com.intea.service;
 
 import com.intea.constant.Const;
 import com.intea.domain.*;
+import com.intea.domain.dto.MembersDTO;
 import com.intea.mapper.AdminMapper;
 import com.intea.mapper.AttachMapper;
 import com.intea.mapper.ProductMapper;
@@ -99,8 +100,8 @@ public class AdminService {
     }
 
     //멤버 전체
-    public List<MemberEntity> selMemberList(MemberEntity param) {
-        List<MemberEntity> memList = Collections.emptyList();
+    public List<MembersDTO> selMemberList(MembersDTO param) {
+        List<MembersDTO> memList = Collections.emptyList();
 
         int totalCnt = aMapper.selMemberTotalCnt(param);
 

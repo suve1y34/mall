@@ -1,22 +1,14 @@
 package com.intea.service;
 
 import com.intea.config.SecurityUser;
-import com.intea.constant.Const;
-import com.intea.domain.MemberEntity;
 import com.intea.domain.entity.Members;
 import com.intea.domain.repository.MembersRepository;
-import com.intea.mapper.MemberMapper;
-import com.intea.util.SecurityUtils;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @AllArgsConstructor

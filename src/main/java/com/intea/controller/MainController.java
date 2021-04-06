@@ -22,7 +22,7 @@ public class MainController {
 
     //admin 메인화면
     @GetMapping("admin/main")
-    public String getMain() {
+    public String admin_main() {
         return "user/admin/ad-index";
     }
 }
