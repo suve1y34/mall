@@ -1,6 +1,6 @@
 package com.intea.domain.dto;
 
-import com.intea.constant.Verify;
+import com.intea.constant.Role;
 import com.intea.domain.entity.Members;
 import lombok.*;
 
@@ -41,20 +41,22 @@ public class MembersDTO {
 
     @Size(max = 50, message = "상세 주소를 알맞게 입력해주세요.")
     private String de_address;
-    private Verify verify;
+    private Role role;
     private Character delete_yn;
+    private String picture;
 
     public Members toEntity() {
         return Members.builder()
                 .mem_id(this.getId())
                 .email(this.getEmailAddress())
-                .nm(this.getMem_nm())
+                .name(this.getMem_nm())
                 .phone(this.getTel())
                 .postCode(this.getPostCode())
                 .address(this.getAddress())
                 .de_address(this.getDe_address())
-                .verify(this.getVerify())
+                .role(this.getRole())
                 .delete_yn(this.getDelete_yn())
+                .picture(this.getPicture())
                 .build();
     }
 }

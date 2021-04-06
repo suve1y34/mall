@@ -1,6 +1,6 @@
 package com.intea.domain.entity;
 
-import com.intea.constant.Verify;
+import com.intea.constant.Role;
 import com.intea.domain.dto.MembersDTO;
 import lombok.*;
 
@@ -20,28 +20,35 @@ public class Members extends CommonEntity {
     private String mem_id;
     private String email;
     private String pw;
-    private String nm;
+    private String name;
     private String phone;
     private String postCode;
     private String address;
     private String de_address;
 
     @Enumerated(EnumType.STRING)
-    private Verify verify;
+    private Role role;
 
     private Character delete_yn;
+
+    private String picture;
 
     public MembersDTO toResponseDTO(Members members) {
         return MembersDTO.builder()
                 .id(members.getMem_id())
                 .emailAddress(members.getEmail())
-                .mem_nm(members.getNm())
+                .mem_nm(members.getName())
                 .tel(members.getPhone())
                 .postCode(members.getPostCode())
                 .address(members.getAddress())
                 .de_address(members.getDe_address())
-                .verify(members.getVerify())
+                .role(members.getRole())
                 .delete_yn(members.getDelete_yn())
+                .picture(members.getPicture())
                 .build();
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 }

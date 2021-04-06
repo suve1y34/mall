@@ -2,14 +2,12 @@ package com.intea.config;
 
 import com.intea.hanlder.LoginFailureHandler;
 import com.intea.hanlder.LoginSuccessHandler;
-import com.intea.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,7 +17,6 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -49,18 +46,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/user/signin"))
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/signin"))
                 .accessDeniedPage("/denied")
                 .and()
                 .formLogin()
-                .loginProcessingUrl("/user/signin")
+                .loginProcessingUrl("/signin")
                 .successHandler(successHandler())
                 .failureHandler(failureHandler())
                 .and()
                 .logout()
-                .logoutUrl("/user/signout")
+                .logoutUrl("/signout")
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+                .and()
+                .headers().frameOptions().disable()
+                .and()
+                .csrf()
+                .and()
+                .sessionManagement()
+                .maximumSessions(1)
+                .expiredUrl("/")
+                .sessionRegistry(sessionRegistry());;
     }
 
     private PersistentTokenRepository getJDBCRepository() {

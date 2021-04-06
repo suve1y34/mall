@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Verify {
+public enum Role {
 
-    MEMBER("MEMBER", "일반 사용자"),
-    ADMIN("ADMIN", "관리자");
+    GUEST("ROLE_GUEST", "비회원"),
+    MEMBER("ROLE_MEMBER", "일반 사용자"),
+    ADMIN("ROLE_ADMIN", "관리자");
 
     private final String key;
     private final String title;
