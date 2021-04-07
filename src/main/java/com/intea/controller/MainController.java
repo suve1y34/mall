@@ -1,5 +1,7 @@
 package com.intea.controller;
 
+import com.intea.config.auth.LoginUser;
+import com.intea.config.auth.dto.SessionUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
     @GetMapping("/")
-    public String main() {
+    public String main(Model model, @LoginUser SessionUser user) {
 
+        if(user != null) {
+            model.addAttribute("userName", user.getName());
+        }
         return "/index";
     }
 

@@ -1,7 +1,7 @@
 package com.intea.domain.entity;
 
 import com.intea.constant.Role;
-import com.intea.domain.dto.MembersDTO;
+import com.intea.domain.dto.UserDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Builder
 @ToString
 @Entity
-public class Members extends CommonEntity {
+public class User extends CommonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,22 +33,22 @@ public class Members extends CommonEntity {
 
     private String picture;
 
-    public MembersDTO toResponseDTO(Members members) {
-        return MembersDTO.builder()
-                .id(members.getMem_id())
-                .emailAddress(members.getEmail())
-                .mem_nm(members.getName())
-                .tel(members.getPhone())
-                .postCode(members.getPostCode())
-                .address(members.getAddress())
-                .de_address(members.getDe_address())
-                .role(members.getRole())
-                .delete_yn(members.getDelete_yn())
-                .picture(members.getPicture())
+    public UserDTO toResponseDTO(User user) {
+        return UserDTO.builder()
+                .id(user.getMem_id())
+                .emailAddress(user.getEmail())
+                .mem_nm(user.getName())
+                .tel(user.getPhone())
+                .postCode(user.getPostCode())
+                .address(user.getAddress())
+                .de_address(user.getDe_address())
+                .role(user.getRole())
+                .delete_yn(user.getDelete_yn())
+                .picture(user.getPicture())
                 .build();
     }
 
-    public Members update(String name, String picture) {
+    public User update(String name, String picture) {
         this.name = name;
         this.picture = picture;
 

@@ -1,7 +1,7 @@
 package com.intea.domain.dto;
 
 import com.intea.constant.Role;
-import com.intea.domain.entity.Members;
+import com.intea.domain.entity.User;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 @ToString
-public class MembersDTO {
+public class UserDTO {
 
     @NotBlank(message = "아이디를 입력해주세요.")
     @Pattern(regexp = "^(?=.*[a-zA-Z0-9]).{8,12}$", message = "아이디는 영문+숫자 조합 8~12자리가 가능합니다.")
@@ -45,8 +45,8 @@ public class MembersDTO {
     private Character delete_yn;
     private String picture;
 
-    public Members toEntity() {
-        return Members.builder()
+    public User toEntity() {
+        return User.builder()
                 .mem_id(this.getId())
                 .email(this.getEmailAddress())
                 .name(this.getMem_nm())

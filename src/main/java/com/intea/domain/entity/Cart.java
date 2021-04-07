@@ -1,12 +1,10 @@
 package com.intea.domain.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,7 +16,7 @@ public class Cart extends CommonEntity {
 
     @ManyToOne
     @JoinColumn(name = "i_mem", referencedColumnName = "i_mem")
-    private Members members;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "i_product", referencedColumnName = "i_product")

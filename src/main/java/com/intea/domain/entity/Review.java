@@ -16,7 +16,7 @@ public class Review extends CommonEntity {
 
     @ManyToOne
     @JoinColumn(name = "i_mem", referencedColumnName = "i_mem")
-    private Members members;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "i_product", referencedColumnName = "i_product")

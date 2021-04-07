@@ -15,7 +15,7 @@ public class Qna extends CommonEntity {
 
     @ManyToOne
     @JoinColumn(name = "i_mem", referencedColumnName = "i_mem")
-    private Members members;
+    private User user;
 
     private String title;
     private String content;

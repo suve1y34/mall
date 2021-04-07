@@ -1,11 +1,9 @@
 package com.intea.controller;
 
-import com.intea.domain.dto.MembersDTO;
+import com.intea.domain.dto.UserDTO;
 import com.intea.service.MemberService;
-import com.intea.util.SecurityUtils;
 import com.intea.util.UiUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -36,7 +34,7 @@ public class MemberController extends UiUtils {
     }
 
     @PostMapping("user/join")
-    public String signup(@ModelAttribute @Valid MembersDTO dto, RedirectAttributes ra) {
+    public String signup(@ModelAttribute @Valid UserDTO dto, RedirectAttributes ra) {
         memberService.signup(dto);
 
         ra.addFlashAttribute("success", "회원가입 완료! 환영합니다!");

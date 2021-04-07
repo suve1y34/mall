@@ -1,8 +1,9 @@
-package com.intea.config;
+package com.intea.config.auth;
 
-import com.intea.domain.dto.SessionUser;
-import com.intea.domain.entity.Members;
-import com.intea.domain.repository.MembersRepository;
+import com.intea.config.auth.dto.OAuthAttributes;
+import com.intea.config.auth.dto.SessionUser;
+import com.intea.domain.entity.User;
+import com.intea.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -19,7 +20,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final MembersRepository membersRepository;
+    private final UserRepository userRepository;
     private final HttpSession httpSession;
 
     @Override
@@ -32,21 +33,21 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        Members members = saveOrUpdate(attributes);
+        User user = saveOrUpdate(attributes);
 
-        httpSession.setAttribute("user", new SessionUser(members));
+        httpSession.setAttribute("user", new SessionUser(user));
 
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(members.getRoleKey())),
+                Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
     }
 
-    private Members saveOrUpdate(OAuthAttributes attributes) {
-        Members members = membersRepository.findByEmail(attributes.getEmail())
+    private User saveOrUpdate(OAuthAttributes attributes) {
+        User user = userRepository.findByEmail(attributes.getEmail())
                 .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
 
-        return membersRepository.save(members);
+        return userRepository.save(user);
     }
 }
