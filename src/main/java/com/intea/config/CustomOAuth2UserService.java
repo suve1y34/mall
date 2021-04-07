@@ -1,5 +1,6 @@
 package com.intea.config;
 
+import com.intea.domain.dto.SessionUser;
 import com.intea.domain.entity.Members;
 import com.intea.domain.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
 
-        return MembersRepository.save(members);
+        return membersRepository.save(members);
     }
 }
