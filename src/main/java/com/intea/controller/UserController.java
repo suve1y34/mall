@@ -16,9 +16,8 @@ public class UserController extends UiUtils {
     private final UserService userService;
 
     //로그인 get
-    @GetMapping("signin")
+    @GetMapping("user/signin")
     public String getLogin(HttpServletRequest req, Model model) {
-
         return "user/member/login";
     }
 

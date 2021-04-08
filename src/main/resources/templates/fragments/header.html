@@ -4,7 +4,6 @@
     <a th:href="@{/}" class="logo"><strong>IN-TEA</strong> by Su-in</a>
     <ul class="icons">
         <div th:if="${session.loginUser == null}">
-            <li><a th:href="@{/user/signup}" class="icon brands"><i class="fas fa-user-plus" aria-hidden="true"></i><span class="label">회원가입</span></a></li>
             <li><a th:href="@{/user/signin}" class="icon brands"><i class="fas fa-sign-in-alt" aria-hidden="true"></i><span class="label">로그인</span></a></li>
         </div>
 

@@ -1,10 +1,16 @@
 package com.intea.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intea.constant.Role;
-import com.intea.domain.dto.UserDTO;
+import com.intea.domain.dto.MembersDTO;
+import com.intea.domain.dto.UserResDTO;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,9 +19,10 @@ import javax.persistence.*;
 @Entity
 public class User extends CommonEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long i_mem;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     private String mem_id;
     private String email;
@@ -33,25 +40,55 @@ public class User extends CommonEntity {
 
     private String picture;
 
-    public UserDTO toResponseDTO(User user) {
-        return UserDTO.builder()
-                .id(user.getMem_id())
-                .emailAddress(user.getEmail())
-                .mem_nm(user.getName())
-                .tel(user.getPhone())
+    @ColumnDefault("0")
+    private Integer saving;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Cart> cartList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Orders> ordersList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Review> reviewList;
+
+
+    public UserResDTO toResDTO(User user) {
+        return UserResDTO.builder()
+                .id(user.getId())
+                .mem_id(user.getMem_id())
+                .email(user.getEmail())
+                .name(user.getName())
+                .phone(user.getPhone())
                 .postCode(user.getPostCode())
                 .address(user.getAddress())
                 .de_address(user.getDe_address())
-                .role(user.getRole())
-                .delete_yn(user.getDelete_yn())
                 .picture(user.getPicture())
+                .saving(user.getSaving())
                 .build();
     }
 
-    public User update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
+    public User update(MembersDTO memDTO) {
+        this.name =memDTO.getName();
+        this.picture = memDTO.getPicture();
+        this.email = memDTO.getEmail();
+        this.postCode = memDTO.getPostCode();
+        this.address = memDTO.getAddress();
+        this.de_address = memDTO.getDe_address();
 
+        return this;
+    }
+
+    public User delProfile() {
+        this.delete_yn = 'Y';
+        return this;
+    }
+
+    public User updPw(String pw) {
+        this.pw = pw;
         return this;
     }
 

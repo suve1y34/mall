@@ -26,8 +26,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/")
                 .and()
                     .formLogin()
-                    .loginProcessingUrl("/signin")
-                    .successHandler(successHandler());
+                    .loginPage("/user/signin")
+                    .loginProcessingUrl("/loginProcess")
+                    .successHandler(successHandler())
+                    .and().csrf().disable();
     }
 
     @Bean
