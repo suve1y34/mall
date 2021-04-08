@@ -8,14 +8,6 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class MemberService {
-    private final UserRepository membersRepo;
-    private final PasswordEncoder passwordEncoder;
+public class UserService {
 
-    //회원가입
-    public void signup(UserDTO dto) {
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-
-        membersRepo.save(dto.toEntity());
-    }
 }

@@ -28,7 +28,10 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     implementation 'org.springframework.security:spring-security-core'
     implementation 'org.apache.commons:commons-lang3'
+    implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.3.5'
 
+
+    //데이터 유효성 검사 프레임워크
     implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
     implementation group: 'net.sf.json-lib', name: 'json-lib', version: '2.3', classifier: 'jdk15'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.2'
@@ -49,7 +52,6 @@ dependencies {
     compile('org.springframework.security:spring-security-oauth2-jose')
     compile 'io.springfox:springfox-swagger2:2.7.0'
     compile 'io.springfox:springfox-swagger-ui:2.7.0'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.1.RELEASE'
 
     compileOnly 'org.projectlombok:lombok'
 
