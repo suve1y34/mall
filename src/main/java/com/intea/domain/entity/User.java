@@ -71,6 +71,12 @@ public class User extends CommonEntity {
                 .build();
     }
 
+    public UserResDTO.ReviewUserResDTO toReviewResDTO() {
+        return UserResDTO.ReviewUserResDTO.builder()
+                .user_id(mem_id)
+                .build();
+    }
+
     public User update(MembersDTO memDTO) {
         this.name =memDTO.getName();
         this.picture = memDTO.getPicture();
@@ -82,7 +88,7 @@ public class User extends CommonEntity {
         return this;
     }
 
-    public User delProfile() {
+    public User delete() {
         this.delete_yn = 'Y';
         return this;
     }

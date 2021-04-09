@@ -1,28 +1,45 @@
 package com.intea.domain.entity;
 
-import com.intea.constant.ReviewStatus;
-import lombok.Data;
-import lombok.ToString;
+import com.intea.domain.dto.ReviewResDTO;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @ToString
 @Entity
 public class Review extends CommonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long i_board;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "i_mem", referencedColumnName = "i_mem")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "i_product", referencedColumnName = "i_product")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     private String title;
     private String content;
-    private ReviewStatus grade;
+    private int rate;
+
+    public ReviewResDTO toResDTO() {
+        LocalDateTime insert_time = this.getInsert_time();
+
+        return ReviewResDTO.builder()
+                .id(id)
+                .user_id(user.toReviewResDTO())
+                .title(title)
+                .rate(rate)
+                .insert_time(insert_time.getYear() + "-" + insert_time.getMonthValue() + "-" +
+                        insert_time.getDayOfMonth() + " " + insert_time.getHour() + ":" + insert_time.getMinute() + ":" + insert_time.getSecond())
+                .build();
+    }
 }

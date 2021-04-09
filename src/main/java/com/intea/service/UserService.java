@@ -26,13 +26,21 @@ public class UserService {
     }
 
     // 유저 프로필 수정
-    public UserResDTO updateProfiles(UUID id, MembersDTO memDto) {
+    public UserResDTO updateProfile(UUID id, MembersDTO memDto) {
         User user = userRepository.findById(id);
 
         User updatedUser = user.update(memDto);
-
         user = userRepository.save(updatedUser);
 
         return user.toResDTO(user);
+    }
+
+    // 유저 탈퇴
+    public void deleteProfile(UUID id) {
+        User user = userRepository.findById(id);
+
+        User disabledUser = user.delete();
+
+        userRepository.save(disabledUser);
     }
 }

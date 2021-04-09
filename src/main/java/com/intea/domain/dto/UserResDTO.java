@@ -2,6 +2,8 @@ package com.intea.domain.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -19,4 +21,11 @@ public class UserResDTO {
     private String de_address;
     private Integer saving;
 
+    @Getter
+    @Setter
+    @Builder
+    @ToString
+    public static class ReviewUserResDTO {
+        private String user_id;
+    }
 }
