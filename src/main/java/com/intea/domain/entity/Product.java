@@ -23,14 +23,15 @@ public class Product extends CommonEntity {
     private String small_ct;
 
     private String p_nm;
-    private Long price;
+    private Integer price;
     private String p_description;
 
-    private Long purchase_cnt;
+    private Integer purchase_cnt;
+    private Integer total_cnt;
 
     private ProductStatus product_status;
 
-    private Long stock;
+    private Integer stock;
 
     private String title_img;
 
