@@ -11,11 +11,13 @@ import javax.persistence.*;
 public class ProductImg extends CommonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long i_img;
+    private Long id;
 
     private String img_url;
 
+    private Character basic_yn;
+
     @ManyToOne
-    @JoinColumn(name = "i_product", referencedColumnName = "i_product")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 }

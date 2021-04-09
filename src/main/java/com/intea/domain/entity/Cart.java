@@ -1,26 +1,31 @@
 package com.intea.domain.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
 @Setter
-@ToString
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Cart extends CommonEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long i_cart;
+    private Long id;
+    private Long count;
 
     @ManyToOne
-    @JoinColumn(name = "i_mem", referencedColumnName = "i_mem")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "i_product", referencedColumnName = "i_product")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    private Long count;
+    @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Orders orders;
 }

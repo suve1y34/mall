@@ -1,20 +1,25 @@
 package com.intea.domain.entity;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Entity(name = "p_category")
 public class Category {
     @Id
-    private Long i_category;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long c_level;
+    private String upper_c_code;
     private String c_code;
     private String c_nm;
 }
