@@ -8,6 +8,7 @@ import com.intea.domain.entity.User;
 import com.intea.domain.repository.ProductRepository;
 import com.intea.domain.repository.ReviewRepository;
 import com.intea.domain.repository.UserRepository;
+import com.intea.exception.NotExistReviewException;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,8 @@ public class ReviewService {
     }
 
     public ReviewResDTO.ReviewDetailResDTO getReviewDetail(Long id) {
-        Review review = reviewRepo.findById(id);
+        Review review = reviewRepo.findById(id).orElseThrow(()
+                -> new NotExistReviewException("존재하지 않는 게시글입니다."));;
 
         return ReviewResDTO.ReviewDetailResDTO.builder()
                 .content(review.getContent())
