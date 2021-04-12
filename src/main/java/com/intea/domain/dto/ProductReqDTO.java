@@ -27,4 +27,24 @@ public class ProductReqDTO {
 
     @NotNull(message = "상품 재고를 입력해 주세요.")
     private Integer total_cnt;
+
+    @Getter
+    @Setter
+    @ToString
+    public static class UpdateResDTO {
+        @NotBlank(message = "상품명을 입력해 주세요.")
+        private String p_nm;
+
+        @NotNull(message = "상품 가격을 입력해 주세요.")
+        private Integer price;
+
+        @NotBlank(message = "상위 카테고리를 입력해 주세요.")
+        private String large_ct;
+
+        @NotBlank(message = "하위 카테고리를 입력해 주세요.")
+        private String small_ct;
+
+        @NotNull(message = "상품 재고를 이볅해 주세요.")
+        private Integer totalCnt;
+    }
 }
