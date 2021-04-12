@@ -5,6 +5,7 @@ import com.intea.domain.dto.ProductReqDTO;
 import com.intea.domain.dto.ProductResDTO;
 import com.intea.domain.entity.Product;
 import com.intea.domain.repository.ProductRepository;
+import com.intea.exception.NotExistProductException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ public class ProductService {
 
     //상품 상세
     public ProductResDTO getProductDetail(Long id) {
-        Product product = productRepo.findById(id);
+        Product product = productRepo.findById(id).orElseThrow(() -> new NotExistProductException("존재하지 않는 상품입니다."));
 
         int price = 0;
         if(product.getPrice() > 0) {

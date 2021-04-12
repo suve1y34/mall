@@ -8,14 +8,14 @@ import com.intea.domain.entity.User;
 import com.intea.domain.repository.ProductRepository;
 import com.intea.domain.repository.ReviewRepository;
 import com.intea.domain.repository.UserRepository;
+import com.intea.exception.NotExistProductException;
 import com.intea.exception.NotExistReviewException;
+import com.intea.exception.NotExistUserException;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,14 +30,16 @@ public class ReviewService {
     private final ProductRepository productRepo;
 
     public String insReview(Long product_id) {
-        Product product = productRepo.findById(product_id);
+        Product product = productRepo.findById(product_id).orElseThrow(() -> new NotExistProductException("존재하지 않는 상품입니다."));
         return product.getP_nm();
     }
 
     @Transactional
     public void makeReview(ReviewReqDTO reviewReqDTO) {
-        User user = userRepo.findById(reviewReqDTO.getUser_id());
-        Product product = productRepo.findById(reviewReqDTO.getProduct_id());
+        User user = userRepo.findById(reviewReqDTO.getUser_id())
+                .orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));
+        Product product = productRepo.findById(reviewReqDTO.getProduct_id())
+                .orElseThrow(() -> new NotExistProductException("존재하지 않는 상품입니다."));
 
         reviewRepo.save(Review.builder()
                 .user(user)
