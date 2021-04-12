@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface CartRepository extends JpaRepository<Cart, Long> {
     List<Cart> findAllByUser_idOrderByInsert_timeDesc(UUID user_id);
     List<Cart> findAllByUser_idAndProduct_id(UUID user_id, Long product_id);
+    List<Cart> findAllByUser_id(Long user_id);
 }
