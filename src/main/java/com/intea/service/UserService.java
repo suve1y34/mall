@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -19,6 +21,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public String idChk(Map<String, Object> id) {
+        Optional<User> user = userRepository.findById((String) id.get("id"));
+
+        String result;
+
+        if(user.isPresent()) {
+            throw new NotExistUserException("이미 등록된 아이디입니다.");
+        } else {
+            result = "SUCCESS";
+        }
+        return result;
+    }
+
     // 유저 프로필 조회
     public int getProfiles(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));
@@ -27,7 +42,7 @@ public class UserService {
     }
 
     // 유저 프로필 수정
-    public UserResDTO updateProfile(UUID id, MembersDTO memDto) {
+    public UserResDTO updateProfile(Long id, MembersDTO memDto) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));;
 
         User updatedUser = user.update(memDto);
@@ -37,7 +52,7 @@ public class UserService {
     }
 
     // 유저 탈퇴
-    public void deleteProfile(UUID id) {
+    public void deleteProfile(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));;
 
         User disabledUser = user.delete();
