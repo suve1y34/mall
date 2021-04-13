@@ -9,6 +9,7 @@ import com.intea.domain.entity.User;
 import com.intea.domain.repository.CartRepository;
 import com.intea.domain.repository.ProductRepository;
 import com.intea.domain.repository.UserRepository;
+import com.intea.exception.CheckReviewAuthorityException;
 import com.intea.exception.NotExistCartException;
 import com.intea.exception.NotExistUserException;
 import lombok.AllArgsConstructor;
@@ -97,5 +98,22 @@ public class CartService {
         }
 
         cartRepo.delete(cartOpt.get());
+    }
+
+    public int chkReviewAuthority(HashMap<String, Object> paramMap) {
+        Long user_id = Long.parseLong(paramMap.get("userId").toString());
+        Long product_id = Long.parseLong(paramMap.get("productId").toString());
+
+        List<Cart> cartList = cartRepo.findAllByUser_idAndProduct_id(user_id, product_id);
+
+        if (cartList.size() > 0) {
+            for (Cart cart : cartList) {
+                if (cart.getorders() != null) {
+                    return 1;
+                }
+            }
+        }
+
+        throw new CheckReviewAuthorityException("해당상품 결제를 완료한 회원만 리뷰를 작성할 수 있습니다.");
     }
 }

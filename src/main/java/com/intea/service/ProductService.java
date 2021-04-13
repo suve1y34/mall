@@ -13,10 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Objects.isNull;
 
@@ -82,5 +79,15 @@ public class ProductService {
                 .build());
 
         return "상품이 등록 되었습니다.";
+    }
+
+    public String initReview(Long productId) {
+
+        Optional<Product> productOpt = productRepo.findById(productId);
+
+        if (!productOpt.isPresent())
+            throw new NotExistProductException("존재하지 않는 상품입니다.");
+
+        return productOpt.get().getP_nm();
     }
 }
