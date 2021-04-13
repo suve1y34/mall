@@ -60,7 +60,40 @@
 		</header>
 		<div class="box alt">
 			<div class="row gtr-50 gtr-uniform products">
-				<div class="product-list"></div>
+				<div class="product-list">
+					<th:block th:if="${#lists.size(productList)} > 0" th:each="productList : ${productList.content}">
+						<div class="col-sm-6 col-md-4 col-lg-4">
+							<div class="pb-0">
+								<div class="thumb">
+									<img alt="상품이미지" th:src="${productList.getTitle_img()}" class="img-thumbnail"/>
+									<div class="overlay">
+										<div class="btn">
+											<a class="btn" th:href="@{/product/detail(id=%{productList.getId()})}">상세보기</a>
+										</div>
+									</div>
+								</div>
+								<div class="text-center bg-light pt-1 pb-1">
+									<a th:href="@{/product/detail(id=${productList.getId()})}"><h5 class="title mt-0" th:text="${productList.getP_nm()}"></h5></a>
+									<div class="fa-star-half" title="Rated 3.50 out of 5"><span style="width: 67%;">3.50</span></div>
+									<div class=""><span class="fa-sort-amount-down" th:text="|${productList.getPrice()}원|"></span></div>
+								</div>
+							</div>
+						</div>
+					</th:block>
+					<div class="col-md-12">
+						<nav>
+							<th:block th:if="${pagingDTO.getTotPage() != 0}">
+								<ul class="pagination theme-colored mt-0">
+									<li th:if="${pagingDTO.getScaleStartPage() != 1}"> <a th:href="@{/productList(page=${pagingDTO.getPrevPage()}, c_code=${c_code})}" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>
+									<li th:each="i : ${#numbers.sequence(pagingDTO.getScaleStartPage(),pagingDTO.getScaleEndPage())}" th:class="${pagingDTO.page eq i} ? active : ''">
+										<a th:href="@{/productList(page=${i}, catCd=${catCd})}" th:text="${i}"></a>
+									</li>
+									<li th:if="${pagingDTO.getScaleEndPage() != pagingDTO.getTotPage()}"> <a th:href="@{/productList(page=${pagingDTO.getNextPage()}, c_code=${c_code})}" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>
+								</ul>
+							</th:block>
+						</nav>
+					</div>
+				</div>
 			</div>
 
 <!--			<th:block layout:fragment="paging">

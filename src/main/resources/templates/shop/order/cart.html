@@ -358,24 +358,65 @@
 						</div>
 					</tr>
 					<tr>
+						<th></th>
+						<th>Photo</th>
 						<th>Product</th>
+						<th>Price</th>
 						<th>Quantity</th>
 						<th>Total</th>
 					</tr>
 					</thead>
 					<tbody>
-					<tr class="chkBox">
-						<input type="checkbox" name="chkBox" class="chkBox" th:data="${row.i_cart}">
-					</tr>
-					<tr>
-						<td>
-							<span class="image left">
-								<img src="images/pic01.jpg" alt="">
-							</span>
-							<div th:text="${row.p_nm}"></div>
+					<tr class="cart_item">
+						<td class="product-remove"><a title="Remove this item" class="remove" href="#">×</a></td>
+						<td class="product-thumbnail"><a href="#"><img alt="member" src="http://placehold.it/320x360"></a></td>
+						<td class="product-name"><a class="text-theme-colored" href="#">상품명</a>
+							<ul class="variation">
+								<li class="variation-size">Color: <span>Black</span></li>
+							</ul>
 						</td>
-						<td th:text="${row.count}"></td>
-						<td th:text="${row.price}" pattern="###,###,###"></td>
+						<td class="product-price"><span class="amount">가격</span></td>
+						<td class="product-quantity"><div class="quantity buttons_added">
+							<input type="button" class="minus" value="-">
+							<input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
+							<input type="button" class="plus" value="+">
+						</div></td>
+						<td class="product-subtotal"><span class="amount">가격</span></td>
+					</tr>
+					<tr class="cart_item">
+						<td class="product-remove"><a title="Remove this item" class="remove" href="#">×</a></td>
+						<td class="product-thumbnail"><a href="#"><img alt="member" src="http://placehold.it/320x360"></a></td>
+						<td class="product-name"><a class="text-theme-colored" href="#">Product Name</a>
+							<ul class="variation">
+								<li class="variation-size">옵션: <span>옵션</span></li>
+							</ul>
+						</td>
+						<td class="product-price"><span class="amount">가격</span></td>
+						<td class="product-quantity"><div class="quantity buttons_added">
+							<input type="button" class="minus" value="-">
+							<input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
+							<input type="button" class="plus" value="+">
+						</div></td>
+						<td class="product-subtotal"><span class="amount">가격</span></td>
+					</tr>
+					<tr class="cart_item">
+						<td class="product-remove"><a title="Remove this item" class="remove" href="#">×</a></td>
+						<td class="product-thumbnail"><a href="#"><img alt="member" src="http://placehold.it/320x360"></a></td>
+						<td class="product-name"><a class="text-theme-colored" href="#">상품명</a>
+							<ul class="variation">
+								<li class="variation-size">옵션: <span>옵션</span></li>
+							</ul></td>
+						<td class="product-price"><span class="amount">가격</span></td>
+						<td class="product-quantity"><div class="quantity buttons_added">
+							<input type="button" class="minus" value="-">
+							<input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
+							<input type="button" class="plus" value="+">
+						</div></td>
+						<td class="product-subtotal"><span class="amount">가격</span></td>
+					</tr>
+					<tr class="cart_item">
+						<td colspan="2">&nbsp;</td>
+						<td><button type="button" class="btn">옵션 수정</button></td>
 					</tr>
 					</tbody>
 					<tfoot>
@@ -384,7 +425,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">total</td>
-						<td th:text="${#aggregates.sum({row.count * row.price})}"></td>
+						<td>토탈 가격</td>
 					</tr>
 					</tfoot>
 				</table>
