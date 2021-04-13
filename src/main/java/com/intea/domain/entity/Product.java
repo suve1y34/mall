@@ -72,4 +72,15 @@ public class Product extends CommonEntity {
                 .purchase_cnt(purchase_cnt)
                 .build();
     }
+
+    public ProductResDTO.AdminProductResDTO toAdminProductResDTO(int price) {
+        return ProductResDTO.AdminProductResDTO.builder()
+                .id(id)
+                .p_nm(p_nm)
+                .title_img(title_img)
+                .price(price)
+                .purchase_cnt(purchase_cnt)
+                .total_cnt(total_cnt)
+                .build();
+    }
 }

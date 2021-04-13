@@ -32,4 +32,14 @@ public class ProductResDTO {
         private Long timestamp;
         private Integer purchase_cnt;
     }
+
+    @Getter @Builder @ToString
+    public static class AdminProductResDTO {
+        private Long id;
+        private String p_nm;
+        private String title_img;
+        private Integer price;
+        private Integer purchase_cnt;
+        private Integer total_cnt;
+    }
 }
