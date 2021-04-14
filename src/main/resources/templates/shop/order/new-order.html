@@ -7,56 +7,146 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
 <th:layout layout:fragment="main">
 	<script>
-		function requestPay() {
-			// IMP.request_pay(param, callback) 호출
-			IMP.request_pay({ // param
-				pg: "kakaopay",
-				pay_method: "card",
-				merchant_uid: "merchant_" + new Date().getTime(),
-				name: "노르웨이 회전 의자",
-				amount: 64900,
-				buyer_email: "gildong@gmail.com",
-				buyer_name: "홍길동",
-				buyer_tel: "010-4242-4242",
-				buyer_addr: "서울특별시 강남구 신사동",
-				buyer_postcode: "01181"
-			}, function (rsp) { // callback
-				if (rsp.success) { // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-					// jQuery로 HTTP 요청
-					//[1] 서버단에서 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
-					jQuery.ajax({
-						url: "https://www.myservice.com/payments/complete", // 가맹점 서버
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						data: {
-							imp_uid: rsp.imp_uid,
-							merchant_uid: rsp.merchant_uid
-							//기타 필요한 데이터가 있으면 추가 전달
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var token  = $("meta[name='_csrf']").attr("content");
+	</script>
+	<script th:inline="javascript">
+
+		var orderObj = {
+
+			getOrderList : function(obj) {
+
+				var userId = [[${session.user.getId()}]],
+						page = obj ? $(obj).data("page") : 1;
+
+				$.ajax({
+					type : "GET",
+					url  : "/user/" + userId + "/order/" + page,
+					contentType : "application/json",
+					beforeSend	: function(xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					success : function(data) {
+						console.log(data);
+
+						if (data) {
+							var productOrderList      = data.productOrderList.content,
+									productOrderPagingDto = data.productOrderPagingDto,
+									$productOrderTableBody = $(".order-table-body"),
+									$productOrderPagination = $(".product-order-pagination");
+
+							$productOrderTableBody.empty();
+							$productOrderPagination.empty();
+
+							if (productOrderList.length > 0) {
+
+								productOrderList.forEach(function(element) {
+
+									var cartListLength = element.carts.length;
+
+									var orderTr = "<tr class='cart_itme'>" +
+											"<td class=\"product-remove\"><a data-order-id='" + element.id + "' data-toggle=\"modal\" data-target=\".bs-order-modal-lg\" title=\"Remove this item\" class=\"remove\" href=\"#\" onclick='orderObj.getOrderDetail(this)'>" + element.orderNumber + "</a></td>" +
+											"<td class=\"product-thumbnail\"><a href='/productDetails?productId=" + element.carts[cartListLength - 1].product.id + "'><img alt=\"member\" src='" + element.carts[cartListLength - 1].product.titleImg + "'></a></td>" +
+											"<td class=\"product-name\"><span class=\"text-theme-colored\">" + element.orderName + "<span/>" +
+											"<ul class=\"variation\">" +
+											"</ul></td>" +
+											"<td class=\"product-price\"><span class=\"amount\">" + element.amount + "</span></td>" +
+											"<td class=\"product-price\"><span class=\"amount\">" + element.orderStatus + "</span></td>" +
+											"<td class=\"product-name\"><span class=\"amount\">" + element.createdDate + "</span></td>" +
+											"</tr>"
+
+									$productOrderTableBody.append(orderTr);
+								})
+
+								// 페이징 그리기
+								// Prev 페이지
+								if (productOrderPagingDto.scaleStartPage !== 1) {
+									var prevLi =
+											"<li><a data-page='" + productOrderPagingDto.prePage + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
+
+									$productOrderPagination.append(prevLi);
+								}
+
+								// 중간 페이지
+								for (var i = productOrderPagingDto.scaleStartPage; i <= productOrderPagingDto.scaleEndPage; i++) {
+									var pageLi = "";
+
+									if (productOrderPagingDto.page === i) {
+										pageLi = "<li class='active'><a data-page='" + i + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)'>" + i + "</a></li>";
+									} else {
+										pageLi = "<li class=''><a data-page='" + i + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)'>" + i + "</a></li>";
+									}
+
+									$productOrderPagination.append(pageLi);
+								}
+
+								// Next 페이지
+								if (productOrderPagingDto.scaleEndPage !== productOrderPagingDto.totPage) {
+									var nextLi =
+											"<li><a data-page='" + productOrderPagingDto.nextPage + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li>"
+
+									$productOrderPagination.append(nextLi);
+								}
+							}
 						}
-					}).done(function (data) {
-						//[2] 서버에서 REST API로 결제정보확인 및 서비스루틴이 정상적인 경우
-						// 가맹점 서버 결제 API 성공시 로직
-						if(everythings_fine) {
-							msg = '결제가 완료되었습니다.';
-							msg += '\n고유ID: ' + rsp.imp_uid;
-							msg += '\n상점 거래ID: ' + rsp.merchant_uid;
-							msg += '\n결제 금액: ' + rsp.paid_amount;
-							msg += '카드 승인번호: ' + rsp.apply_num;
-						} else {
-							//[3] 아직 제대로 결제가 되지 않았습니다.
-							//[4] 결제된 금액이 요청한 금액과 달라 결제를 자동취소처리하였습니다.
+
+
+					},
+					error   : function(e) {
+						alert(e.responseText);
+					}
+				})
+			},
+			getOrderDetail  : function (obj) {
+
+				$.ajax({
+					type : "GET",
+					url : "/order/" + $(obj).data("orderId"),
+					contentType : "application/json",
+					beforeSend	: function(xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					success : function(data) {
+						var $orderUl = $(".order-ul");
+
+						$orderUl.empty();
+
+						var orderLi = "<li><strong>주문번호</strong></li>" +
+								"<li>" + data.order_num + "</li><hr>" +
+								"<li><strong>주문명</strong></li>" +
+								"<li>" + data.order_name + "</li><hr>" +
+								"<li><strong>결제금액</strong></li>" +
+								"<li>" + data.amount + "원</li><hr>" +
+								"<li><strong>주문상태</strong></li>" +
+								"<li>" + data.order_status + "</li><hr>" +
+								"<li><strong>배송주소</strong></li>" +
+								"<li>" + data.address + "</li><hr>" +
+								"<li><strong>배송메세지</strong></li>" +
+								"<li>" + data.message + "</li><hr>" +
+								"<li><strong>주문상품 (최대 16개 까지만 표시됩니다.)</strong></li>";
+
+						for (var i = 0; i < data.carts.length; i++) {
+							orderLi += "<img width='100px' height='100px' alt=\"member\" src='" + data.cart[i].product.titl_img + "'>";
+
+							if (i === 15) {
+								orderLi += "<hr><li>외 " + (data.cart.length - (i + 1)) + "종류의 상품</li>"
+								break;
+							}
 						}
-					})
-					//성공시 이동할 페이지
-					location.href = 'msg='+msg;
-				} else {
-					alert("결제에 실패하였습니다. 에러 내용: " +  rsp.error_msg);
-					//실패시 이동할 페이지
-					location.href = "";
-					alert(msg);
-				}
-			});
+
+						$orderUl.append(orderLi);
+					},
+					error : function (e) {
+						alert(e.responseText);
+					}
+				})
+
+			}
 		}
+
+		$(function() {
+			orderObj.getOrderList();
+		})
 	</script>
 	<!-- Section -->
 	<section>
@@ -124,12 +214,12 @@
 							</div>
 						</td>
 					</tr>
-					<!--					<tr>
-                						<td class="col-2 col-12-xsmall">
-                                                <label for="">배송 메시지</label>
-                                                <textarea id="demo-message" placeholder="배송기사님께 전달할 메시지입니다" rows="2"></textarea>
-                                            </td>
-                                        </tr>-->
+					<tr>
+						<td class="col-2 col-12-xsmall">
+							<label for="demo-message">배송 메시지</label>
+							<textarea id="demo-message" placeholder="배송기사님께 전달할 메시지입니다" rows="2"></textarea>
+						</td>
+					</tr>-
 				</table>
 			</div>
 			<div class="table-wrapper">

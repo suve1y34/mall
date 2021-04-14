@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class OrdersController {
     @GetMapping("/order")
     public String getOrders(Model model) {
-        model.addAttribute("product", "order");
+        model.addAttribute("pageName", "order");
         return "shop/order/new-order";
     }
 }
