@@ -92,38 +92,4 @@
 		</div>
 	</section>
 </th:layout>
-
-<th:block layout:fragment="script">
-	<script th:inline="javascript">
-		/*<![CDATA[*/
-
-		function insCart(form) {
-
-			var result = (
-					isValid(form.i_product, "상품번호", null, null)
-					&& isValid(form.count, "수량", null, null)
-			);
-
-			if ( result == false ) {
-				return false;
-			}
-
-			var idx = /*[[ ${board.i_cart} ]]*/;
-			if (isEmpty(i_cart) == false) {
-				var queryString = /*[[ ${param.makeQueryString(param.currentPageNo)} ]]*/;
-
-				/*[- 쿼리 스트링을 오브젝트 형태로 변환 -]*/
-				queryString = new URLSearchParams(queryString);
-				queryString.forEach(function(value, key) {
-					if (isEmpty(value) == false) {
-						$(form).append('<input type="hidden" name="' + key + '" value="' + value + '" />');
-					}
-				});
-			}
-		}
-
-		/*]]>*/
-
-	</script>
-</th:block>
 </html>

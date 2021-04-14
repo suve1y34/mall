@@ -40,7 +40,7 @@ public class CartService {
             throw new NotExistUserException("존재하지 않는 회원입니다.");
         }
 
-        Optional<Product> productOptional = productRepo.findById(cartReqDTO.getUser_id());
+        Optional<Product> productOptional = productRepo.findById(cartReqDTO.getProduct_id());
 
         if(!productOptional.isPresent()) {
             throw new NotExistUserException("존재하지 않는 상품입니다.");

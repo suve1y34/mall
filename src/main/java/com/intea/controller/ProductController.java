@@ -17,4 +17,9 @@ public class ProductController {
 
         return "shop/product/product-list";
     }
+
+    @GetMapping("/product/detail")
+    public String productDetail() {
+        return "shop/product/product-list";
+    }
 }

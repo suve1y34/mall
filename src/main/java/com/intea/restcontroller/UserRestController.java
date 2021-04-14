@@ -1,4 +1,4 @@
-package com.intea.controller.rest;
+package com.intea.restcontroller;
 
 import com.intea.domain.dto.MembersDTO;
 import com.intea.service.UserService;

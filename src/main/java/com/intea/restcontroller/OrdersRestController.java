@@ -1,7 +1,6 @@
-package com.intea.controller.rest;
+package com.intea.restcontroller;
 
 import com.intea.domain.dto.OrdersReqDTO;
-import com.intea.domain.dto.OrdersResDTO;
 import com.intea.service.OrdersService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
