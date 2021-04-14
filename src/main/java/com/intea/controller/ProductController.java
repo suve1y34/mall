@@ -13,8 +13,8 @@ public class ProductController {
 
     @GetMapping("/productList")
     public String productList(Model model) {
-        model.addAttribute("product", "productList");
+        model.addAttribute("pageName", "productList");
 
-        return "shop/product/product-detail";
+        return "shop/product/product-list";
     }
 }

@@ -1,4 +1,4 @@
-package com.intea.controller;
+package com.intea.controller.rest;
 
 import com.intea.domain.dto.ReviewReqDTO;
 import com.intea.service.CartService;
