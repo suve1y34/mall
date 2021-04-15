@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductRestController {
     private ProductService productService;
 
-    @GetMapping("/productList/{page}/ct/{c_code}")
+    @GetMapping("/productList/{page}/ct/{c_code}/sc/{sort_code}")
     public ResponseEntity<?> getProductList(@PathVariable("page") int page, @PathVariable("c_code") String c_code,
-                                            @PageableDefault(size = 9, sort = "insert_time", direction = Sort.Direction.DESC)Pageable pageable) {
-        return ResponseEntity.ok().body(productService.getProductListByCcode(c_code, pageable));
+                                            @PathVariable("sc")String sort_code) {
+//        return ResponseEntity.ok().body(productService.getProductListByKeyword(c_code, pageable, String sort_code));
+        return null;
     }
 
     @GetMapping("/product/{id}")
