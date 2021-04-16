@@ -11,5 +11,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllByC_levelOrderByC_codeDesc(int idx);
     List<Category> findAllByUpper_c_codeOrderByC_codeDesc(String upper_c_code);
     Category findByC_code(String upper_c_code);
+    List<Category> findAllByUse_yn(char yn);
     List<Category> findAllByUpper_c_code(String large_ct);
 }

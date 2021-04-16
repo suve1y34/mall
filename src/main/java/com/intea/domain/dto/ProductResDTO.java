@@ -17,8 +17,10 @@ public class ProductResDTO {
     private String small_ct;
     private Integer price;
     private Integer purchase_cnt;
+    private Integer limit_cnt;
     private Integer total_cnt;
     private ProductStatus status;
+    private Integer rate_avg;
 
     @Getter
     @AllArgsConstructor
@@ -40,6 +42,18 @@ public class ProductResDTO {
         private String title_img;
         private Integer price;
         private Integer purchase_cnt;
+        private Integer total_cnt;
+        private Integer rate_avg;
+    }
+
+    @Getter @Builder @ToString
+    public static class AdminProductDetailResDTO {
+        private Long id;
+        private String p_nm;
+        private String title_img;
+        private Integer price;
+        private String large_ct;
+        private String small_ct;
         private Integer total_cnt;
     }
 }

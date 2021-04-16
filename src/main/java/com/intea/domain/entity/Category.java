@@ -1,5 +1,6 @@
 package com.intea.domain.entity;
 
+import com.intea.domain.dto.CategoryResDTO;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -22,4 +23,15 @@ public class Category {
     private String upper_c_code;
     private String c_code;
     private String c_nm;
+    private Character use_yn;
+
+    public CategoryResDTO.SmallCategory toSmallCategoryDTO() {
+        return CategoryResDTO.SmallCategory.builder()
+                .id(id)
+                .c_code(c_code)
+                .c_nm(c_nm)
+                .upper_c_code(upper_c_code)
+                .use_yn(use_yn)
+                .build();
+    }
 }

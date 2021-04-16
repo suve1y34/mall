@@ -30,5 +30,6 @@ public class CategoryReqDTO {
         private String c_nm;
         @NotBlank(message = "상위 카테고리 코드를 작성해 주세요.")
         private String upper_c_code;
+        private Character use_yn;
     }
 }

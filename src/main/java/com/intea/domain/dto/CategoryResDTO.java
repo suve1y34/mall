@@ -14,6 +14,7 @@ public class CategoryResDTO {
     public static class BigCategory {
         private Long id;
         private String c_nm;
+        private Character use_yn;
     }
 
     @Getter
@@ -24,5 +25,6 @@ public class CategoryResDTO {
         private String c_nm;
         private String c_code;
         private String upper_c_code;
+        private Character use_yn;
     }
 }

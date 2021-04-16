@@ -11,13 +11,13 @@ import java.util.List;
 @Setter
 @ToString
 public class OrdersReqDTO {
-    private List<Long> cart_id_list;
+    private List<Long> cartIdList;
 
     @NotBlank(message = "주문번호는 필수 항목입니다.")
     private String order_num;
 
     @NotBlank(message = "주문명은 필수 항목입니다.")
-    private String order_name;
+    private String order_nm;
     private String message;
     @NotBlank(message = "주소는 필수 항목입니다.")
     private String postCode;
@@ -26,4 +26,6 @@ public class OrdersReqDTO {
     @NotBlank(message = "주소는 필수 항목입니다.")
     private String de_address;
     private Integer amount;
+    private Integer use_saving;
+    private String impUid;
 }

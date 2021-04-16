@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intea.constant.ProductStatus;
 import com.intea.domain.dto.ProductResDTO;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,10 +12,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity @Builder
+@NoArgsConstructor @AllArgsConstructor
 @ToString
 public class Product extends CommonEntity {
     @Id
@@ -29,6 +28,7 @@ public class Product extends CommonEntity {
     private String p_description;
 
     private Integer purchase_cnt;
+    private Integer limit_cnt;
     private Integer total_cnt;
 
     private ProductStatus product_status;
@@ -36,6 +36,9 @@ public class Product extends CommonEntity {
     private Integer stock;
 
     private String title_img;
+
+    @ColumnDefault("0")
+    private Integer rate_avg;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductImg> productImgList;
@@ -56,9 +59,11 @@ public class Product extends CommonEntity {
                 .small_ct(small_ct)
                 .price(price)
                 .purchase_cnt(purchase_cnt)
+                .limit_cnt(limit_cnt)
                 .total_cnt(total_cnt)
                 .status(product_status)
                 .title_img(title_img)
+                .rate_avg(rate_avg)
                 .build();
     }
 
@@ -81,6 +86,7 @@ public class Product extends CommonEntity {
                 .price(price)
                 .purchase_cnt(purchase_cnt)
                 .total_cnt(total_cnt)
+                .rate_avg(rate_avg)
                 .build();
     }
 }

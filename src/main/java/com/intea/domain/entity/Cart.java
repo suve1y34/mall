@@ -16,6 +16,7 @@ public class Cart extends CommonEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer count;
+    private Character use_yn;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
