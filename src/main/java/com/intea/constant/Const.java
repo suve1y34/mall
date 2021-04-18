@@ -17,6 +17,5 @@ public class Const {
 
     public static final String LOGIN_USER = "loginUser";
 
-    public static final String ADMIN = "ADMIN";
-    public static final String MEMBER = "MEMBER";
+    public static final String CATEGORY_LIST_KEY = "categoryList";
 }
