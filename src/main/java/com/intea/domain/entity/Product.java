@@ -45,13 +45,17 @@ public class Product extends CommonEntity {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
+    private List<Product> productList;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Cart> cartList;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Review> reviewList;
 
-    public ProductResDTO toResponseDTO(int price) {
+    public ProductResDTO toResponseDTO() {
         return ProductResDTO.builder()
                 .id(id)
                 .p_nm(p_nm)

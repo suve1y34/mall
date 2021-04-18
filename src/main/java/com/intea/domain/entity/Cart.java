@@ -31,7 +31,7 @@ public class Cart extends CommonEntity {
     @JsonIgnore
     private Orders orders;
 
-    public CartResDTO toResponseDTO(int price) {
+    public CartResDTO toResponseDTO() {
 
         return CartResDTO.builder()
                 .id(id)

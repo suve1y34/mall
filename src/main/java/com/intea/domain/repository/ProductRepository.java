@@ -11,4 +11,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAll(Pageable pageable);
     Page<Product> findBySmall_ct(String c_code, Pageable pageable);
     Page<Product> findAllByLarge_ct(String large_ct, Pageable pageable);
+    Page<Product> findByLarge_ctAndSmall_ctOrderByInsert_timeDesc(String large_ct, String small_ct, Pageable pageable);
 }

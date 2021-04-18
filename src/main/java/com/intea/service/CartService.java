@@ -12,6 +12,7 @@ import com.intea.domain.repository.UserRepository;
 import com.intea.exception.CheckReviewAuthorityException;
 import com.intea.exception.NotExistCartException;
 import com.intea.exception.NotExistUserException;
+import com.intea.exception.ProductLimitCountException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,10 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -48,23 +47,26 @@ public class CartService {
 
         Product product = productOptional.get();
 
+        if(product.getLimit_cnt() < cartReqDTO.getCount()) throw new ProductLimitCountException("재고가 없는 상품입니다.");
+
         cartRepo.save(Cart.builder()
                 .user(user.get())
                 .product(product)
                 .build());
     }
 
-    public HashMap<String, Object> getCartList(Long user_id, int page, Pageable pageable) {
+    @Transactional
+    public HashMap<String, Object> getCartList(UUID user_id, int page, Pageable pageable) {
         int realPage = page - 1;
         pageable = PageRequest.of(realPage, 5);
 
-        Page<Cart> cartList = cartRepo.findAllByUser_idOrderByInsert_timeDesc(user_id, pageable);
+        Page<Cart> cartList = cartRepo.findAllByUser_idAnAndUse_ynOrderByInsert_timeDesc(user_id, 'Y', pageable);
 
         if(cartList.getTotalElements() > 0) {
             List<CartResDTO> cartResDTOList = new ArrayList<>();
 
             for(Cart cart : cartList) {
-                cartRepo.add(cart.toResponseDTO());
+                cartResDTOList.add(cart.toResponseDTO());
             }
 
             PageImpl<CartResDTO> cartLists = new PageImpl<>(cartResDTOList, pageable, cartList.getTotalElements());
@@ -72,11 +74,12 @@ public class CartService {
             PagingDTO cartPagingDTO = new PagingDTO();
             cartPagingDTO.setPagingInfo(cartLists);
 
-            List<Cart> carts = cartRepo.findAllByUser_id(user_id);
-
+            List<Cart> carts = cartRepo.findAllByUser_idAnAndUse_ynOrderByInsert_timeDesc(user_id, 'Y');
             int chkoutPrice = 0;
+            List<Long> cartIdList = new ArrayList<>();
 
             for(Cart cart : carts) {
+                cartIdList.add(cart.getId());
                 chkoutPrice += cart.getProduct().getPrice() * cart.getCount();
             }
 
@@ -90,25 +93,26 @@ public class CartService {
         return null;
     }
 
+    @Transactional
     public void delCart(Long id) {
         Optional<Cart> cartOpt = cartRepo.findById(id);
 
         if(!cartOpt.isPresent()) {
-            throw new NotExistCartException("장바구니에 상품이 존재하지 않습니다.");
+            throw new NotExistCartException("존재하지 않는 장바구니 입니다.");
         }
 
         cartRepo.delete(cartOpt.get());
     }
 
     public int chkReviewAuthority(HashMap<String, Object> paramMap) {
-        Long user_id = Long.parseLong(paramMap.get("userId").toString());
-        Long product_id = Long.parseLong(paramMap.get("productId").toString());
+        UUID user_id = UUID.fromString(paramMap.get("user_id").toString());
+        Long product_id = Long.parseLong(paramMap.get("product_id").toString());
 
         List<Cart> cartList = cartRepo.findAllByUser_idAndProduct_id(user_id, product_id);
 
         if (cartList.size() > 0) {
             for (Cart cart : cartList) {
-                if (cart.getorders() != null) {
+                if (cart.getOrders() != null) {
                     return 1;
                 }
             }
