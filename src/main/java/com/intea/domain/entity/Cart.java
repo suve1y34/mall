@@ -1,7 +1,7 @@
 package com.intea.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.intea.domain.dto.CartResDTO;
+import com.intea.domain.dto.CartResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,24 +16,24 @@ public class Cart extends CommonEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer count;
-    private Character use_yn;
+    private Character useYn;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JoinColumn(name = "orderId", referencedColumnName = "id")
     @JsonIgnore
     private Orders orders;
 
-    public CartResDTO toResponseDTO() {
+    public CartResponseDto toResponseDto() {
 
-        return CartResDTO.builder()
+        return CartResponseDto.builder()
                 .id(id)
                 .user(user)
                 .product(product)

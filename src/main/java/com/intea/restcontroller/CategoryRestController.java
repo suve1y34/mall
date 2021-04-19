@@ -1,6 +1,6 @@
 package com.intea.restcontroller;
 
-import com.intea.domain.dto.CategoryReqDTO;
+import com.intea.domain.dto.CategoryRequestDto;
 import com.intea.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +32,7 @@ public class CategoryRestController {
     @ApiOperation(value = "1차 카테고리 추가 ( 관리자 권한 ) ")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("categories/first")
-    public ResponseEntity<?> addFirstCategory(@RequestBody @Valid CategoryReqDTO.BigCategory bigCategory,
+    public ResponseEntity<?> addFirstCategory(@RequestBody @Valid CategoryRequestDto.BigCategory bigCategory,
                                               BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             String errMsg = bindingResult.getAllErrors().get(0).getDefaultMessage();
@@ -44,7 +44,7 @@ public class CategoryRestController {
     @ApiOperation(value = "2차 카테고리 추가 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/categories/second")
-    public ResponseEntity<?> addSecondCategory(@RequestBody @Valid CategoryReqDTO.SmallCategory smallCategory,
+    public ResponseEntity<?> addSecondCategory(@RequestBody @Valid CategoryRequestDto.SmallCategory smallCategory,
                                                BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             String errMsg = bindingResult.getAllErrors().get(0).getDefaultMessage();
@@ -64,7 +64,7 @@ public class CategoryRestController {
     @ApiOperation(value = "1, 2차 카테고리 수정 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/categories/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody @Valid CategoryReqDTO categoryDto,
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody @Valid CategoryRequestDto categoryDto,
                                             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()){

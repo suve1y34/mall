@@ -7,13 +7,13 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class ReviewResDTO {
+public class ReviewResponseDto {
 
     private Long id;
-    private UserResDTO.ReviewUserResDTO user_id;
+    private UserResponseDto.ReviewUserResDTO userId;
     private String title;
     private int rate;
-    private String insert_time;
+    private String insertTime;
 
     @Getter
     @Builder

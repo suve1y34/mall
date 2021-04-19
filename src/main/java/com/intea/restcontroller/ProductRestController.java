@@ -1,20 +1,16 @@
 package com.intea.restcontroller;
 
-import com.intea.domain.dto.ProductReqDTO;
+import com.intea.domain.dto.ProductRequestDto;
 import com.intea.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -72,7 +68,7 @@ public class ProductRestController {
     @ApiOperation(value = "상품 추가 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/products")
-    public ResponseEntity<?> addProduct(@RequestBody @Valid ProductReqDTO productReqDTO,
+    public ResponseEntity<?> addProduct(@RequestBody @Valid ProductRequestDto productRequestDto,
                                         BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()){
@@ -80,7 +76,7 @@ public class ProductRestController {
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok().body(productService.addProduct(productReqDTO));
+        return ResponseEntity.ok().body(productService.addProduct(productRequestDto));
     }
 
     // 상품 상세 (관리자 권한)
@@ -96,7 +92,7 @@ public class ProductRestController {
     @ApiOperation(value = "상품 수정 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/products/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductReqDTO.UpdateResDTO updateReqDTO,
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductRequestDto.UpdateResDTO updateReqDTO,
                                            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()){

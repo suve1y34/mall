@@ -1,8 +1,8 @@
 package com.intea.service;
 
-import com.intea.domain.dto.CartReqDTO;
-import com.intea.domain.dto.CartResDTO;
-import com.intea.domain.dto.PagingDTO;
+import com.intea.domain.dto.CartRequestDto;
+import com.intea.domain.dto.CartResponseDto;
+import com.intea.domain.dto.PagingDto;
 import com.intea.domain.entity.Cart;
 import com.intea.domain.entity.Product;
 import com.intea.domain.entity.User;
@@ -32,14 +32,14 @@ public class CartService {
     private ProductRepository productRepo;
     private CartRepository cartRepo;
 
-    public void getCart(CartReqDTO cartReqDTO) {
-        Optional<User> user = userRepo.findById(cartReqDTO.getUser_id());
+    public void getCart(CartRequestDto cartRequestDto) {
+        Optional<User> user = userRepo.findById(cartRequestDto.getUserId());
 
         if(!user.isPresent()) {
             throw new NotExistUserException("존재하지 않는 회원입니다.");
         }
 
-        Optional<Product> productOptional = productRepo.findById(cartReqDTO.getProduct_id());
+        Optional<Product> productOptional = productRepo.findById(cartRequestDto.getProductId());
 
         if(!productOptional.isPresent()) {
             throw new NotExistUserException("존재하지 않는 상품입니다.");
@@ -47,7 +47,7 @@ public class CartService {
 
         Product product = productOptional.get();
 
-        if(product.getLimit_cnt() < cartReqDTO.getCount()) throw new ProductLimitCountException("재고가 없는 상품입니다.");
+        if(product.getLimitCnt() < cartRequestDto.getCount()) throw new ProductLimitCountException("재고가 없는 상품입니다.");
 
         cartRepo.save(Cart.builder()
                 .user(user.get())
@@ -60,21 +60,21 @@ public class CartService {
         int realPage = page - 1;
         pageable = PageRequest.of(realPage, 5);
 
-        Page<Cart> cartList = cartRepo.findAllByUser_idAnAndUse_ynOrderByInsert_timeDesc(user_id, 'Y', pageable);
+        Page<Cart> cartList = cartRepo.findAllByUserIdAndUseYnOrderByInsertTimeDesc(user_id, 'Y', pageable);
 
         if(cartList.getTotalElements() > 0) {
-            List<CartResDTO> cartResDTOList = new ArrayList<>();
+            List<CartResponseDto> cartResDTOList = new ArrayList<>();
 
             for(Cart cart : cartList) {
-                cartResDTOList.add(cart.toResponseDTO());
+                cartResDTOList.add(cart.toResponseDto());
             }
 
-            PageImpl<CartResDTO> cartLists = new PageImpl<>(cartResDTOList, pageable, cartList.getTotalElements());
+            PageImpl<CartResponseDto> cartLists = new PageImpl<>(cartResDTOList, pageable, cartList.getTotalElements());
 
-            PagingDTO cartPagingDTO = new PagingDTO();
-            cartPagingDTO.setPagingInfo(cartLists);
+            PagingDto cartPagingDto = new PagingDto();
+            cartPagingDto.setPagingInfo(cartLists);
 
-            List<Cart> carts = cartRepo.findAllByUser_idAnAndUse_ynOrderByInsert_timeDesc(user_id, 'Y');
+            List<Cart> carts = cartRepo.findAllByUserIdAndUseYnOrderByInsertTimeDesc(user_id, 'Y');
             int chkoutPrice = 0;
             List<Long> cartIdList = new ArrayList<>();
 
@@ -85,7 +85,7 @@ public class CartService {
 
             HashMap<String, Object> resultMap = new HashMap<>();
             resultMap.put("cartList", cartLists);
-            resultMap.put("cartPagingDTO", cartPagingDTO);
+            resultMap.put("cartPagingDTO", cartPagingDto);
             resultMap.put("chkoutPrice", chkoutPrice);
 
             return resultMap;
@@ -108,7 +108,7 @@ public class CartService {
         UUID user_id = UUID.fromString(paramMap.get("user_id").toString());
         Long product_id = Long.parseLong(paramMap.get("product_id").toString());
 
-        List<Cart> cartList = cartRepo.findAllByUser_idAndProduct_id(user_id, product_id);
+        List<Cart> cartList = cartRepo.findAllByUserIdAndProductId(user_id, product_id);
 
         if (cartList.size() > 0) {
             for (Cart cart : cartList) {

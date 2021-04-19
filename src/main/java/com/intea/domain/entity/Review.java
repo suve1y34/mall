@@ -1,6 +1,6 @@
 package com.intea.domain.entity;
 
-import com.intea.domain.dto.ReviewResDTO;
+import com.intea.domain.dto.ReviewResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,16 +30,16 @@ public class Review extends CommonEntity {
     private String content;
     private int rate;
 
-    public ReviewResDTO toResponseDTO() {
-        LocalDateTime insert_time = this.getInsert_time();
+    public ReviewResponseDto toResponseDTO() {
+        LocalDateTime insertTime = this.getInsertTime();
 
-        return ReviewResDTO.builder()
+        return ReviewResponseDto.builder()
                 .id(id)
-                .user_id(user.toReviewResDTO())
+                .userId(user.toReviewResDTO())
                 .title(title)
                 .rate(rate)
-                .insert_time(insert_time.getYear() + "-" + insert_time.getMonthValue() + "-" +
-                        insert_time.getDayOfMonth() + " " + insert_time.getHour() + ":" + insert_time.getMinute() + ":" + insert_time.getSecond())
+                .insertTime(insertTime.getYear() + "-" + insertTime.getMonthValue() + "-" +
+                        insertTime.getDayOfMonth() + " " + insertTime.getHour() + ":" + insertTime.getMinute() + ":" + insertTime.getSecond())
                 .build();
     }
 }

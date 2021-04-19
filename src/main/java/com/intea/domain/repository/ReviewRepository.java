@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    Page<Review> findAllByProductIdOrderByInsert_timeDesc(Long product_id, Pageable pageable);
+    Page<Review> findAllByProductIdOrderByInsertTimeDesc(Long productId, Pageable pageable);
 }

@@ -2,7 +2,7 @@ package com.intea.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intea.constant.ProductStatus;
-import com.intea.domain.dto.ProductResDTO;
+import com.intea.domain.dto.ProductResponseDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -20,25 +20,25 @@ public class Product extends CommonEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String large_ct;
-    private String small_ct;
+    private String largeCat;
+    private String smallCat;
 
-    private String p_nm;
+    private String productNm;
     private Integer price;
-    private String p_description;
+    private String productDescription;
 
-    private Integer purchase_cnt;
-    private Integer limit_cnt;
-    private Integer total_cnt;
+    private Integer purchaseCnt;
+    private Integer limitCnt;
+    private Integer totalCnt;
 
-    private ProductStatus product_status;
+    private ProductStatus productStatus;
 
     private Integer stock;
 
-    private String title_img;
+    private String titleImg;
 
     @ColumnDefault("0")
-    private Integer rate_avg;
+    private Integer rateAvg;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductImg> productImgList;
@@ -55,42 +55,42 @@ public class Product extends CommonEntity {
     @JsonIgnore
     private List<Review> reviewList;
 
-    public ProductResDTO toResponseDTO() {
-        return ProductResDTO.builder()
+    public ProductResponseDto toResponseDTO() {
+        return ProductResponseDto.builder()
                 .id(id)
-                .p_nm(p_nm)
-                .large_ct(large_ct)
-                .small_ct(small_ct)
+                .productNm(productNm)
+                .largeCat(largeCat)
+                .smallCat(smallCat)
                 .price(price)
-                .purchase_cnt(purchase_cnt)
-                .limit_cnt(limit_cnt)
-                .total_cnt(total_cnt)
-                .status(product_status)
-                .title_img(title_img)
-                .rate_avg(rate_avg)
+                .purchaseCnt(purchaseCnt)
+                .limitCnt(limitCnt)
+                .totalCnt(totalCnt)
+                .status(productStatus)
+                .titleImg(titleImg)
+                .rateAvg(rateAvg)
                 .build();
     }
 
-    public ProductResDTO.MainProductResDTO toMainProductResDTO() {
-        return ProductResDTO.MainProductResDTO.builder()
+    public ProductResponseDto.MainProductResDTO toMainProductResDTO() {
+        return ProductResponseDto.MainProductResDTO.builder()
                 .id(id)
-                .p_nm(p_nm)
-                .title_img(title_img)
+                .productNm(productNm)
+                .titleImg(titleImg)
                 .price(price)
-                .timestamp(Timestamp.valueOf(this.getInsert_time()).getTime())
-                .purchase_cnt(purchase_cnt)
+                .timestamp(Timestamp.valueOf(this.getInsertTime()).getTime())
+                .purchaseCnt(purchaseCnt)
                 .build();
     }
 
-    public ProductResDTO.AdminProductResDTO toAdminProductResDTO(int price) {
-        return ProductResDTO.AdminProductResDTO.builder()
+    public ProductResponseDto.AdminProductResDTO toAdminProductResDTO(int price) {
+        return ProductResponseDto.AdminProductResDTO.builder()
                 .id(id)
-                .p_nm(p_nm)
-                .title_img(title_img)
+                .productNm(productNm)
+                .titleImg(titleImg)
                 .price(price)
-                .purchase_cnt(purchase_cnt)
-                .total_cnt(total_cnt)
-                .rate_avg(rate_avg)
+                .purchaseCnt(purchaseCnt)
+                .totalCnt(totalCnt)
+                .rateAvg(rateAvg)
                 .build();
     }
 }

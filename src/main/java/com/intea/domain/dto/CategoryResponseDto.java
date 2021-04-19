@@ -7,14 +7,14 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class CategoryResDTO {
+public class CategoryResponseDto {
     @Getter
     @Builder
     @ToString
     public static class BigCategory {
         private Long id;
-        private String c_nm;
-        private Character use_yn;
+        private String catNm;
+        private Character useYn;
     }
 
     @Getter
@@ -22,9 +22,9 @@ public class CategoryResDTO {
     @ToString
     public static class SmallCategory {
         private Long id;
-        private String c_nm;
-        private String c_code;
-        private String upper_c_code;
-        private Character use_yn;
+        private String catNm;
+        private String catCode;
+        private String upprCatCode;
+        private Character useYn;
     }
 }

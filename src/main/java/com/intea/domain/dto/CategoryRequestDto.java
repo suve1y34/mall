@@ -10,17 +10,18 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
-public class CategoryReqDTO {
+public class CategoryRequestDto {
     @NotBlank(message = "카테고리명을 작성해 주세요.")
     private String c_nm;
-    private Character use_yn;
+    private Character useYn;
 
     @Getter
     @Setter
     @ToString
     public static class BigCategory {
         @NotBlank(message = "카테고리명을 작성해 주세요.")
-        private String c_nm;
+        private String catNm;
+        private Character useYn;
     }
 
     @Getter
@@ -28,9 +29,9 @@ public class CategoryReqDTO {
     @ToString
     public static class SmallCategory {
         @NotBlank(message = "카테고리명을 작성해 주세요.")
-        private String c_nm;
+        private String catNm;
         @NotBlank(message = "상위 카테고리 코드를 작성해 주세요.")
-        private String upper_c_code;
-        private Character use_yn;
+        private String upprCatCode;
+        private Character useYn;
     }
 }

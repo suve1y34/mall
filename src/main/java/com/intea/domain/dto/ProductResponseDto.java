@@ -9,18 +9,18 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductResDTO {
+public class ProductResponseDto {
     private Long id;
-    private String p_nm;
-    private String title_img;
-    private String large_ct;
-    private String small_ct;
+    private String productNm;
+    private String titleImg;
+    private String largeCat;
+    private String smallCat;
     private Integer price;
-    private Integer purchase_cnt;
-    private Integer limit_cnt;
-    private Integer total_cnt;
+    private Integer purchaseCnt;
+    private Integer limitCnt;
+    private Integer totalCnt;
     private ProductStatus status;
-    private Integer rate_avg;
+    private Integer rateAvg;
 
     @Getter
     @AllArgsConstructor
@@ -28,32 +28,32 @@ public class ProductResDTO {
     @Builder
     public static class MainProductResDTO implements Serializable {
         private Long id;
-        private String p_nm;
-        private String title_img;
+        private String productNm;
+        private String titleImg;
         private Integer price;
         private Long timestamp;
-        private Integer purchase_cnt;
+        private Integer purchaseCnt;
     }
 
     @Getter @Builder @ToString
     public static class AdminProductResDTO {
         private Long id;
-        private String p_nm;
-        private String title_img;
+        private String productNm;
+        private String titleImg;
         private Integer price;
-        private Integer purchase_cnt;
-        private Integer total_cnt;
-        private Integer rate_avg;
+        private Integer purchaseCnt;
+        private Integer totalCnt;
+        private Integer rateAvg;
     }
 
     @Getter @Builder @ToString
     public static class AdminProductDetailResDTO {
         private Long id;
-        private String p_nm;
-        private String title_img;
+        private String productNm;
+        private String titleImg;
         private Integer price;
-        private String large_ct;
-        private String small_ct;
-        private Integer total_cnt;
+        private String largeCat;
+        private String smallCat;
+        private Integer totalCnt;
     }
 }

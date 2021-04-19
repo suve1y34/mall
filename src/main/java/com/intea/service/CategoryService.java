@@ -1,16 +1,16 @@
 package com.intea.service;
 
+import com.intea.constant.Const;
 import com.intea.constant.Role;
-import com.intea.domain.dto.CategoryReqDTO;
-import com.intea.domain.dto.CategoryResDTO;
+import com.intea.domain.dto.CategoryRequestDto;
+import com.intea.domain.dto.CategoryResponseDto;
 import com.intea.domain.entity.Category;
 import com.intea.domain.repository.CategoryRepository;
 import com.intea.exception.CategoryCodeException;
 import com.intea.exception.NotExistCategoryException;
-import com.nimbusds.openid.connect.sdk.federation.policy.operations.ValueOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.DynamicAny.DynValueOperations;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,17 +28,17 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-//    private final ValueOperations valueOperation;
+    private final ValueOperations valueOperations;
 
-/*    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public HashMap<String, Object> getCategoryList() {
-        return (HashMap<String, Object>) valueOperation.get(CATEGORY_LIST_KEY);
-    }*/
+        return (HashMap<String, Object>) valueOperations.get(Const.CATEGORY_LIST_KEY);
+    }
 
     /**
      * 상위 카테고리 추가, 추가 후 캐시 업데이트
      */
-    public String addFirstCategory(CategoryReqDTO.BigCategory bigCategory) {
+    public String addFirstCategory(CategoryRequestDto.BigCategory bigCategory) {
         // Mysql에 추가 (File i/o)
         saveFirstCategory(bigCategory);
 
@@ -51,7 +51,7 @@ public class CategoryService {
     /**
      * 하위 카테고리 추가, 추가 후 캐시 업데이트
      */
-    public String addSecondCategory(CategoryReqDTO.SmallCategory smallCategory) {
+    public String addSecondCategory(CategoryRequestDto.SmallCategory smallCategory) {
         // Mysql에 추가 (File i/o)
         saveSecondCategory(smallCategory);
 
@@ -71,18 +71,18 @@ public class CategoryService {
 
         Category category = categoryOpt.get();
 
-        if (category.getC_level() == 1) {
-            return ResponseEntity.ok().body(CategoryResDTO.BigCategory.builder()
+        if (category.getCtLevel() == 1) {
+            return ResponseEntity.ok().body(CategoryResponseDto.BigCategory.builder()
                     .id(category.getId())
-                    .c_nm(category.getC_nm())
-                    .use_yn(category.getUse_yn())
+                    .catNm(category.getCatNm())
+                    .useYn(category.getUseYn())
                     .build());
         } else {
-            return ResponseEntity.ok().body(CategoryResDTO.SmallCategory.builder()
+            return ResponseEntity.ok().body(CategoryResponseDto.SmallCategory.builder()
                     .id(category.getId())
-                    .c_nm(category.getC_nm())
-                    .upper_c_code(categoryRepository.findByC_code(category.getUpper_c_code()).getC_nm())
-                    .use_yn(category.getUse_yn())
+                    .catNm(category.getCatNm())
+                    .upprCatCode(categoryRepository.findByCatCode(category.getUpprCatCode()).getCatNm())
+                    .useYn(category.getUseYn())
                     .build());
         }
     }
@@ -90,12 +90,12 @@ public class CategoryService {
     /**
      * 카테고리 수정 시, 캐시 업데이트
      */
-    public String updateCategory(Long id, CategoryReqDTO categoryDTO) {
+    public String updateCategory(Long id, CategoryRequestDto categoryDTO) {
         Category category = categoryRepository.findById(id).orElseThrow(()
                 -> new NotExistCategoryException("존재하지 않는 카테고리 입니다."));
 
-        category.setC_nm(categoryDTO.getC_nm());
-        category.setUse_yn(categoryDTO.getUse_yn());
+        category.setCatNm(categoryDTO.getC_nm());
+        category.setUseYn(categoryDTO.getUseYn());
 
         categoryRepository.save(category);
 
@@ -106,11 +106,11 @@ public class CategoryService {
     }
 
     // 2차 카테고리 리스트 조회
-    public List<CategoryResDTO.SmallCategory> getSecondCategoryList(String firstCatCd) {
+    public List<CategoryResponseDto.SmallCategory> getSecondCategoryList(String firstCatCd) {
 
-        List<Category> secondCategoryList = categoryRepository.findAllByUpper_c_code(firstCatCd);
+        List<Category> secondCategoryList = categoryRepository.findAllByUpprCatCode(firstCatCd);
 
-        List<CategoryResDTO.SmallCategory> secondCategoryDtoList = new ArrayList<>();
+        List<CategoryResponseDto.SmallCategory> secondCategoryDtoList = new ArrayList<>();
 
         for (Category productCat : secondCategoryList) {
             secondCategoryDtoList.add(productCat.toSmallCategoryDTO());
@@ -128,53 +128,53 @@ public class CategoryService {
 
             resultMap.put("adminCatList", allCategoryList);
             resultMap.put("mainCatList", allCategoryList.stream().
-                    filter(productCat -> productCat.getUse_yn() == 'Y').collect(Collectors.toList()));
+                    filter(productCat -> productCat.getUseYn() == 'Y').collect(Collectors.toList()));
         }
 
         return resultMap;
     }
 
-    private void saveFirstCategory(CategoryReqDTO.BigCategory bigCategory) {
-        List<Category> firstCategoryList = categoryRepository.findAllByC_levelOrderByC_codeDesc(1);
+    private void saveFirstCategory(CategoryRequestDto.BigCategory bigCategory) {
+        List<Category> firstCategoryList = categoryRepository.findAllByCtLevelOrderByCatCodeDesc(1);
 
         String catCdOfFinalBigCategory;
 
         if(firstCategoryList.isEmpty()) {
             catCdOfFinalBigCategory = "C010000";
         } else {
-            catCdOfFinalBigCategory = makeFirstCatCd(firstCategoryList.get(0).getC_code());
+            catCdOfFinalBigCategory = makeFirstCatCd(firstCategoryList.get(0).getCatCode());
         }
 
         categoryRepository.save(Category.builder()
-                .c_code(catCdOfFinalBigCategory)
-                .c_level(1)
-                .catNm(bigCategory.getC_nm())
-                .useYn(bigCategory.getUse_yn())
+                .catCode(catCdOfFinalBigCategory)
+                .ctLevel(1)
+                .catNm(bigCategory.getCatNm())
+                .useYn(bigCategory.getUseYn())
                 .build());
     }
 
-    private void saveSecondCategory(CategoryReqDTO.SmallCategory smallCategory) {
-        String upprCatCd = smallCategory.getUpper_c_code();
+    private void saveSecondCategory(CategoryRequestDto.SmallCategory smallCategory) {
+        String upprCatCd = smallCategory.getUpprCatCode();
 
-        List<Category> secondCategoryList = categoryRepository.findAllByUpper_c_codeOrderByC_codeDesc(upprCatCd);
+        List<Category> secondCategoryList = categoryRepository.findAllByUpperCatCodeOrderByCatCodeDesc(upprCatCd);
 
         String catCdOfNewSmallCategory;
 
         if (secondCategoryList.isEmpty()) {
             catCdOfNewSmallCategory = makeSecondCatCd(upprCatCd);
         } else {
-            String catCdOfFinalSmallCategory = secondCategoryList.get(0).getC_code();
+            String catCdOfFinalSmallCategory = secondCategoryList.get(0).getCatCode();
 
             catCdOfNewSmallCategory = makeSecondCatCd(catCdOfFinalSmallCategory);
         }
 
         categoryRepository.save(Category.builder()
-                .c_code(catCdOfNewSmallCategory)
-                .c_level(2)
-                .catNm(smallCategory.getC_nm())
-                .upprCatCd(upprCatCd)
+                .catCode(catCdOfNewSmallCategory)
+                .ctLevel(2)
+                .catNm(smallCategory.getCatNm())
+                .upprCatCode(upprCatCd)
                 .cnntUrl("/productList")
-                .useYn(smallCategory.getUse_yn())
+                .useYn(smallCategory.getUseYn())
                 .build());
     }
 
@@ -219,9 +219,9 @@ public class CategoryService {
      */
     private void setCategoryCaching() {
         HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("mainCatList", categoryRepository.findAllByUse_yn('Y'));
+        resultMap.put("mainCatList", categoryRepository.findAllByUseYn('Y'));
 
-//        valueOperations.set(CATEGORY_LIST_KEY, resultMap);
+        valueOperations.set(Const.CATEGORY_LIST_KEY, resultMap);
     }
 
 }

@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
-    Page<Orders> findAllByUser_idOrOrderByInsert_timeDesc(UUID user_id, Pageable pageable);
+    Page<Orders> findAllByUserIdOrderByInsertTimeDesc(UUID userId, Pageable pageable);
 }

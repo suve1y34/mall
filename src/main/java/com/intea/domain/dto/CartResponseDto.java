@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class CartResDTO {
+public class CartResponseDto {
     private Long id;
     private User user;
     private Product product;

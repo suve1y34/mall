@@ -1,9 +1,9 @@
 package com.intea.service;
 
 import com.intea.constant.ProductStatus;
-import com.intea.domain.dto.PagingDTO;
-import com.intea.domain.dto.ProductReqDTO;
-import com.intea.domain.dto.ProductResDTO;
+import com.intea.domain.dto.PagingDto;
+import com.intea.domain.dto.ProductRequestDto;
+import com.intea.domain.dto.ProductResponseDto;
 import com.intea.domain.entity.Product;
 import com.intea.domain.repository.ProductRepository;
 import com.intea.exception.NoValidProductSortException;
@@ -12,6 +12,7 @@ import com.intea.exception.ProductListException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,13 +28,12 @@ import static java.util.Objects.nonNull;
 public class ProductService {
 
     private final ProductRepository productRepository;
-//    private final ZSetOperations<String, Object> zSetOperations;
+    private final ZSetOperations<String, Object> zSetOperations;
 
     // 전체 상품 혹은 카테고리로 상품 조회
     public HashMap<String, Object> getProductList(String catCd, String sortCd, int page) throws Exception {
         int realPage = (page == 0) ? 0 : page - 1;
-        Pageable pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "createdDate"));
-
+        Pageable pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "insertTime"));
         // 카테고리로 조회
         if(isNull(sortCd)) {
             return getResult(getProductsByCategory(catCd, pageable), pageable);
@@ -48,7 +48,7 @@ public class ProductService {
     }
 
     // 상품 상세
-    public ProductResDTO getProductDetails(Long id) {
+    public ProductResponseDto getProductDetails(Long id) {
         Product product = productRepository.findById(id).orElseThrow(()
                 -> new NotExistProductException("존재하지 않는 상품입니다."));
 
@@ -63,7 +63,7 @@ public class ProductService {
     /**
      * 인기 상위 10개의 상품 조회
      */
-    public List<ProductResDTO.MainProductResDTO> getBestProductList() {
+    public List<ProductResponseDto.MainProductResDTO> getBestProductList() {
         // 레디스 캐시(메모리) I/O
 //        Set<Object> result = zSetOperations.reverseRange(BEST10_PRODUCT_LIST_KEY, 0, 9);
 
@@ -78,7 +78,7 @@ public class ProductService {
     /**
      * 최신 상위 8개 상품 조회
      */
-    public List<ProductResDTO.MainProductResDTO> getNewProductList() {
+    public List<ProductResponseDto.MainProductResDTO> getNewProductList() {
 /*        // 레디스 캐시(메모리) I/O
         Set<Object> result = zSetOperations.reverseRange(NEW8_PRODUCT_LIST_KEY, 0, 7);
 
@@ -114,9 +114,9 @@ public class ProductService {
         if (firstCatCd.equals("ALL") && secondCatCd.equals("ALL")) {
             productPage = productRepository.findAll(pageable);
         } else if (!firstCatCd.equals("ALL") && secondCatCd.equals("ALL")) {
-            productPage = productRepository.findAllByLarge_ct(firstCatCd, pageable);
+            productPage = productRepository.findAllByLargeCat(firstCatCd, pageable);
         } else if (!firstCatCd.equals("ALL")) {
-            productPage = productRepository.findByLarge_ctAndSmall_ctOrderByInsert_timeDesc(firstCatCd, secondCatCd, pageable);
+            productPage = productRepository.findByLargeCatAndSmallCatOrderByInsertTimeDesc(firstCatCd, secondCatCd, pageable);
         } else {
             throw new ProductListException("상품 리스트를 가져올 수 없습니다.");
         }
@@ -129,28 +129,28 @@ public class ProductService {
     }
 
     // 상품 추가
-    public String addProduct(ProductReqDTO productRequestDto) {
+    public String addProduct(ProductRequestDto productRequestDto) {
 
         productRepository.save(Product.builder()
-                .p_nm(productRequestDto.getP_nm())
+                .productNm(productRequestDto.getProductNm())
                 .price(productRequestDto.getPrice())
-                .title_img(productRequestDto.getTitle_img())
-                .large_ct(productRequestDto.getLarge_ct())
-                .small_ct(productRequestDto.getSmall_ct())
-                .product_status(ProductStatus.SALE)
+                .titleImg(productRequestDto.getTitleImg())
+                .largeCat(productRequestDto.getLargeCtCode())
+                .smallCat(productRequestDto.getSmallCtCode())
+                .productStatus(ProductStatus.SALE)
                 .cartList(new ArrayList<>())
                 .productImgList(new ArrayList<>())
                 .reviewList(new ArrayList<>())
-                .purchase_cnt(0)
-                .limit_cnt(productRequestDto.getTotal_cnt())
-                .total_cnt(productRequestDto.getTotal_cnt())
+                .purchaseCnt(0)
+                .limitCnt(productRequestDto.getTotalCnt())
+                .totalCnt(productRequestDto.getTotalCnt())
                 .build());
 
         return "상품이 추가되었습니다.";
     }
 
     // 상품 상세조회
-    public ProductResDTO.AdminProductDetailResDTO getAdminProductDetails(Long id) {
+    public ProductResponseDto.AdminProductDetailResDTO getAdminProductDetails(Long id) {
         Optional<Product> productOpt = productRepository.findById(id);
 
         if (!productOpt.isPresent())
@@ -178,19 +178,19 @@ public class ProductService {
             endDayStr = disEndDate.getDayOfMonth() < 10 ? "0" + disEndDate.getDayOfMonth() : "" + disEndDate.getDayOfMonth();
         }
 
-        return ProductResDTO.AdminProductDetailResDTO.builder()
+        return ProductResponseDto.AdminProductDetailResDTO.builder()
                 .id(product.getId())
-                .p_nm(product.getP_nm())
+                .productNm(product.getProductNm())
                 .price(product.getPrice())
-                .title_img(product.getTitle_img())
-                .large_ct(product.getLarge_ct())
-                .small_ct(product.getSmall_ct())
-                .total_cnt(product.getTotal_cnt())
+                .titleImg(product.getTitleImg())
+                .largeCat(product.getLargeCat())
+                .smallCat(product.getSmallCat())
+                .totalCnt(product.getTotalCnt())
                 .build();
     }
 
     // 상품 정보 수정
-    public String updateProduct(Long id, ProductReqDTO.UpdateResDTO updateRequestDto) {
+    public String updateProduct(Long id, ProductRequestDto.UpdateResDTO updateRequestDto) {
         Optional<Product> productOpt = productRepository.findById(id);
 
         if (!productOpt.isPresent())
@@ -198,10 +198,10 @@ public class ProductService {
 
         Product product = productOpt.get();
 
-        product.setP_nm(updateRequestDto.getP_nm());
+        product.setProductNm(updateRequestDto.getProductNm());
         product.setPrice(updateRequestDto.getPrice());
-        product.setLarge_ct(updateRequestDto.getLarge_ct());
-        product.setSmall_ct(updateRequestDto.getSmall_ct());
+        product.setLargeCat(updateRequestDto.getLargeCtCode());
+        product.setSmallCat(updateRequestDto.getSmallCtCode());
 //        product.setTotal_cnt(updateRequestDto.getTotal_cnt());
 
         productRepository.save(product);
@@ -210,15 +210,15 @@ public class ProductService {
     }
 
     private HashMap<String, Object> getResult(Page<Product> product, Pageable pageable) {
-        List<ProductResDTO> productResponseDtoList = getProductResponseDtoList(product);
+        List<ProductResponseDto> productResponseDtoList = getProductResponseDtoList(product);
 
-        PageImpl<ProductResDTO> productResponseDtoPage = new PageImpl<>(productResponseDtoList, pageable, product.getTotalElements());
+        PageImpl<ProductResponseDto> productResponseDtoPage = new PageImpl<>(productResponseDtoList, pageable, product.getTotalElements());
 
         return getResultMap(productResponseDtoPage);
     }
 
-    private List<ProductResDTO> getProductResponseDtoList(Page<Product> products) {
-        List<ProductResDTO> productResponseDtoList = new ArrayList<>();
+    private List<ProductResponseDto> getProductResponseDtoList(Page<Product> products) {
+        List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
 
         for (Product product : products) {
             int disPrice = 0;
@@ -237,7 +237,7 @@ public class ProductService {
             return productRepository.findAll(pageable);
         }
         // 카테고리로 상품 조회
-        return productRepository.findBySmall_ct(catCd, pageable);
+        return productRepository.findBySmallCat(catCd, pageable);
     }
 
     private Page<Product> getProductsByCatCdAndSortCd(String catCd, String sortCd, int page) {
@@ -248,11 +248,11 @@ public class ProductService {
             return productRepository.findAll(pageable);
         }
         // 카테고리, 정렬기준으로 상품 조회
-        return productRepository.findAllByLarge_ct(catCd, pageable);
+        return productRepository.findAllByLargeCat(catCd, pageable);
     }
 
-    private List<ProductResDTO.MainProductResDTO> getMainProductResponseDto(List<Product> products) {
-        List<ProductResDTO.MainProductResDTO> productResponseDtoList = new ArrayList<>();
+    private List<ProductResponseDto.MainProductResDTO> getMainProductResponseDto(List<Product> products) {
+        List<ProductResponseDto.MainProductResDTO> productResponseDtoList = new ArrayList<>();
 
         for (Product product : products) {
             int disPrice = 0;
@@ -264,17 +264,17 @@ public class ProductService {
 
     // adminProductListDto 조회 공통
     private HashMap<String, Object> getAdminProductListMap(Page<Product> productPage, PageRequest pageable) {
-        List<ProductResDTO.AdminProductResDTO> productResponseDtoList = new ArrayList<>();
+        List<ProductResponseDto.AdminProductResDTO> productResponseDtoList = new ArrayList<>();
 
         for (Product product : productPage) {
             int disPrice = 0;
             productResponseDtoList.add(product.toAdminProductResDTO(disPrice));
         }
 
-        PageImpl<ProductResDTO.AdminProductResDTO> adminProductResponseDtoPage
+        PageImpl<ProductResponseDto.AdminProductResDTO> adminProductResponseDtoPage
                 = new PageImpl<>(productResponseDtoList, pageable, productPage.getTotalElements());
 
-        PagingDTO adminProductPagingDto = new PagingDTO();
+        PagingDto adminProductPagingDto = new PagingDto();
         adminProductPagingDto.setPagingInfo(adminProductResponseDtoPage);
 
         HashMap<String, Object> resultMap = new HashMap<>();
@@ -312,9 +312,9 @@ public class ProductService {
         return pageable;
     }
 
-    private HashMap<String, Object> getResultMap(PageImpl<ProductResDTO> products) {
+    private HashMap<String, Object> getResultMap(PageImpl<ProductResponseDto> products) {
 
-        PagingDTO questionPagingDto = new PagingDTO();
+        PagingDto questionPagingDto = new PagingDto();
         questionPagingDto.setPagingInfo(products);
 
         HashMap<String, Object> resultMap = new HashMap<>();

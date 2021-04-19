@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class) //생성시간,수정시간 자동화
 public class CommonEntity {
     @CreatedDate
-    private LocalDateTime insert_time;
+    private LocalDateTime insertTime;
     @LastModifiedDate
-    private LocalDateTime update_time;
+    private LocalDateTime updateTime;
 }

@@ -1,9 +1,9 @@
 package com.intea.service;
 
 import com.intea.constant.OrderStatus;
-import com.intea.domain.dto.OrdersReqDTO;
-import com.intea.domain.dto.OrdersResDTO;
-import com.intea.domain.dto.PagingDTO;
+import com.intea.domain.dto.OrdersRequestDto;
+import com.intea.domain.dto.OrdersResponseDto;
+import com.intea.domain.dto.PagingDto;
 import com.intea.domain.entity.Cart;
 import com.intea.domain.entity.Orders;
 import com.intea.domain.entity.Product;
@@ -35,9 +35,9 @@ public class OrdersService {
     private OrdersRepository ordersRepository;
     private ProductRepository productRepository;
 
-    public void makeOrder(OrdersReqDTO ordersReqDTO) {
+/*    public void makeOrder(OrdersRequestDto ordersRequestDto) {
 
-        List<Long> cartIdList = ordersReqDTO.getCart_id_list();
+        List<Long> cartIdList = ordersRequestDto.getCartIdList();
 
         Optional<Cart> cartOpt = cartRepository.findById(cartIdList.get(0));
 
@@ -56,11 +56,11 @@ public class OrdersService {
 
         Orders productOrder = ordersRepository.save(Orders.builder()
                 .normalUser(userOpt.get())
-                .orderNumber(ordersReqDTO.getOrder_num())
-                .orderName(ordersReqDTO.getOrder_name())
-                .amount(ordersReqDTO.getAmount())
-                .deliveryMessage(ordersReqDTO.getMessage())
-                .address(ordersReqDTO.getAddress())
+                .orderNumber(ordersRequestDto.getOrderNum())
+                .orderName(ordersRequestDto.getOrder_name())
+                .amount(ordersRequestDto.getAmount())
+                .deliveryMessage(ordersRequestDto.getMessage())
+                .address(ordersRequestDto.getAddress())
                 .orderStatus(OrderStatus.COMPLATE)
                 .build());
 
@@ -94,9 +94,9 @@ public class OrdersService {
             product.setTotal_cnt(product.getTotal_cnt() - productCount);
             productRepository.save(product);
         }
-    }
+    }*/
 
-    public OrdersResDTO getOrderDetails(Long order_id) {
+    public OrdersResponseDto getOrderDetails(Long order_id) {
 
         Optional<Orders> orderOpt = ordersRepository.findById(order_id);
 
@@ -110,24 +110,24 @@ public class OrdersService {
         int realPage = (page == 0) ? 0 : (page - 1);
         pageable = PageRequest.of(realPage, 5);
 
-        Page<Orders> productOrderPage = ordersRepository.findAllByUser_idOrOrderByInsert_timeDesc(user_id, pageable);
+        Page<Orders> productOrderPage = ordersRepository.findAllByUserIdOrderByInsertTimeDesc(user_id, pageable);
 
         if(productOrderPage.getTotalElements() > 0) {
-            List<OrdersResDTO> productOrderResponseDtoList = new ArrayList<>();
+            List<OrdersResponseDto> productOrderResponseDtoList = new ArrayList<>();
 
             for (Orders productOrder : productOrderPage) {
                 productOrderResponseDtoList.add(productOrder.toResponseDTO());
             }
 
-            PageImpl<OrdersResDTO> productOrderResponseDTOs
+            PageImpl<OrdersResponseDto> productOrderResponseDTOs
                     = new PageImpl<>(productOrderResponseDtoList, pageable, productOrderPage.getTotalElements());
 
-            PagingDTO ordersPagingDTO = new PagingDTO();
-            ordersPagingDTO.setPagingInfo(productOrderResponseDTOs);
+            PagingDto ordersPagingDto = new PagingDto();
+            ordersPagingDto.setPagingInfo(productOrderResponseDTOs);
 
             HashMap<String, Object> resultMap = new HashMap<>();
             resultMap.put("productOrderList", productOrderResponseDTOs);
-            resultMap.put("productOrderPagingDto", ordersPagingDTO);
+            resultMap.put("productOrderPagingDto", ordersPagingDto);
 
             return resultMap;
         }

@@ -13,11 +13,11 @@ public class ProductImg extends CommonEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String img_url;
+    private String imgUrl;
 
-    private Character basic_yn;
+    private Character basicYn;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
 }

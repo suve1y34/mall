@@ -1,6 +1,6 @@
 package com.intea.restcontroller;
 
-import com.intea.domain.dto.ReviewReqDTO;
+import com.intea.domain.dto.ReviewRequestDto;
 import com.intea.service.CartService;
 import com.intea.service.ReviewService;
 import io.swagger.annotations.Api;
@@ -12,10 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.HashMap;
 
 @Slf4j
@@ -48,7 +46,7 @@ public class ReviewRestController {
     @ApiOperation(value = "리뷰 생성")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @PostMapping("/reviews")
-    public ResponseEntity<?> makeReview(@RequestBody @Valid ReviewReqDTO reviewReqDTO,
+    public ResponseEntity<?> makeReview(@RequestBody @Valid ReviewRequestDto reviewRequestDto,
                                         BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()){
@@ -56,7 +54,7 @@ public class ReviewRestController {
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
 
-        reviewService.makeReview(reviewReqDTO);
+        reviewService.makeReview(reviewRequestDto);
 
         return ResponseEntity.ok().body("리뷰가 추가되었습니다.");
     }

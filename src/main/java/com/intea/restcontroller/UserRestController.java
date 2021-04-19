@@ -1,7 +1,7 @@
 package com.intea.restcontroller;
 
-import com.intea.domain.dto.MembersDTO;
-import com.intea.domain.dto.UpdatePasswordReqDTO;
+import com.intea.domain.dto.MemberRequestDto;
+import com.intea.domain.dto.UpdatePasswordRequestDto;
 import com.intea.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j @AllArgsConstructor
@@ -38,14 +37,14 @@ public class UserRestController {
     @ApiOperation(value = "회원 프로필 수정")
     @PutMapping("/me/{id}")
     public ResponseEntity<String> modifyProfiles(HttpServletRequest request, @PathVariable UUID id,
-                                                 @RequestBody @Valid MembersDTO membersDTO, BindingResult bindingResult) {
+                                                 @RequestBody @Valid MemberRequestDto memberRequestDto, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()){
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
 
-        request.getSession().setAttribute("user", userService.updateProfile(id, membersDTO));
+        request.getSession().setAttribute("user", userService.updateProfile(id, memberRequestDto));
 
         return ResponseEntity.ok("프로필 수정이 완료되었습니다!");
     }
@@ -62,7 +61,7 @@ public class UserRestController {
     @ApiOperation(value = "회원 비밀번호 수정")
     @PutMapping("/me/{id}/password")
     public ResponseEntity<String> updatePassword(@PathVariable UUID id,
-                                                 @RequestBody @Valid UpdatePasswordReqDTO updatePasswordReqDTO,
+                                                 @RequestBody @Valid UpdatePasswordRequestDto updatePasswordRequestDto,
                                                  BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()){
@@ -70,7 +69,7 @@ public class UserRestController {
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
 
-        userService.updatePassword(id, updatePasswordReqDTO);
+        userService.updatePassword(id, updatePasswordRequestDto);
 
         return ResponseEntity.ok().body("비밀번호 수정이 완료되었습니다.");
     }

@@ -1,6 +1,6 @@
 package com.intea.domain.entity;
 
-import com.intea.domain.dto.CategoryResDTO;
+import com.intea.domain.dto.CategoryResponseDto;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -19,19 +19,20 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long c_level;
-    private String upper_c_code;
-    private String c_code;
-    private String c_nm;
-    private Character use_yn;
+    private Integer ctLevel;
+    private String upprCatCode;
+    private String catCode;
+    private String catNm;
+    private Character useYn;
+    private String cnntUrl;
 
-    public CategoryResDTO.SmallCategory toSmallCategoryDTO() {
-        return CategoryResDTO.SmallCategory.builder()
+    public CategoryResponseDto.SmallCategory toSmallCategoryDTO() {
+        return CategoryResponseDto.SmallCategory.builder()
                 .id(id)
-                .c_code(c_code)
-                .c_nm(c_nm)
-                .upper_c_code(upper_c_code)
-                .use_yn(use_yn)
+                .catCode(catCode)
+                .catNm(catNm)
+                .upprCatCode(upprCatCode)
+                .useYn(useYn)
                 .build();
     }
 }

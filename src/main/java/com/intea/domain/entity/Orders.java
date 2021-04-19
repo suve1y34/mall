@@ -1,7 +1,7 @@
 package com.intea.domain.entity;
 
 import com.intea.constant.OrderStatus;
-import com.intea.domain.dto.OrdersResDTO;
+import com.intea.domain.dto.OrdersResponseDto;
 import lombok.Data;
 import lombok.ToString;
 
@@ -17,36 +17,36 @@ public class Orders extends CommonEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String order_num;
-    private String order_name;
+    private String orderNum;
+    private String orderNm;
     private String message;
     private OrderStatus status;
     private String postCode;
     private String address;
-    private String de_address;
+    private String deAddress;
     private String phone;
     private Integer amount;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "pd_orders", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productOrders", cascade = CascadeType.ALL)
     private List<Cart> cartList;
 
-    public OrdersResDTO toResponseDTO() {
-        LocalDateTime insert_time = this.getInsert_time();
+    public OrdersResponseDto toResponseDTO() {
+        LocalDateTime insertTime = this.getInsertTime();
 
-        return OrdersResDTO.builder()
+        return OrdersResponseDto.builder()
                 .id(id)
-                .order_num(order_num)
-                .order_name(order_name)
+                .orderNum(orderNum)
+                .orderNm(orderNm)
                 .message(message)
                 .status(status.getValue())
                 .address(address)
                 .amount(amount)
-                .insert_time(insert_time.getYear() + "." + insert_time.getMonthValue() + "."
-                +insert_time.getDayOfMonth() + " " + insert_time.getHour() + ":" + insert_time.getMinute() + ":" + insert_time.getSecond())
+                .insertTime(insertTime.getYear() + "." + insertTime.getMonthValue() + "."
+                +insertTime.getDayOfMonth() + " " + insertTime.getHour() + ":" + insertTime.getMinute() + ":" + insertTime.getSecond())
                 .cartList(cartList)
                 .build();
     }

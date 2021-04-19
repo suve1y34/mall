@@ -1,6 +1,6 @@
 package com.intea.restcontroller;
 
-import com.intea.domain.dto.CartReqDTO;
+import com.intea.domain.dto.CartRequestDto;
 import com.intea.service.CartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,13 +38,13 @@ public class CartRestController {
     @ApiOperation(value = "장바구니 추가")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @PostMapping("/addCart")
-    public ResponseEntity<?> insCart(@RequestBody @Valid CartReqDTO cartReqDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> insCart(@RequestBody @Valid CartRequestDto cartRequestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             String errMsg = bindingResult.getAllErrors().get(0).getDefaultMessage();
             return new ResponseEntity<>(errMsg, HttpStatus.BAD_REQUEST);
         }
 
-        cartService.getCart(cartReqDTO);
+        cartService.getCart(cartRequestDto);
 
         return ResponseEntity.ok().body("장바구니 추가 완료");
     }

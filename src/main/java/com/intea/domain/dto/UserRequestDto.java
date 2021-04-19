@@ -1,6 +1,5 @@
 package com.intea.domain.dto;
 
-import com.intea.constant.Role;
 import com.intea.domain.entity.User;
 import lombok.*;
 
@@ -14,11 +13,11 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 @ToString
-public class UserReqDTO {
+public class UserRequestDto {
 
     @NotBlank(message = "아이디를 입력해주세요.")
     @Pattern(regexp = "^(?=.*[a-zA-Z0-9]).{8,12}$", message = "아이디는 영문+숫자 조합 8~12자리가 가능합니다.")
-    private String mem_id;
+    private String memId;
     
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일 주소 양식에 맞게 입력해주세요.")
@@ -29,7 +28,7 @@ public class UserReqDTO {
     private String password;
 
     @NotBlank(message = "이름을 입력해주세요.")
-    private String mem_nm;
+    private String memNm;
 
     @NotBlank(message = "연락처를 입력해주세요.")
     private String tel;
@@ -40,19 +39,19 @@ public class UserReqDTO {
     private String address;
 
     @Size(max = 50, message = "상세 주소를 알맞게 입력해주세요.")
-    private String de_address;
+    private String deAddress;
     private String picture;
 
 
     public User toEntity() {
         return User.builder()
-                .mem_id(this.getMem_id())
+                .mem_id(this.getMemId())
                 .email(this.getEmailAddress())
-                .name(this.getMem_nm())
+                .name(this.getMemNm())
                 .phone(this.getTel())
                 .postCode(this.getPostCode())
                 .address(this.getAddress())
-                .de_address(this.getDe_address())
+                .de_address(this.getDeAddress())
                 .picture(this.getPicture())
                 .build();
     }

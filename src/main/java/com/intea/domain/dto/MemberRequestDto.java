@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
-public class MembersDTO {
+public class MemberRequestDto {
 
     @NotBlank(message = "이름을 작성해 주세요.")
     private String name;
@@ -24,5 +24,5 @@ public class MembersDTO {
 
     private String postCode;
     private String address;
-    private String de_address;
+    private String deAddress;
 }

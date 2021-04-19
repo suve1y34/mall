@@ -16,8 +16,6 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns("/css/**", "/fonts/**", "/plugin/**", "/js/**", "/webfonts/**" ,"/img/**");
     }
 
-
-
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();

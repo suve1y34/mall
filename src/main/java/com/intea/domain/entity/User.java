@@ -2,8 +2,8 @@ package com.intea.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intea.constant.Role;
-import com.intea.domain.dto.MembersDTO;
-import com.intea.domain.dto.UserResDTO;
+import com.intea.domain.dto.MemberRequestDto;
+import com.intea.domain.dto.UserResponseDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
@@ -19,24 +19,25 @@ import java.util.UUID;
 @Entity
 public class User extends CommonEntity {
 
+    @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private String mem_id;
+    private String memId;
     private String email;
-    private String pw;
+    private String password;
     private String name;
     private String phone;
     private String postCode;
     private String address;
-    private String de_address;
+    private String deAddress;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private Character delete_yn;
+    private Character deleteYn;
 
     private String picture;
 
@@ -56,45 +57,45 @@ public class User extends CommonEntity {
     private List<Review> reviewList;
 
 
-    public UserResDTO toResDTO(User user) {
-        return UserResDTO.builder()
+    public UserResponseDto toResDTO(User user) {
+        return UserResponseDto.builder()
                 .id(user.getId())
-                .mem_id(user.getMem_id())
+                .memId(user.getMemId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .phone(user.getPhone())
                 .postCode(user.getPostCode())
                 .address(user.getAddress())
-                .de_address(user.getDe_address())
+                .deAddress(user.getDeAddress())
                 .picture(user.getPicture())
                 .saving(user.getSaving())
                 .build();
     }
 
-    public UserResDTO.ReviewUserResDTO toReviewResDTO() {
-        return UserResDTO.ReviewUserResDTO.builder()
-                .user_id(mem_id)
+    public UserResponseDto.ReviewUserResDTO toReviewResDTO() {
+        return UserResponseDto.ReviewUserResDTO.builder()
+                .userId(memId)
                 .build();
     }
 
-    public User update(MembersDTO memDTO) {
+    public User update(MemberRequestDto memDTO) {
         this.name =memDTO.getName();
         this.picture = memDTO.getPicture();
         this.email = memDTO.getEmail();
         this.postCode = memDTO.getPostCode();
         this.address = memDTO.getAddress();
-        this.de_address = memDTO.getDe_address();
+        this.deAddress = memDTO.getDeAddress();
 
         return this;
     }
 
     public User delete() {
-        this.delete_yn = 'Y';
+        this.deleteYn = 'Y';
         return this;
     }
 
     public User updPw(String pw) {
-        this.pw = pw;
+        this.password = pw;
         return this;
     }
 

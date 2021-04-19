@@ -1,8 +1,8 @@
 package com.intea.service;
 
-import com.intea.domain.dto.PagingDTO;
-import com.intea.domain.dto.ReviewReqDTO;
-import com.intea.domain.dto.ReviewResDTO;
+import com.intea.domain.dto.PagingDto;
+import com.intea.domain.dto.ReviewRequestDto;
+import com.intea.domain.dto.ReviewResponseDto;
 import com.intea.domain.entity.Product;
 import com.intea.domain.entity.Review;
 import com.intea.domain.entity.User;
@@ -19,10 +19,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +36,7 @@ public class ReviewService {
 
     public String insReview(Long product_id) {
         Product product = productRepo.findById(product_id).orElseThrow(() -> new NotExistProductException("존재하지 않는 상품입니다."));
-        return product.getP_nm();
+        return product.getProductNm();
     }
 
 /*    public String uploadReviewImage(MultipartFile file, String dirName) throws IOException {
@@ -52,18 +50,18 @@ public class ReviewService {
     }*/
 
     @Transactional
-    public void makeReview(ReviewReqDTO reviewReqDTO) {
-        User user = userRepo.findById(reviewReqDTO.getUser_id())
+    public void makeReview(ReviewRequestDto reviewRequestDto) {
+        User user = userRepo.findById(reviewRequestDto.getUserId())
                 .orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));
-        Product product = productRepo.findById(reviewReqDTO.getProduct_id())
+        Product product = productRepo.findById(reviewRequestDto.getProductId())
                 .orElseThrow(() -> new NotExistProductException("존재하지 않는 상품입니다."));
 
         reviewRepo.save(Review.builder()
                 .user(user)
                 .product(product)
-                .title(reviewReqDTO.getTitle())
-                .content(reviewReqDTO.getContent())
-                .rate(reviewReqDTO.getRate())
+                .title(reviewRequestDto.getTitle())
+                .content(reviewRequestDto.getContent())
+                .rate(reviewRequestDto.getRate())
                 .build());
 
         productRepo.save(product);
@@ -73,19 +71,19 @@ public class ReviewService {
         int realPage = page - 1;
         Pageable pageable = PageRequest.of(realPage, 3);
 
-        Page<Review> reviewPage = reviewRepo.findAllByProductIdOrderByInsert_timeDesc(product_id, pageable);
+        Page<Review> reviewPage = reviewRepo.findAllByProductIdOrderByInsertTimeDesc(product_id, pageable);
 
-        List<ReviewResDTO> reviewResponseDtoList = new ArrayList<>();
+        List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
 
         for (Review review : reviewPage) {
             reviewResponseDtoList.add(review.toResponseDTO());
         }
 
-        PageImpl<ReviewResDTO> reviewResponseDtos
+        PageImpl<ReviewResponseDto> reviewResponseDtos
                 = new PageImpl<>(reviewResponseDtoList, pageable, reviewPage.getTotalElements());
 
-        PagingDTO reviewPagingDTO = new PagingDTO();
-        reviewPagingDTO.setPagingInfo(reviewResponseDtos);
+        PagingDto reviewPagingDto = new PagingDto();
+        reviewPagingDto.setPagingInfo(reviewResponseDtos);
 
         // 평점 평균 조회해서 맵에 추가
         Product product = productRepo.findById(product_id)
@@ -93,16 +91,16 @@ public class ReviewService {
 
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("reviewList", reviewResponseDtos);
-        resultMap.put("reviewPagingDTO", reviewPagingDTO);
+        resultMap.put("reviewPagingDTO", reviewPagingDto);
 
         return resultMap;
     }
 
-    public ReviewResDTO.ReviewDetailResDTO getReviewDetail(Long id) {
+    public ReviewResponseDto.ReviewDetailResDTO getReviewDetail(Long id) {
         Review review = reviewRepo.findById(id).orElseThrow(()
                 -> new NotExistReviewException("존재하지 않는 게시글입니다."));;
 
-        return ReviewResDTO.ReviewDetailResDTO.builder()
+        return ReviewResponseDto.ReviewDetailResDTO.builder()
                 .content(review.getContent())
                 .build();
     }

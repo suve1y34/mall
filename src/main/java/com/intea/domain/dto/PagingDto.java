@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageImpl;
 @Getter
 @Setter
 @ToString
-public class PagingDTO {
+public class PagingDto {
     private int page = 1;               //현재
     private int scale = 3;
     private int scaleStartPage = 1;     //scale 시작

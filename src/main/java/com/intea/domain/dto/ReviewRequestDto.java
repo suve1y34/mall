@@ -12,10 +12,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class ReviewReqDTO {
+public class ReviewRequestDto {
 
-    private UUID user_id;
-    private Long product_id;
+    private UUID userId;
+    private Long productId;
     @NotBlank(message = "제목을 작성해 주세요.")
     private String title;
 

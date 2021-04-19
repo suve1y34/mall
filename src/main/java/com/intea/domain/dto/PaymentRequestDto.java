@@ -10,35 +10,35 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class PaymentReqDTO {
+public class PaymentRequestDto {
     @Getter
     @Builder
     public static class Success {
-        private UUID user_id;
+        private UUID userId;
 
         @NotBlank(message = "이메일을 작성해 주세요.")
         @Email(message = "이메일의 양식을 지켜서 작성해 주세요.")
         private String email;
 
         @NotBlank(message = "주문자 성함을 작성해 주세요.")
-        private String buyer_nm;
+        private String buyerNm;
 
         @NotBlank(message = "주문번호를 작성해 주세요.")
-        private String order_num;
+        private String orderNum;
 
         @NotBlank(message = "주문명을 작성해 주세요.")
-        private String order_nm;
+        private String orderNm;
 
         private String message;
 
         @NotBlank(message = "주소를 작성해 주세요.")
         private String poseCode;
         private String address;
-        private String de_address;
+        private String deAddress;
 
         private Integer amount;
 
-        private Integer use_saving;
+        private Integer useSaving;
 
         private List<Long> cartIdList;
     }

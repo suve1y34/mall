@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    List<Category> findAllByC_levelOrderByC_codeDesc(int idx);
-    List<Category> findAllByUpper_c_codeOrderByC_codeDesc(String upper_c_code);
-    Category findByC_code(String upper_c_code);
-    List<Category> findAllByUse_yn(char yn);
-    List<Category> findAllByUpper_c_code(String large_ct);
+    List<Category> findAllByCtLevelOrderByCatCodeDesc(int idx);
+    List<Category> findAllByUpperCatCodeOrderByCatCodeDesc(String upperCatCode);
+    List<Category> findAllByUseYn(char yn);
+    Category findByCatCode(String upprCatCode);
+    List<Category> findAllByUpprCatCode(String largeCat);
 }

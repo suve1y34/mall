@@ -9,16 +9,16 @@ import java.util.UUID;
 
 @Builder
 @Getter
-public class UserResDTO {
+public class UserResponseDto {
     private UUID id;
-    private String mem_id;
+    private String memId;
     private String email;
     private String name;
     private String phone;
     private String picture;
     private String postCode;
     private String address;
-    private String de_address;
+    private String deAddress;
     private Integer saving;
 
     @Getter
@@ -26,6 +26,6 @@ public class UserResDTO {
     @Builder
     @ToString
     public static class ReviewUserResDTO {
-        private String user_id;
+        private String userId;
     }
 }
