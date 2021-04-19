@@ -1,5 +1,6 @@
 package com.intea.controller;
 
+import com.intea.service.CategoryService;
 import com.intea.service.UserService;
 import com.intea.util.UiUtils;
 import lombok.AllArgsConstructor;
@@ -17,18 +18,22 @@ import javax.servlet.http.HttpSession;
 @Slf4j @AllArgsConstructor
 @Controller
 public class UserController extends UiUtils {
-
+    private final CategoryService categoryService;
     private final UserService userService;
 
     //로그인 get
     @GetMapping("/login")
     public String getLogin(HttpServletRequest req, Model model) {
+        String referrer = req.getHeader("Referer");
+        req.getSession().setAttribute("prevPage", referrer);
+        model.addAttribute("catMapList", categoryService.getCategoryList());
         return "user/member/login";
     }
 
     @GetMapping("/profile")
     public String getProfile(Model model) throws Exception {
         model.addAttribute("pageName", "profile");
+        model.addAttribute("catMapList", categoryService.getCategoryList());
 
         return "user/member/myinfo";
     }

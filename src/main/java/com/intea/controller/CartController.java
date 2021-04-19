@@ -16,7 +16,7 @@ public class CartController {
     @GetMapping("/cart")
     public String getCart(Model model) {
         model.addAttribute("pageName", "cart");
-//        model.addAttribute("catMapList", categoryService.getCategoryList());
+        model.addAttribute("catMapList", categoryService.getCategoryList());
 
         return "shop/order/cart";
     }

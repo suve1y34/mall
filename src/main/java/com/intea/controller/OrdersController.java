@@ -16,7 +16,7 @@ public class OrdersController {
     @GetMapping("/order")
     public String getOrders(Model model) {
         model.addAttribute("pageName", "order");
-//        model.addAttribute("catMapList", categoryService.getCategoryList());
+        model.addAttribute("catMapList", categoryService.getCategoryList());
 
         return "shop/order/new-order";
     }

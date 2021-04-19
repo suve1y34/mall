@@ -28,7 +28,7 @@ public class ReviewController {
 
         model.addAttribute("chkReviewAuth", cartService.chkReviewAuthority(map));
         model.addAttribute("productNm", reviewService.insReview(product_id));
-//        model.addAttribute("catMapList", categoryService.getCategoryList());
+        model.addAttribute("catMapList", categoryService.getCategoryList());
 
         return "board/review/review-list";
     }

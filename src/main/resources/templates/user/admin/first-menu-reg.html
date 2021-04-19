@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
+<th:layout layout:fragment="main">
+    <script th:inline="javascript">
+
+        var firstCategoryObj = {
+
+            firstCategoryRegistAction   : function () {
+
+                var dataObj = {
+                    catNm   : $("#catNm").val(),
+                    useYn   : $("input[type='radio']").val()
+                }
+
+                if (dataObj.catNm === "" || dataObj.useYn === "") {
+                    alert("비어있는 곳이 존재합니다.")
+
+                    return;
+                }
+
+                $.ajax({
+                    type : "POST",
+                    url  : "/categories/first",
+                    contentType : "application/json",
+                    data : JSON.stringify(dataObj),
+                    beforeSend	: function(xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success : function (data) {
+                        alert(data);
+
+                        $("#catNm").val("");
+                    },
+                    error   : function (e) {
+                        alert(e.responseText);
+                    }
+                })
+            }
+        }
+
+    </script>
+    <!-- Section -->
+    <section>
+        <header class="main">
+            <h1>ADMIN PAGE</h1>
+        </header>
+        <div id="row gtr-200">
+            <div id="col-6 col-12-medium">
+                <div class="con-area">
+                    <fieldset>
+                        <legend>LAYER_메뉴등록</legend>
+                        <div class="con-table">
+                            <form id="menuRegistForm">
+                                <table summary="LAYER_메뉴등록">
+                                    <caption>LAYER_메뉴등록</caption>
+                                    <colgroup>
+                                        <col width="200" />
+                                        <col />
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="col" class="bor_top_style1">*카테고리명 <span class="point" title="카테고리명" /></th>
+                                        <td class="bor_top_style1">
+                                            <input type="text" id="catNm" name="catNm" class="input_txt" style="width:180px;" placeholder="" title="카테고리명" maxlength="10"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col" class="bor_top_style1">*사용 여부 <span class="point" title="사용 여부" /></th>
+                                        <td class="bor_top_style1">
+                                            <input type="radio" id="useYn" name="useYn" class="input_radio" title="YES" checked="checked" value="Y"/> YES &nbsp;&nbsp;
+                                            <input type="radio" id="useYn" name="useYn" class="input_radio" title="NO" value="N"/> NO
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </fieldset>
+                </div>
+                <!--버튼_start-->
+                <div class="txt-center pdt_25">
+                    <a href="javascript:void(0);" class="btn-wine-14" onclick="firstCategoryObj.firstCategoryRegistAction();">저장</a>
+                    <a th:href="@{/admin/main}" class="btn-gray-14">메인화면</a>
+                </div>
+                <!--버튼_end-->
+                <hr />
+            </div>
+        </div>
+    </section>
+</th:layout>
+</html>

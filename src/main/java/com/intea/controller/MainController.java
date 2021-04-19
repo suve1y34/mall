@@ -25,7 +25,7 @@ public class MainController {
     public String main(ModelMap model /*, @LoginUser SessionUser user*/) {
 
         model.addAttribute("pageName", "main");
-//        model.addAttribute("catMapList", categoryService.getCategoryList());
+        model.addAttribute("catMapList", categoryService.getCategoryList());
         return "/index";
     }
 
