@@ -6,37 +6,175 @@
 -->
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default">
 <th:block layout:fragment="script">
-	<script th:inline="javascript">
+	<script sec:authorize="hasAuthority('ROLE_USER')" th:inline="javascript">
+		var profilesObj = {
 
-		/*<![CDATA[*/
-		function regMyinfo(form) {
-			var result = (
-					isValid(form.postCode, "우편번호", null, null)
-					&& isValid(form.address, "도로명주소", null, null)
-					&& isValid(form.de_address, "상세주소", null, null)
-					&& isValid(form.phone, "연락처", null, null)
-					&& isValid(form.birth, "생일", null, null)
-			);
+			inputObj : {},
 
-			if(result == false) {
-				return false;
-			}
+			init    : function() {
+				var that = this;
 
-			var idx = /*[[ ${product.i_product} ]]*/;
-			if(isEmpty(idx) == false) {
-				var queryString = /*[[ ${param.makeQueryString(param.currentPageNo)} ]]*/;
+				$(".changeable-input").each(function() {
+					that.inputObj[$(this).attr("name")] = $(this).val();
+				})
 
-				/*[- 쿼리 스트링을 오브젝트 형태로 변환 -]*/
-				queryString = new URLSearchParams(queryString);
-				queryString.forEach(function(value, key) {
-					if (isEmpty(value) == false) {
-						$(form).append('<input type="hidden" name="' + key + '" value="' + value + '" />');
+				var user = [[${session.user}]],
+						userId = user.id;
+				console.log(user)
+				$.ajax({
+					type : "GET",
+					url  : "/me/" + userId,
+					contentType: "application/json",
+					beforeSend	: function(xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					success: function (data) {
+
+						$(".savings").text("보유 적립금 : " + data + "원");
+					},
+					error : function (e) {
+						alert(e.responseText);
 					}
-				});
+				})
+			},
+
+			modifyBtnFnCb   : function () {
+				var modifiedInputObj = {},
+						properties       = [];
+
+				$(".changeable-input").each(function() {
+					modifiedInputObj[$(this).attr("name")] = $(this).val();
+					properties.push($(this).attr("name"));
+				})
+
+				var newInputObj = {};
+
+				properties.forEach(function (value) {
+
+					if (profilesObj.inputObj[value] !== modifiedInputObj[value]) {
+						newInputObj[value] = modifiedInputObj[value];
+					}
+				})
+
+				if ($.isEmptyObject(newInputObj)) {
+					alert("수정한 곳이 없습니다!");
+				} else {
+					$.ajax({
+						type: "PUT",
+						url: "/me/" + [[${session.user.getId()}]],
+						contentType: "application/json",
+						data : JSON.stringify(modifiedInputObj),
+						beforeSend	: function(xhr) {
+							xhr.setRequestHeader(header, token);
+						},
+						success: function (data) {
+							alert(data);
+
+							location.reload();
+						},
+						error: function (error) {
+							alert(error.responseText);
+						}
+					})
+				}
+			},
+			deleteBtnFnCb   : function () {
+
+				var confirmChk = confirm("정말로 탈퇴하시겠습니까?");
+
+				if (confirmChk) {
+					$.ajax({
+						type : "DELETE",
+						url  : "/me/" + [[${session.user.getId()}]],
+						contentType: "application/json",
+						beforeSend	: function(xhr) {
+							xhr.setRequestHeader(header, token);
+						},
+						success : function(data) {
+							alert(data);
+
+							location.href = "/logout";
+						},
+						error   : function(error) {
+							alert(error);
+						}
+					})
+				}
+			},
+			modifyPwdBtnFnCb : function() {
+
+				var emptyCnt = 0;
+
+				// 공백 체크
+				$(".password-modify-input").each(function() {
+					var $this = $(this),
+							removeBlankData = $this.val().replace(Regex.blank, ""),     // 빈칸 (스페이스바) 입력 시 공백지움
+							dataName = $this.data("name");
+
+					$this.val(removeBlankData);
+
+					// 공백일 경우 if
+					if ($this.val() === "") {
+
+						alert(dataName + "은/는 필수 입력 값입니다.");
+
+						$this.focus();
+
+						emptyCnt++;
+
+						// each문 종료
+						return false;
+					}
+				})
+
+				// 공백 없을 경우
+				if (emptyCnt === 0) {
+
+					var oldPassword = $("input[name='oldPassword']").val(),
+							newPassword = $("input[name='newPassword']").val();
+
+					if (newPassword !== $("input[name='rePassword']").val()) {
+						alert("비밀번호가 서로 일치하지 않습니다.");
+
+						return;
+					}
+
+					$.ajax({
+						type : "PUT",
+						url  : "/me/" + [[${session.user.getId()}]] + "/password",
+						contentType: "application/json",
+						data : JSON.stringify({"oldPassword" : oldPassword, "newPassword" : newPassword}),
+						beforeSend	: function(xhr) {
+							xhr.setRequestHeader(header, token);
+						},
+						success : function(data) {
+							alert(data);
+
+							location.reload();
+						},
+						error : function(e) {
+							alert(e.responseText);
+
+							$("input[name='oldPassword']").focus();
+						}
+					})
+				}
 			}
 		}
-		/*]]>*/
-		/*[- end of function -]*/
+
+		$(function() {
+
+			profilesObj.init();
+
+			// 수정버튼 클릭 이벤트
+			$(".btn-modify").on("click", profilesObj.modifyBtnFnCb)
+
+			// 탈퇴버튼 클릭 이벤트
+			$(".btn-delete").on("click", profilesObj.deleteBtnFnCb)
+
+			// 비밀번호 수정 버튼 클릭 이벤트
+			$(".btn-password-modify").on("click", profilesObj.modifyPwdBtnFnCb)
+		})
 	</script>
 </th:block>
 <th:layout layout:fragment="main">
@@ -47,65 +185,84 @@
 			<a href="" class="button">Orders</a>
 			<a href="myinfo.html" class="button">My Page</a>
 		</header>
-		<form id="myForm" name="myForm" th:action="@{/user/upd}" method="post" enctype="multipart/form-data" th:object="${member}">
-			<input type="hidden" name="i_mem" id="i_mem" th:value="${member.i_mem}">
-			<h3>기본 정보</h3>
-			<div class="table-wrapper">
-				<table>
-					<tr>
-						<th>아이디</th>
-						<td><input id="memberId" name="mem_id" th:value="${session.loginUser.mem_id}" readonly></td>
-					</tr>
-					<tr>
-						<th>이름</th>
-						<td><input id="memberNm" name="nm" th:value="${session.loginUser.nm}" readonly></td>
-					</tr>
-					<tr>
-						<th>주소</th>
-						<td>
-							<input type="text" name="postCode" id="postCode" th:value="${member.postCode}" placeholder="우편번호">
-							<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-							<input type="text" name="address" id="address" th:value="${member.address}" placeholder="주소">
-							<input type="text" name="de_address" id="de_address" th:value="${member.de_address}" placeholder="상세주소">
-							<input type="text" id="extraAddress" class="d_form" placeholder="참고항목">
-							<div id="wrap" style="display: none; border: 1px solid; width: 500px; height: 466px; margin: 5px 0px; position: relative;">
-								<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor: pointer; position: absolute; right: 0px; top:-1px; z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+		<div class="container">
+			<div class="section-content">
+				<div class="row">
+					<div class="col-sx-12 col-sm-4 col-md-4">
+						<div class="doctor-thumb">
+							<img th:if="${session.user.getProfileImage() == 'null'}" src="http://placehold.it/400x470" alt="">
+							<img th:unless="${session.user.getProfileImage() == 'null'}" th:src="${session.user.getProfileImage()}" alt="">
+						</div>
+						<div class="info p-20 bg-black-333">
+							<a class="btn btn-danger btn-flat mt-10 mb-sm-30" href="/logout">Logout</a>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-8 col-md-8">
+						<form name="editprofile-form" method="post">
+							<div class="icon-box mb-0 p-0">
+								<a href="#" class="icon icon-bordered icon-rounded icon-sm pull-left mb-0 mr-10">
+									<i class="fa fa-user"></i>
+								</a>
+								<h4 class="text-gray pt-10 mt-0 mb-30">Social User Profile</h4>
 							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>연락처</th>
-						<td><input type="text" name="phone" id="memberPhone" th:value="${member.phone}" class="col-6"></td>
-					</tr>
-					<tr>
-						<th>이메일</th>
-						<td><input type="email" name="email" id="memberEmail" th:value="${session.loginUser.email}" readonly></td>
-					</tr>
-				</table>
-			</div>
-			<h3>추가 정보</h3>
-			<div class="table-wrapper">
-				<table>
-					<tr>
-						<th>생일</th>
-						<td th:if="${member.birth == null}">
-							<input type="date" id="memBirth" name="birth">
-						</td>
-						<td th:unless="${member.birth == null}">
-							<input type="date" id="memberBirth" name="birth" th:value="${member.birth}">
-						</td>
-					</tr>
-				</table>
-			</div>
-			<ul class="actions small">
-				<li>
-					<button type="submit" class="button primary small">정보수정</button>
-					<a href="#" class="button small">뒤로가기</a>
-				</li>
-			</ul>
-		</form>
-		<button type="button" class="btn-delete">탈퇴</button>
+							<hr>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>Name</label>
+									<input name="name" class="form-control" th:value="${session.user.getName()}" type="text" disabled>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>Email</label>
+									<input name="email" class="form-control" th:value="${session.user.getEmail()}" type="email" disabled>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>Social Type</label>
+									<input name="socialType" class="form-control" th:value="${session.user.getSocialType()} + ' ' + '유저'" type="text" disabled>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>Road Address</label>
+									<input name="roadAddr" class="form-control social-input" th:value="${session.user.getRoadAddr()}" type="text">
+								</div>
+								<div class="form-group col-md-6">
+									<label>Building Name</label>
+									<input name="buildingName" class="form-control social-input" th:value="${session.user.getBuildingName()}" type="text">
+								</div>
+								<div class="form-group col-md-6">
+									<label>Detail Address</label>
+									<input name="detailAddr" class="form-control social-input" th:value="${session.user.getDetailAddr()}" type="text">
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<button th:type="button" class="btn btn-success" th:onclick="registAddrObj.searchAddrFn()">우편번호 검색</button>
+								</div>
+								<div class="form-group col-md-6">
+									<button class="btn btn-success btn-social-modify" type="button">프로필 수정</button>
+								</div>
 
+<!--								<th>주소</th>
+								<td>
+									<input type="text" name="postCode" id="postCode" th:value="${member.postCode}" placeholder="우편번호">
+									<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+									<input type="text" name="address" id="address" th:value="${member.address}" placeholder="주소">
+									<input type="text" name="de_address" id="de_address" th:value="${member.de_address}" placeholder="상세주소">
+									<input type="text" id="extraAddress" class="d_form" placeholder="참고항목">
+									<div id="wrap" style="display: none; border: 1px solid; width: 500px; height: 466px; margin: 5px 0px; position: relative;">
+										<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor: pointer; position: absolute; right: 0px; top:-1px; z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+									</div>
+								</td>-->
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </th:layout>
 
