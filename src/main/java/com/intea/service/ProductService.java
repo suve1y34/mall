@@ -30,17 +30,17 @@ public class ProductService {
 //    private final ZSetOperations<String, Object> zSetOperations;
 
     // 전체 상품 혹은 카테고리로 상품 조회
-    public HashMap<String, Object> getProductList(String catCd, String sortCd, String saleCd, int page) throws Exception {
+    public HashMap<String, Object> getProductList(String catCd, String sortCd, int page) throws Exception {
         int realPage = (page == 0) ? 0 : page - 1;
         Pageable pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "createdDate"));
 
         // 카테고리로 조회
-        if(isNull(sortCd) && isNull(saleCd)) {
+        if(isNull(sortCd)) {
             return getResult(getProductsByCategory(catCd, pageable), pageable);
         }
 
         // 정렬 기준으로 조회
-        if(nonNull(sortCd) && nonNull(catCd) && isNull(saleCd)) {
+        if(nonNull(sortCd) && nonNull(catCd)) {
             return getResult(getProductsByCatCdAndSortCd(catCd, sortCd, realPage), pageable);
         }
 

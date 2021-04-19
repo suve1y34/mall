@@ -38,7 +38,7 @@ public class UserService {
     }
 
     // 유저 프로필 수정
-    public UserResDTO updateProfile(Long id, MembersDTO memDto) {
+    public UserResDTO updateProfile(UUID id, MembersDTO memDto) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));;
 
         User updatedUser = user.update(memDto);
@@ -66,7 +66,7 @@ public class UserService {
     }
 
     // 유저 탈퇴
-    public void deleteProfile(Long id) {
+    public void deleteProfile(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));;
 
         User disabledUser = user.delete();

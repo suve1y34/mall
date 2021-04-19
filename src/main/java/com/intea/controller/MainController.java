@@ -2,6 +2,7 @@ package com.intea.controller;
 
 import com.intea.config.auth.LoginUser;
 import com.intea.config.auth.dto.SessionUser;
+import com.intea.service.CategoryService;
 import com.intea.service.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +18,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
-    private ProductService productService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
 
     @GetMapping("/")
     public String main(ModelMap model /*, @LoginUser SessionUser user*/) {
 
-/*        if(user != null) {
-            model.addAttribute("userName", user.getName());
-        }*/
         model.addAttribute("pageName", "main");
+//        model.addAttribute("catMapList", categoryService.getCategoryList());
         return "/index";
     }
 
