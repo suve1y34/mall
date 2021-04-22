@@ -5,6 +5,7 @@ import com.intea.domain.dto.CartResponseDto;
 import com.intea.domain.dto.PagingDto;
 import com.intea.domain.entity.Cart;
 import com.intea.domain.entity.Product;
+import com.intea.domain.entity.ProductDisPrice;
 import com.intea.domain.entity.User;
 import com.intea.domain.repository.CartRepository;
 import com.intea.domain.repository.ProductRepository;
@@ -22,7 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -68,7 +71,7 @@ public class CartService {
             List<CartResponseDto> cartResDTOList = new ArrayList<>();
 
             for(Cart cart : cartList) {
-                cartResDTOList.add(cart.toResponseDto());
+                cartResDTOList.add(cart.toResponseDto(getDisPrice(cart)));
             }
 
             PageImpl<CartResponseDto> cartLists = new PageImpl<>(cartResDTOList, pageable, cartList.getTotalElements());
@@ -82,6 +85,7 @@ public class CartService {
 
             for(Cart cart : carts) {
                 cartIdList.add(cart.getId());
+                int salePrice = (int)((((float) 100 - (float)getDisPrice(cart)) / (float)100) * cart.getProduct().getPrice());
                 chkoutPrice += cart.getProduct().getPrice() * cart.getCount();
             }
 
@@ -123,5 +127,20 @@ public class CartService {
         }
 
         throw new CheckReviewAuthorityException("해당상품 결제를 완료한 회원만 리뷰를 작성할 수 있습니다.");
+    }
+
+    @Transactional
+    public int getDisPrice(Cart cart) {
+        int disPrice = 0;
+
+        if(cart.getProduct().getProductDisPrcList().size() > 0) {
+            List<ProductDisPrice> disprcList
+                    = cart.getProduct().getProductDisPrcList().stream().filter(productDisPrice -> LocalDateTime.now().isAfter(productDisPrice.getStartDate())
+                    && LocalDateTime.now().isBefore(productDisPrice.getEndDate())).sorted().limit(1).collect(Collectors.toList());
+            if(disprcList.size() > 0) {
+                disPrice = disprcList.get(0).getDisPrice();
+            }
+        }
+        return disPrice;
     }
 }

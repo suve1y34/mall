@@ -5,6 +5,7 @@ import com.intea.domain.dto.PagingDto;
 import com.intea.domain.dto.ProductRequestDto;
 import com.intea.domain.dto.ProductResponseDto;
 import com.intea.domain.entity.Product;
+import com.intea.domain.entity.ProductDisPrice;
 import com.intea.domain.repository.ProductRepository;
 import com.intea.exception.NoValidProductSortException;
 import com.intea.exception.NotExistProductException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -52,12 +54,12 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(()
                 -> new NotExistProductException("존재하지 않는 상품입니다."));
 
-/*        int disPrice = 0;
-        if (product.getProductList().size() > 0) {
+        int disPrice = 0;
+        if (product.getProductDisPrcList().size() > 0) {
             disPrice = getDisPrice(product);
-        }*/
+        }
 
-        return product.toResponseDTO();
+        return product.toResponseDTO(disPrice);
     }
 
     /**
@@ -182,6 +184,9 @@ public class ProductService {
                 .id(product.getId())
                 .productNm(product.getProductNm())
                 .price(product.getPrice())
+                .disPrice(disPrice)
+                .disStartDate(disStartDate == null ? "" : disStartDate.getYear() + "-" + startMonthStr + "-" + startDayStr)
+                .disEndDate(disEndDate == null ? "" : disEndDate.getYear() + "-" + endMonthStr + "-" + endDayStr)
                 .titleImg(product.getTitleImg())
                 .largeCat(product.getLargeCat())
                 .smallCat(product.getSmallCat())
@@ -222,10 +227,10 @@ public class ProductService {
 
         for (Product product : products) {
             int disPrice = 0;
-/*            if (product.getProductList().size() > 0) {
+            if (product.getProductDisPrcList().size() > 0) {
                 disPrice = getDisPrice(product);
-            }*/
-            productResponseDtoList.add(product.toResponseDTO());
+            }
+            productResponseDtoList.add(product.toResponseDTO(disPrice));
         }
 
         return productResponseDtoList;
@@ -256,7 +261,10 @@ public class ProductService {
 
         for (Product product : products) {
             int disPrice = 0;
-            productResponseDtoList.add(product.toMainProductResDTO());
+            if (product.getProductDisPrcList().size() > 0) {
+                disPrice = getDisPrice(product);
+            }
+            productResponseDtoList.add(product.toMainProductResDTO(disPrice));
         }
 
         return productResponseDtoList;
@@ -310,6 +318,22 @@ public class ProductService {
                 throw new NoValidProductSortException("유효하지 않은 상품 정렬입니다.");
         }*/
         return null;
+    }
+
+    private int getDisPrice(Product product) {
+        List<ProductDisPrice> disPriceList
+                = product.getProductDisPrcList().stream()
+                .filter(productDisPrice -> {
+                    LocalDateTime now = LocalDateTime.now();
+
+                    return now.isAfter(productDisPrice.getStartDate()) && now.isBefore(productDisPrice.getEndDate());
+                }).sorted().limit(1).collect(Collectors.toList());
+
+        if(disPriceList.size() > 0) {
+            return disPriceList.get(0).getDisPrice();
+        }
+
+        return 0;
     }
 
     private HashMap<String, Object> getResultMap(PageImpl<ProductResponseDto> products) {

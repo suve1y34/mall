@@ -2,10 +2,17 @@ package com.intea.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intea.domain.dto.ProductDisPriceResponseDto;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDisPrice extends CommonEntity implements Comparable<ProductDisPrice> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
