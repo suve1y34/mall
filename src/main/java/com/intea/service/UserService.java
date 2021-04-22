@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     public boolean idChk(String id) {
         if(userRepository.existsByMemId(id)) {
@@ -46,9 +46,9 @@ public class UserService {
     }
 
     // 유저 비밀번호 변경
-    public void updatePassword(UUID id, UpdatePasswordRequestDto passwordReqDTO) {
+/*    public void updatePassword(UUID id, UpdatePasswordRequestDto passwordReqDTO) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 유저입니다."));
-        String beforePassword = user.getPassword();
+        String beforePassword = user.getPassword();*/
 
 /*        if(!isPasswordEquals(beforePassword, passwordRequestDto.getOldPassword())) {
             throw new UpdatePasswordException("기존 비밀번호를 잘못 입력하였습니다.");
@@ -58,10 +58,10 @@ public class UserService {
             throw new UpdatePasswordException("기존 비밀번호와 바꾸려는 새 비밀번호가 일치합니다.");
         }*/
 
-        User updatedUser = user.updPw(passwordEncoder.encode(passwordReqDTO.getNewPassword()));
+/*        User updatedUser = user.updPw(passwordEncoder.encode(passwordReqDTO.getNewPassword()));
 
         userRepository.save(updatedUser);
-    }
+    }*/
 
     // 유저 탈퇴
     public void deleteProfile(UUID id) {

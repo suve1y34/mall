@@ -25,7 +25,6 @@ public class Product extends CommonEntity {
 
     private String productNm;
     private Integer price;
-    private String productDescription;
 
     private Integer purchaseCnt;
     private Integer limitCnt;
@@ -45,7 +44,7 @@ public class Product extends CommonEntity {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Product> productList;
+    private List<ProductDisPrice> productDisPrcList;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -55,13 +54,14 @@ public class Product extends CommonEntity {
     @JsonIgnore
     private List<Review> reviewList;
 
-    public ProductResponseDto toResponseDTO() {
+    public ProductResponseDto toResponseDTO(int disPrice) {
         return ProductResponseDto.builder()
                 .id(id)
                 .productNm(productNm)
                 .largeCat(largeCat)
                 .smallCat(smallCat)
                 .price(price)
+                .disPrice(disPrice)
                 .purchaseCnt(purchaseCnt)
                 .limitCnt(limitCnt)
                 .totalCnt(totalCnt)
@@ -71,23 +71,26 @@ public class Product extends CommonEntity {
                 .build();
     }
 
-    public ProductResponseDto.MainProductResDTO toMainProductResDTO() {
-        return ProductResponseDto.MainProductResDTO.builder()
+    public ProductResponseDto.MainProductResponseDto toMainProductResDTO(int disPrice) {
+        return ProductResponseDto.MainProductResponseDto.builder()
                 .id(id)
                 .productNm(productNm)
                 .titleImg(titleImg)
                 .price(price)
+                .disPrice(disPrice)
+                .salePrice((int)((((float) 100 - (float) disPrice) / (float)100) * price))
                 .timestamp(Timestamp.valueOf(this.getInsertTime()).getTime())
                 .purchaseCnt(purchaseCnt)
                 .build();
     }
 
-    public ProductResponseDto.AdminProductResDTO toAdminProductResDTO(int price) {
-        return ProductResponseDto.AdminProductResDTO.builder()
+    public ProductResponseDto.AdminProductResponseDto toAdminProductResDTO(int disPrice) {
+        return ProductResponseDto.AdminProductResponseDto.builder()
                 .id(id)
                 .productNm(productNm)
                 .titleImg(titleImg)
                 .price(price)
+                .disPrice(disPrice)
                 .purchaseCnt(purchaseCnt)
                 .totalCnt(totalCnt)
                 .rateAvg(rateAvg)

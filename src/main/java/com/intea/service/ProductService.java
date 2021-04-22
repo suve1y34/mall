@@ -28,12 +28,12 @@ import static java.util.Objects.nonNull;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ZSetOperations<String, Object> zSetOperations;
+//    private final ZSetOperations<String, Object> zSetOperations;
 
     // 전체 상품 혹은 카테고리로 상품 조회
     public HashMap<String, Object> getProductList(String catCd, String sortCd, int page) throws Exception {
         int realPage = (page == 0) ? 0 : page - 1;
-        Pageable pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "insertTime"));
+        Pageable pageable = PageRequest.of(realPage, 9, Sort.by("insertTime")/*new Sort(Sort.Direction.DESC, "insertTime")*/);
         // 카테고리로 조회
         if(isNull(sortCd)) {
             return getResult(getProductsByCategory(catCd, pageable), pageable);
@@ -63,7 +63,7 @@ public class ProductService {
     /**
      * 인기 상위 10개의 상품 조회
      */
-    public List<ProductResponseDto.MainProductResDTO> getBestProductList() {
+    public List<ProductResponseDto.MainProductResponseDto> getBestProductList() {
         // 레디스 캐시(메모리) I/O
 //        Set<Object> result = zSetOperations.reverseRange(BEST10_PRODUCT_LIST_KEY, 0, 9);
 
@@ -78,7 +78,7 @@ public class ProductService {
     /**
      * 최신 상위 8개 상품 조회
      */
-    public List<ProductResponseDto.MainProductResDTO> getNewProductList() {
+    public List<ProductResponseDto.MainProductResponseDto> getNewProductList() {
 /*        // 레디스 캐시(메모리) I/O
         Set<Object> result = zSetOperations.reverseRange(NEW8_PRODUCT_LIST_KEY, 0, 7);
 
@@ -92,7 +92,7 @@ public class ProductService {
 
     public HashMap<String, Object> getAdminProductList(int page) {
         int realPage = page - 1;
-        PageRequest pageable = PageRequest.of(realPage, 10, new Sort(Sort.Direction.DESC, "createdDate"));
+        PageRequest pageable = PageRequest.of(realPage, 10, Sort.by("insertTime")/*new Sort(Sort.Direction.DESC, "insertTime")*/);
 
         Page<Product> productPage = productRepository.findAll(pageable);
 
@@ -107,7 +107,7 @@ public class ProductService {
     @Transactional
     public HashMap<String, Object> getProductListByCatCd(int page, String firstCatCd, String secondCatCd) {
         int realPage = page - 1;
-        PageRequest pageable = PageRequest.of(realPage, 10, new Sort(Sort.Direction.DESC, "createdDate"));
+        PageRequest pageable = PageRequest.of(realPage, 10, Sort.by("insertTime")/*new Sort(Sort.Direction.DESC, "insertTime")*/);
 
         Page<Product> productPage = null;
 
@@ -150,7 +150,7 @@ public class ProductService {
     }
 
     // 상품 상세조회
-    public ProductResponseDto.AdminProductDetailResDTO getAdminProductDetails(Long id) {
+    public ProductResponseDto.AdminProductDetailResponseDto getAdminProductDetails(Long id) {
         Optional<Product> productOpt = productRepository.findById(id);
 
         if (!productOpt.isPresent())
@@ -178,7 +178,7 @@ public class ProductService {
             endDayStr = disEndDate.getDayOfMonth() < 10 ? "0" + disEndDate.getDayOfMonth() : "" + disEndDate.getDayOfMonth();
         }
 
-        return ProductResponseDto.AdminProductDetailResDTO.builder()
+        return ProductResponseDto.AdminProductDetailResponseDto.builder()
                 .id(product.getId())
                 .productNm(product.getProductNm())
                 .price(product.getPrice())
@@ -190,7 +190,7 @@ public class ProductService {
     }
 
     // 상품 정보 수정
-    public String updateProduct(Long id, ProductRequestDto.UpdateResDTO updateRequestDto) {
+    public String updateProduct(Long id, ProductRequestDto.UpdateResponseDto updateRequestDto) {
         Optional<Product> productOpt = productRepository.findById(id);
 
         if (!productOpt.isPresent())
@@ -251,8 +251,8 @@ public class ProductService {
         return productRepository.findAllByLargeCat(catCd, pageable);
     }
 
-    private List<ProductResponseDto.MainProductResDTO> getMainProductResponseDto(List<Product> products) {
-        List<ProductResponseDto.MainProductResDTO> productResponseDtoList = new ArrayList<>();
+    private List<ProductResponseDto.MainProductResponseDto> getMainProductResponseDto(List<Product> products) {
+        List<ProductResponseDto.MainProductResponseDto> productResponseDtoList = new ArrayList<>();
 
         for (Product product : products) {
             int disPrice = 0;
@@ -264,14 +264,14 @@ public class ProductService {
 
     // adminProductListDto 조회 공통
     private HashMap<String, Object> getAdminProductListMap(Page<Product> productPage, PageRequest pageable) {
-        List<ProductResponseDto.AdminProductResDTO> productResponseDtoList = new ArrayList<>();
+        List<ProductResponseDto.AdminProductResponseDto> productResponseDtoList = new ArrayList<>();
 
         for (Product product : productPage) {
             int disPrice = 0;
             productResponseDtoList.add(product.toAdminProductResDTO(disPrice));
         }
 
-        PageImpl<ProductResponseDto.AdminProductResDTO> adminProductResponseDtoPage
+        PageImpl<ProductResponseDto.AdminProductResponseDto> adminProductResponseDtoPage
                 = new PageImpl<>(productResponseDtoList, pageable, productPage.getTotalElements());
 
         PagingDto adminProductPagingDto = new PagingDto();
@@ -309,7 +309,7 @@ public class ProductService {
             default:
                 throw new NoValidProductSortException("유효하지 않은 상품 정렬입니다.");
         }*/
-        return pageable;
+        return null;
     }
 
     private HashMap<String, Object> getResultMap(PageImpl<ProductResponseDto> products) {

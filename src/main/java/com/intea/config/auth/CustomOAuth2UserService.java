@@ -19,8 +19,8 @@ import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final UserRepository userRepository;
+public class CustomOAuth2UserService /*implements OAuth2UserService<OAuth2UserRequest, OAuth2User> */{
+/*    private final UserRepository userRepository;
     private final HttpSession httpSession;
 
     @Override
@@ -52,5 +52,5 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .orElse(attributes.toEntity());
 
         return userRepository.save(user);
-    }
+    }*/
 }

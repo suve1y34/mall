@@ -11,10 +11,10 @@ import javax.persistence.*;
 public class Qna extends CommonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long iBoard;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     private String title;

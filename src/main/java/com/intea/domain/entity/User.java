@@ -72,8 +72,8 @@ public class User extends CommonEntity {
                 .build();
     }
 
-    public UserResponseDto.ReviewUserResDTO toReviewResDTO() {
-        return UserResponseDto.ReviewUserResDTO.builder()
+    public UserResponseDto.ReviewUserResponseDto toReviewResDTO() {
+        return UserResponseDto.ReviewUserResponseDto.builder()
                 .userId(memId)
                 .build();
     }

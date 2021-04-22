@@ -25,7 +25,7 @@ public class UserResponseDto {
     @Setter
     @Builder
     @ToString
-    public static class ReviewUserResDTO {
+    public static class ReviewUserResponseDto {
         private String userId;
     }
 }

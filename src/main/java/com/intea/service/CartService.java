@@ -32,6 +32,7 @@ public class CartService {
     private ProductRepository productRepo;
     private CartRepository cartRepo;
 
+    //카트담기
     public void getCart(CartRequestDto cartRequestDto) {
         Optional<User> user = userRepo.findById(cartRequestDto.getUserId());
 
@@ -55,6 +56,7 @@ public class CartService {
                 .build());
     }
 
+    //리스트 뿌리기
     @Transactional
     public HashMap<String, Object> getCartList(UUID user_id, int page, Pageable pageable) {
         int realPage = page - 1;
@@ -93,6 +95,7 @@ public class CartService {
         return null;
     }
 
+    //카트 삭제
     @Transactional
     public void delCart(Long id) {
         Optional<Cart> cartOpt = cartRepo.findById(id);
@@ -104,6 +107,7 @@ public class CartService {
         cartRepo.delete(cartOpt.get());
     }
 
+    //리뷰 권한 체크
     public int chkReviewAuthority(HashMap<String, Object> paramMap) {
         UUID user_id = UUID.fromString(paramMap.get("user_id").toString());
         Long product_id = Long.parseLong(paramMap.get("product_id").toString());

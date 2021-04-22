@@ -45,13 +45,13 @@ public class UserRequestDto {
 
     public User toEntity() {
         return User.builder()
-                .mem_id(this.getMemId())
+                .memId(this.getMemId())
                 .email(this.getEmailAddress())
                 .name(this.getMemNm())
                 .phone(this.getTel())
                 .postCode(this.getPostCode())
                 .address(this.getAddress())
-                .de_address(this.getDeAddress())
+                .deAddress(this.getDeAddress())
                 .picture(this.getPicture())
                 .build();
     }

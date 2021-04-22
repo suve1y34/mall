@@ -25,8 +25,7 @@ public class CategoryRestController {
     @ApiOperation(value = "전체 카테고리 조회")
     @GetMapping("/categories")
     public ResponseEntity<?> getCategory() {
-//        return ResponseEntity.ok().body(categoryService.getCategoryList());
-        return null;
+        return ResponseEntity.ok().body(categoryService.getCategoryList());
     }
 
     @ApiOperation(value = "1차 카테고리 추가 ( 관리자 권한 ) ")

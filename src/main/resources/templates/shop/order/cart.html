@@ -12,12 +12,12 @@
 			userId: "",
 			buyer_name : "",
 			email : "",
-			roadAddr : "",
-			buildingName : "",
-			detailAddr : "",
-			orderName : "",
+			postCode : "",
+			address : "",
+			deAddress : "",
+			orderNm : "",
 			amount : 0,
-			deliveryMessage : "",
+			message : "",
 			userSavings : 0,
 			useSavings : 0,
 			cartId : []
@@ -31,7 +31,7 @@
 
 				$.ajax({
 					type : "GET",
-					url  : "/users/" + userId + "/carts/" + page,
+					url  : "/user/" + userId + "/cart/" + page,
 					contentType : "application/json",
 					beforeSend	: function(xhr) {
 						xhr.setRequestHeader(header, token);
@@ -49,9 +49,9 @@
 								var representProductNm = cartList[0].product.productNm;
 
 								if (data.cartIdList.length > 1) {
-									checkoutData.orderName = representProductNm + " 외 " + (data.cartIdList.length - 1) + "건";
+									checkoutData.orderNm = representProductNm + " 외 " + (data.cartIdList.length - 1) + "건";
 								} else {
-									checkoutData.orderName = representProductNm;
+									checkoutData.orderNm = representProductNm;
 								}
 							}
 
@@ -59,9 +59,9 @@
 							checkoutData.userId = cartList[0].user.id;
 							checkoutData.buyer_name = cartList[0].user.name;
 							checkoutData.email = cartList[0].user.email;
-							checkoutData.roadAddr = cartList[0].user.roadAddr;
-							checkoutData.buildingName = cartList[0].user.buildingName;
-							checkoutData.detailAddr = cartList[0].user.detailAddr;
+							checkoutData.roadAddr = cartList[0].user.postCode;
+							checkoutData.buildingName = cartList[0].user.address;
+							checkoutData.detailAddr = cartList[0].user.deAddress;
 
 							checkoutData.userSavings = cartList[0].user.savings;
 							$(".savings p.user-savings").text(checkoutData.userSavings + "원 보유 (5000원 이상 결제 시 사용가능)");
@@ -80,7 +80,7 @@
 							if (cartList.length > 0) {
 
 								cartList.forEach(function(element) {
-									var amount = Number(element.productCount) * Number(element.salePrice);
+									var amount = Number(element.count) * Number(element.salePrice);
 
 									var cartTr = "<tr class='cart_itme'>" +
 											"<td class=\"product-remove\"><a data-cart-id='" + element.id + "' title=\"Remove this item\" class=\"remove\" href=\"#\" onclick='cartObj.removeCart(this)'>×</a></td>" +

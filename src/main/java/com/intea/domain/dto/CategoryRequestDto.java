@@ -31,7 +31,7 @@ public class CategoryRequestDto {
         @NotBlank(message = "카테고리명을 작성해 주세요.")
         private String catNm;
         @NotBlank(message = "상위 카테고리 코드를 작성해 주세요.")
-        private String upprCatCode;
+        private String upperCatCode;
         private Character useYn;
     }
 }

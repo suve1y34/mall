@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @AllArgsConstructor
 @Controller
 public class AdminController {
-    //admin 메인화면
-    @GetMapping("admin/main")
-    public String admin_main() {
-        return "user/admin/ad-index";
-    }
+
 
     @GetMapping("admin/product")
     public String getProductList() {

@@ -2,15 +2,17 @@ package com.intea.domain.entity;
 
 import com.intea.constant.OrderStatus;
 import com.intea.domain.dto.OrdersResponseDto;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@ToString
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Orders extends CommonEntity {
     @Id
@@ -28,10 +30,10 @@ public class Orders extends CommonEntity {
     private Integer amount;
 
     @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "productOrders", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<Cart> cartList;
 
     public OrdersResponseDto toResponseDTO() {

@@ -92,7 +92,7 @@ public class ProductRestController {
     @ApiOperation(value = "상품 수정 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/products/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductRequestDto.UpdateResDTO updateReqDTO,
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductRequestDto.UpdateResponseDto updateReqDTO,
                                            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()){

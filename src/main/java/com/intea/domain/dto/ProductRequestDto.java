@@ -31,7 +31,7 @@ public class ProductRequestDto {
     @Getter
     @Setter
     @ToString
-    public static class UpdateResDTO {
+    public static class UpdateResponseDto {
         @NotBlank(message = "상품명을 입력해 주세요.")
         private String productNm;
 

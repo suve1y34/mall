@@ -96,11 +96,11 @@ public class ReviewService {
         return resultMap;
     }
 
-    public ReviewResponseDto.ReviewDetailResDTO getReviewDetail(Long id) {
+    public ReviewResponseDto.ReviewDetailResponseDto getReviewDetail(Long id) {
         Review review = reviewRepo.findById(id).orElseThrow(()
                 -> new NotExistReviewException("존재하지 않는 게시글입니다."));;
 
-        return ReviewResponseDto.ReviewDetailResDTO.builder()
+        return ReviewResponseDto.ReviewDetailResponseDto.builder()
                 .content(review.getContent())
                 .build();
     }

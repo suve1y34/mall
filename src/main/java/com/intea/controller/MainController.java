@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Slf4j
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Controller
 public class MainController {
 
-    private final ProductService productService;
     private final CategoryService categoryService;
 
     @GetMapping("/")

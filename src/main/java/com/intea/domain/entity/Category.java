@@ -20,7 +20,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer ctLevel;
-    private String upprCatCode;
+    private String upperCatCode;
     private String catCode;
     private String catNm;
     private Character useYn;
@@ -31,7 +31,7 @@ public class Category {
                 .id(id)
                 .catCode(catCode)
                 .catNm(catNm)
-                .upprCatCode(upprCatCode)
+                .upperCatCode(upperCatCode)
                 .useYn(useYn)
                 .build();
     }

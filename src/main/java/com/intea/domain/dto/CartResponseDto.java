@@ -13,5 +13,6 @@ public class CartResponseDto {
     private Long id;
     private User user;
     private Product product;
+    private Integer salePrice;
     private Integer count;
 }

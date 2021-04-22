@@ -28,11 +28,12 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final ValueOperations valueOperations;
+//    private final ValueOperations valueOperations;
 
     @SuppressWarnings("unchecked")
     public HashMap<String, Object> getCategoryList() {
-        return (HashMap<String, Object>) valueOperations.get(Const.CATEGORY_LIST_KEY);
+//        return (HashMap<String, Object>) valueOperations.get(Const.CATEGORY_LIST_KEY);
+        return null;
     }
 
     /**
@@ -41,9 +42,6 @@ public class CategoryService {
     public String addFirstCategory(CategoryRequestDto.BigCategory bigCategory) {
         // Mysql에 추가 (File i/o)
         saveFirstCategory(bigCategory);
-
-        // 상품 카테고리 캐싱 (Memory i/o)
-        setCategoryCaching();
 
         return "1차 카테고리가 등록 되었습니다.";
     }
@@ -54,9 +52,6 @@ public class CategoryService {
     public String addSecondCategory(CategoryRequestDto.SmallCategory smallCategory) {
         // Mysql에 추가 (File i/o)
         saveSecondCategory(smallCategory);
-
-        // 상품 카테고리 캐싱 (Memory i/o)
-        setCategoryCaching();
 
         return "2차 카테고리가 등록 되었습니다.";
     }
@@ -81,7 +76,7 @@ public class CategoryService {
             return ResponseEntity.ok().body(CategoryResponseDto.SmallCategory.builder()
                     .id(category.getId())
                     .catNm(category.getCatNm())
-                    .upprCatCode(categoryRepository.findByCatCode(category.getUpprCatCode()).getCatNm())
+                    .upperCatCode(categoryRepository.findByCatCode(category.getUpperCatCode()).getCatNm())
                     .useYn(category.getUseYn())
                     .build());
         }
@@ -99,16 +94,13 @@ public class CategoryService {
 
         categoryRepository.save(category);
 
-        // 캐시 업데이트
-        setCategoryCaching();
-
         return "카테고리가 수정되었습니다.";
     }
 
     // 2차 카테고리 리스트 조회
     public List<CategoryResponseDto.SmallCategory> getSecondCategoryList(String firstCatCd) {
 
-        List<Category> secondCategoryList = categoryRepository.findAllByUpprCatCode(firstCatCd);
+        List<Category> secondCategoryList = categoryRepository.findAllByUpperCatCode(firstCatCd);
 
         List<CategoryResponseDto.SmallCategory> secondCategoryDtoList = new ArrayList<>();
 
@@ -154,7 +146,7 @@ public class CategoryService {
     }
 
     private void saveSecondCategory(CategoryRequestDto.SmallCategory smallCategory) {
-        String upprCatCd = smallCategory.getUpprCatCode();
+        String upprCatCd = smallCategory.getUpperCatCode();
 
         List<Category> secondCategoryList = categoryRepository.findAllByUpperCatCodeOrderByCatCodeDesc(upprCatCd);
 
@@ -172,7 +164,7 @@ public class CategoryService {
                 .catCode(catCdOfNewSmallCategory)
                 .ctLevel(2)
                 .catNm(smallCategory.getCatNm())
-                .upprCatCode(upprCatCd)
+                .upperCatCode(upprCatCd)
                 .cnntUrl("/productList")
                 .useYn(smallCategory.getUseYn())
                 .build());
@@ -213,15 +205,4 @@ public class CategoryService {
 
         return catCd;
     }
-
-    /**
-     * 카테고리 추가 시 캐시 업데이트
-     */
-    private void setCategoryCaching() {
-        HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("mainCatList", categoryRepository.findAllByUseYn('Y'));
-
-        valueOperations.set(Const.CATEGORY_LIST_KEY, resultMap);
-    }
-
 }

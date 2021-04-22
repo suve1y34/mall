@@ -24,7 +24,7 @@ public class CategoryResponseDto {
         private Long id;
         private String catNm;
         private String catCode;
-        private String upprCatCode;
+        private String upperCatCode;
         private Character useYn;
     }
 }

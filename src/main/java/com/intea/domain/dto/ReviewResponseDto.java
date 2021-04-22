@@ -10,7 +10,7 @@ import lombok.ToString;
 public class ReviewResponseDto {
 
     private Long id;
-    private UserResponseDto.ReviewUserResDTO userId;
+    private UserResponseDto.ReviewUserResponseDto userId;
     private String title;
     private int rate;
     private String insertTime;
@@ -18,7 +18,7 @@ public class ReviewResponseDto {
     @Getter
     @Builder
     @ToString
-    public static class ReviewDetailResDTO {
+    public static class ReviewDetailResponseDto {
         private String content;
     }
 }
