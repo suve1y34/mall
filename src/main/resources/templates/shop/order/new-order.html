@@ -153,110 +153,74 @@
 		<header class="main">
 			<h2>ORDER</h2>
 		</header>
-		<form action="" method="post">
-			<div class="table-wrapper">
-				<h4>주문상품</h4>
-				<table>
-					<tbody>
-					<tr>
-						<td>
-							<span class="image left">
-								<img src="images/pic01.jpg" alt="">
-							</span>
-							웅앵커피<br>
-						</td>
-						<td>X 1</td>
-						<td>12,000</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-			<h4>배송정보</h4>
-			<div class="table-wrapper">
-				<table>
-					<tr>
-						<td class="col-6 col-12-xsmall">
-							<label for="rec">받는 분</label>
-							<input type="text" name="rec" id="rec">
-						</td>
-						<td>
-							<input type="text" value="" placeholder="이름">
-						</td>
-					</tr>
-					<tr>
-						<td class="col-6 col-12-xsmall">
-							<label for="phone">휴대전화</label>
-							<input type="text" name="phone" id="phone">
-						</td>
-						<td>
-						<input type="text" value="" placeholder="휴대전화">
-						</td>
-					</tr>
 
-<!--					<tr>
-						<td class="col-2 col-12-xsmall">
-							<label for="email">이메일</label>
-						</td>
-						<td>
-							<input type="email" value="" placeholder="이메일">
-						</td>
-					</tr>-->
-					<tr>
-						<td class="col-2 col-12-xsmall">
-							<label for="postCode">주소</label>
-							<input type="text" name="postCode" id="postCode" placeholder="우편번호">
-							<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-							<input type="text" name="address" id="address" placeholder="주소">
-							<input type="text" name="de_address" id="de_address" placeholder="상세주소">
-							<input type="text" id="extraAddress" class="d_form" placeholder="참고항목">
-							<div id="wrap" style="display: none; border: 1px solid; width: 500px; height: 466px; margin: 5px 0px; position: relative;">
-								<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor: pointer; position: absolute; right: 0px; top:-1px; z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+		<!-- 주문상세 모달창 -->
+		<div class="modal fade bs-order-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Order</h4>
+					</div>
+					<div class="modal-body">
+						<div class="col-md-12">
+							<div class="horizontal-tab order-tab">
+								<ul class="nav nav-tabs">
+									<li class="active order-tab"><a href="#order-tab" data-toggle="tab">주문상세</a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane fade in active" id="order-tab">
+										<div class="orders">
+											<ul class="order-ul">
+
+											</ul>
+										</div>
+									</div>
+								</div>
 							</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-2 col-12-xsmall">
-							<label for="demo-message">배송 메시지</label>
-							<textarea id="demo-message" placeholder="배송기사님께 전달할 메시지입니다" rows="2"></textarea>
-						</td>
-					</tr>-
-				</table>
+						</div>
+
+					</div>
+					<div class="row"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-success" data-dismiss="modal">닫기</button>
+					</div>
+				</div>
 			</div>
-			<div class="table-wrapper">
-				<table>
-					<thead>
-					<tr>
-						<th>결제</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr>
-						<td>
-							<input type="radio"><label>신용카드</label>
-							<input type="radio"><label>계좌이체</label>
-							<input type="radio"><label>휴대폰</label>
-							<input type="radio"><label>무통장입금</label>
-						</td>
-					</tr>
-					</tbody>
-				</table>
+		</div>
+
+		<div class="container">
+			<div class="section-content">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<h2>Order List</h2>
+						<hr>
+						<table class="table table-striped table-bordered tbl-shopping-cart">
+							<thead>
+							<tr>
+								<th>주문번호</th>
+								<th>이미지</th>
+								<th>주문명</th>
+								<th>결제액</th>
+								<th>주문상태</th>
+								<th>주문날짜</th>
+							</tr>
+							</thead>
+							<tbody class="order-table-body">
+
+							</tbody>
+						</table>
+						<div class="col-md-12">
+							<nav>
+								<ul class="pagination product-order-pagination theme-skin-green mt-0">
+
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="table-wrapper">
-				<table>
-					<tr>
-						<td class="">상품금액</td><td class="">12,000 원</td>
-					</tr>
-					<tr>
-						<td class="">배송비</td><td class="">2,500 원</td>
-					</tr>
-					<tr>
-						<td class="">결제예정</td><td class="">14,500 원</td>
-					</tr>
-				</table>
-			</div>
-			<button type="submit" class="orderBtn primary">주문</button>
-			<button type="button" class="button cancelBtn"></button>
-		</form>
+		</div>
 	</section>
 </th:layout>
 </html>

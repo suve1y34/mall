@@ -226,16 +226,16 @@
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6">
-									<label>Road Address</label>
-									<input name="roadAddr" class="form-control social-input" th:value="${session.user.getRoadAddr()}" type="text">
+									<label>우편번호</label>
+									<input name="roadAddr" class="form-control social-input" th:value="${session.user.getPostCode()}" type="text">
 								</div>
 								<div class="form-group col-md-6">
-									<label>Building Name</label>
-									<input name="buildingName" class="form-control social-input" th:value="${session.user.getBuildingName()}" type="text">
+									<label>주소</label>
+									<input name="buildingName" class="form-control social-input" th:value="${session.user.getAddress()}" type="text">
 								</div>
 								<div class="form-group col-md-6">
-									<label>Detail Address</label>
-									<input name="detailAddr" class="form-control social-input" th:value="${session.user.getDetailAddr()}" type="text">
+									<label>상세 주소</label>
+									<input name="detailAddr" class="form-control social-input" th:value="${session.user.getDeAddress()}" type="text">
 								</div>
 							</div>
 							<div class="row">
