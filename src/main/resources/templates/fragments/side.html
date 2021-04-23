@@ -69,6 +69,35 @@
             </ul>
         </nav>
 
+        <div class="header-nav">
+            <div class="header-nav-wrapper navbar-scrolltofixed">
+                <div class="container">
+                    <nav id="menuzord" class="menuzord green">
+                        <ul class="menuzord-menu">
+                            <li id="main" class="home"><a href="/"><i class="fa fa-home font-28"></i></a></li>
+                            <li><a href="#home">전체카테고리</a>
+                                <ul class="dropdown category">
+                                    <th:block th:if="${#lists.size(catList_L)} > 0" th:each="catList_L : ${catMapList.get('mainCatList')}">
+                                        <li th:if="${(catList_L.getCatLv() eq 1)}">
+                                            <a href="#" th:text="${catList_L.getCatNm()}"></a>
+                                            <ul class="dropdown">
+                                                <th:block th:if="${#lists.size(catList_S)} > 0" th:each="catList_S : ${catMapList.get('mainCatList')}">
+                                                    <li th:if="${(catList_S.getCatLv() eq 2) and (catList_L.getCatCd() eq catList_S.getUpprCatCd())}">
+                                                        <a th:href="@{|${catList_S.getCnntUrl()}?catCd=${catList_S.getCatCd()}|}" th:text="${catList_S.getCatNm()}"></a>
+                                                    </li>
+                                                </th:block>
+                                            </ul>
+                                        </li>
+                                    </th:block>
+                                </ul>
+                            </li>
+                            <li id="saleProductList"><a href="/saleProductList" >On sale</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
         <!-- Section -->
         <section>
             <header class="major">

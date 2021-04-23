@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ProductDisCountService {
+public class ProductDiscountService {
 
     private final ProductRepository productRepository;
     private final ProductDisPriceRepository productDisPriceRepository;
