@@ -1,4 +1,4 @@
-package com.intea.util;
+package com.intea.constant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,6 +1,9 @@
 package com.intea.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.intea.constant.AWSS3Utils;
 import com.intea.constant.ProductStatus;
+import com.intea.constant.UploadFileUtils;
 import com.intea.domain.dto.PagingDto;
 import com.intea.domain.dto.ProductRequestDto;
 import com.intea.domain.dto.ProductResponseDto;
@@ -13,10 +16,11 @@ import com.intea.exception.ProductListException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,6 +33,7 @@ import static java.util.Objects.nonNull;
 @Service
 public class ProductService {
 
+    private final AWSS3Utils awss3Utils;
     private final ProductRepository productRepository;
 //    private final ZSetOperations<String, Object> zSetOperations;
 
@@ -349,7 +354,7 @@ public class ProductService {
         return resultMap;
     }
 
-/*    private ProductResDTO.SaleProductResponseDto mapToDto(Map<String, Object> map) {
+    private ProductResponseDto.SaleProductResponseDto mapToDto(Map<String, Object> map) {
 
         Product saleProduct = (Product) map.get("product");
         Integer disPrice = (Integer) map.get("disPrc");
@@ -363,9 +368,9 @@ public class ProductService {
                 .disPrice(disPrice)
                 .salePrice((int)((((float) 100 - (float) disPrice) / (float)100) * saleProduct.getPrice()))
                 .build();
-    }*/
+    }
 
-/*    public String uploadProductImage(MultipartFile file, String dirName) throws IOException {
+    public String uploadProductImage(MultipartFile file, String dirName) throws IOException {
         // S3와 연결할 client 얻기
         AmazonS3 s3Client = awss3Utils.getS3Client();
 
@@ -374,5 +379,5 @@ public class ProductService {
 
         // S3에 파일 저장 후 url 반환
         return awss3Utils.putObjectToS3AndGetUrl(s3Client, saveFilePath, file);
-    }*/
+    }
 }
