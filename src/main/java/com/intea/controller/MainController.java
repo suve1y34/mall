@@ -24,7 +24,7 @@ public class MainController {
 
         model.addAttribute("pageName", "main");
         model.addAttribute("catMapList", categoryService.getCategoryList());
-        return "/index";
+        return "index";
     }
 
     //admin 메인화면

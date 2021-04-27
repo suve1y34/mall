@@ -78,13 +78,9 @@ public class User extends CommonEntity {
                 .build();
     }
 
-    public User update(MemberRequestDto memDTO) {
-        this.name =memDTO.getName();
-        this.picture = memDTO.getPicture();
-        this.email = memDTO.getEmail();
-        this.postCode = memDTO.getPostCode();
-        this.address = memDTO.getAddress();
-        this.deAddress = memDTO.getDeAddress();
+    public User update(String name, String picture) {
+        this.name = name;
+        this.picture = picture;
 
         return this;
     }

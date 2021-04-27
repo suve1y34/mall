@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CartController {
     private final CategoryService categoryService;
 
-    @GetMapping("/cart")
+    @GetMapping("/my/cart")
     public String getCart(Model model) {
         model.addAttribute("pageName", "cart");
         model.addAttribute("catMapList", categoryService.getCategoryList());

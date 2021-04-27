@@ -39,8 +39,8 @@ public class UserService {
     public UserResponseDto updateProfile(UUID id, MemberRequestDto memDto) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));;
 
-        User updatedUser = user.update(memDto);
-        user = userRepository.save(updatedUser);
+//        User updatedUser = user.update(memDto);
+//        user = userRepository.save(updatedUser);
 
         return user.toResDTO(user);
     }

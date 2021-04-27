@@ -12,12 +12,12 @@ import java.util.Map;
 
 @Repository
 public interface ProductDisPriceRepository extends JpaRepository<ProductDisPrice, Long> {
-    @Query("SELECT new Map(p.id AD id, p.product AS rpdocut," +
+/*    @Query("SELECT new Map(p.id AD id, p.product AS rpdocut," +
             "MAX(p.disPrice) AS disPrice)" +
             "FROM ProductDisPrice p" +
             "WHERE NOW() BETWEEN p.startDate p.endDate" +
             "GROUP BY p.product")
-    Page<Map<String, Object>> getSaleProductList(Pageable pageable);
+    Page<Map<String, Object>> getSaleProductList(Pageable pageable);*/
 
     List<ProductDisPrice> findByProductId(Long id);
 }
