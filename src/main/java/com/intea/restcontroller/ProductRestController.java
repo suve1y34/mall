@@ -1,5 +1,6 @@
 package com.intea.restcontroller;
 
+import com.intea.common.Const;
 import com.intea.domain.dto.ProductRequestDto;
 import com.intea.service.ProductService;
 import io.swagger.annotations.Api;
@@ -11,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Api(tags = "product", description = "상품")
 @Slf4j @AllArgsConstructor
@@ -56,18 +59,18 @@ public class ProductRestController {
     }
 
     // 상품 타이틀 이미지 업로드 (관리자 권한)
-/*    @ApiOperation(value = "상품 타이틀 이미지 업로드 (관리자 권한)")
+    @ApiOperation(value = "상품 타이틀 이미지 업로드 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/products/titleImage")
+    @PostMapping("/product/titleImage")
     public ResponseEntity<?> uploadProductImage(@RequestParam("file") MultipartFile file) throws IOException {
 
-        return ResponseEntity.ok().body(productService.uploadProductImage(file, PRODUCT_UPLOAD_IMAGE));
-    }*/
+        return ResponseEntity.ok().body(productService.uploadProductImage(file, Const.PRODUCT_UPLOAD_IMAGE));
+    }
 
     // 상품 추가 (관리자 권한)
     @ApiOperation(value = "상품 추가 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/products")
+    @PostMapping("/product")
     public ResponseEntity<?> addProduct(@RequestBody @Valid ProductRequestDto productRequestDto,
                                         BindingResult bindingResult) {
 
@@ -82,7 +85,7 @@ public class ProductRestController {
     // 상품 상세 (관리자 권한)
     @ApiOperation(value = "상품 상세 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin/products/{id}")
+    @GetMapping("/admin/product/{id}")
     public ResponseEntity<?> getAdminProductDetails(@PathVariable Long id) {
 
         return ResponseEntity.ok().body(productService.getAdminProductDetails(id));
@@ -91,7 +94,7 @@ public class ProductRestController {
     // 상품 수정 (관리자 권한)
     @ApiOperation(value = "상품 수정 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/products/{id}")
+    @PutMapping("/product/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductRequestDto.UpdateResponseDto updateReqDTO,
                                            BindingResult bindingResult) {
 

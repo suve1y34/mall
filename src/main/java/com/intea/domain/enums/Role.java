@@ -1,4 +1,4 @@
-package com.intea.constant;
+package com.intea.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

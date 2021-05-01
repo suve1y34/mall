@@ -1,6 +1,7 @@
 package com.intea.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.intea.common.CommonEntity;
 import com.intea.domain.dto.CartResponseDto;
 import lombok.*;
 

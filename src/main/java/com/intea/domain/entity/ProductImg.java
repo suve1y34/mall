@@ -1,12 +1,15 @@
 package com.intea.domain.entity;
 
-import lombok.Data;
-import lombok.ToString;
+import com.intea.common.CommonEntity;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
-@ToString
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class ProductImg extends CommonEntity {
     @Id

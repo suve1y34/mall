@@ -1,6 +1,6 @@
 package com.intea.config.auth.dto;
 
-import com.intea.constant.Role;
+import com.intea.domain.enums.Role;
 import com.intea.domain.entity.User;
 import lombok.Builder;
 import lombok.Getter;

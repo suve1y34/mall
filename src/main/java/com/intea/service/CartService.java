@@ -112,11 +112,12 @@ public class CartService {
     }
 
     //리뷰 권한 체크
+    @Transactional
     public int chkReviewAuthority(HashMap<String, Object> paramMap) {
-        UUID user_id = UUID.fromString(paramMap.get("user_id").toString());
-        Long product_id = Long.parseLong(paramMap.get("product_id").toString());
+        UUID userId = UUID.fromString(paramMap.get("userId").toString());
+        Long productId = Long.parseLong(paramMap.get("productId").toString());
 
-        List<Cart> cartList = cartRepo.findAllByUserIdAndProductId(user_id, product_id);
+        List<Cart> cartList = cartRepo.findAllByUserIdAndProductId(userId, productId);
 
         if (cartList.size() > 0) {
             for (Cart cart : cartList) {
@@ -126,7 +127,7 @@ public class CartService {
             }
         }
 
-        throw new CheckReviewAuthorityException("해당상품 결제를 완료한 회원만 리뷰를 작성할 수 있습니다.");
+        throw new CheckReviewAuthorityException("해당상품을 주문하신 회원만 리뷰를 작성할 수 있습니다.");
     }
 
     @Transactional

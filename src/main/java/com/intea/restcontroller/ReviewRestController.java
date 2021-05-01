@@ -25,16 +25,8 @@ public class ReviewRestController {
     private ReviewService reviewService;
     private CartService cartService;
 
-/*    @ApiOperation(value = "리뷰 이미지 업로드")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @PostMapping("/reviews/image")
-    public ResponseEntity<?> uploadReviewImage(@RequestParam("file") MultipartFile file) throws IOException {
-
-        return ResponseEntity.ok().body(reviewService.uploadReviewImage(file, REVIEW_UPLOAD_IMAGE));
-    }*/
-
     // 리뷰를 작성할 수 있는 회원인지
-    @ApiOperation(value = "리뷰 권한 파악")
+    @ApiOperation(value = "리뷰 작성 권한 확인")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/review/authority")
     public ResponseEntity<?> checkReviewAuthority(@RequestParam HashMap<String, Object> paramMap) {
@@ -43,9 +35,9 @@ public class ReviewRestController {
     }
 
     // 리뷰 추가
-    @ApiOperation(value = "리뷰 생성")
+    @ApiOperation(value = "리뷰 작성")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @PostMapping("/reviews")
+    @PostMapping("/review")
     public ResponseEntity<?> makeReview(@RequestBody @Valid ReviewRequestDto reviewRequestDto,
                                         BindingResult bindingResult) {
 

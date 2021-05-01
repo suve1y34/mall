@@ -26,7 +26,7 @@
 					if (data.disPrice !== 0) {
 						$(".detail-product-price").prepend("<del><span class=\"real-price amount\">" + data.price + "원</span></del>")
 					}
-					// $(".real-price").text(data.price + "원");
+					$(".real-price").text(data.price + "원");
 					$(".sale-price").text(data.price * ((100 - data.disPrice) / 100) + "원");
 					$(".limit-count").text(data.limitCnt + "개");
 					$(".purchase-count").text(data.purchaseCnt + "개");
@@ -35,7 +35,7 @@
 				// 리뷰 리스트 가져오기
 				productDetail.getReviewListFn();
 				// 관련 상품 리스트 가져오기
-				productDetail.getRelatedProductListFn(data.id, data.smallCatCd);
+				productDetail.getRelatedProductListFn(data.id, data.smallCat);
 			},
 
 			makeCartFn  : function() {
@@ -65,7 +65,7 @@
 				var data = {
 					"userId"       : userId,
 					"productId"    : [[${productId}]],
-					"productCount" : productCount
+					"productCnt" : productCount
 				}
 
 				$.ajax({
@@ -100,7 +100,7 @@
 				// 리뷰를 작성할 수 있는 회원인지 파악
 				$.ajax({
 					type : "GET",
-					url  : "/reviews/authority",
+					url  : "/review/authority",
 					data : {userId : userId, productId : [[${productId}]]},
 					contentType : "application/json",
 					beforeSend  : function (xhr) {
@@ -108,7 +108,7 @@
 					},
 					success : function (data) {
 
-						location.href = "/reviews?userId=" + userId + "&" + "productId=" + [[${productId}]];
+						location.href = "/review?userId=" + userId + "&" + "productId=" + [[${productId}]];
 					},
 					error   : function (e) {
 						alert(e.responseText);
@@ -125,7 +125,7 @@
 
 				$.ajax({
 					type : "GET",
-					url : "/products/" + [[${productId}]] + "/reviews?page=" + page,
+					url : "/product/" + [[${productId}]] + "/reviews?page=" + page,
 					contentType : "application/json",
 					success : function (data) {
 						// 상품의 전체 평점 값 설정하기
@@ -156,7 +156,7 @@
 									"<div title=\"Rated 5.00 out of 5\" class=\"star-rating\"><span style='width: " + rate + ";'>5.00</span></div>" +
 									"</li>" +
 									"<li>" +
-									"<h5 class=\"media-heading meta\"><span class=\"author\"><strong>" + element.userId.memId + "</strong> / </span>     " + element.createdDate + "</h5>" +
+									"<h5 class=\"media-heading meta\"><span class=\"author\"><strong>" + element.userId.memId + "</strong> / </span>     " + element.insertTime + "</h5>" +
 									"</li>" +
 									"</ul><a data-review-id='" + element.id + "' href='#review-btn' onclick='productDetail.getReviewDetail(this)'>" + element.title + "</a>" +
 									"</div>" +
@@ -170,7 +170,7 @@
 						// 페이징 처리하기
 						if (reviewPagingDto.scaleStartPage !== 1) {
 							var prevLi =
-									"<li><a data-page='" + reviewPagingDto.prevPage + "' class='question-page' href='javascript:;' onclick='productDetail.getReviewListFn(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
+									"<li><a data-page='" + reviewPagingDto.prePage + "' class='question-page' href='javascript:;' onclick='productDetail.getReviewListFn(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
 
 							$reviewPagination.append(prevLi);
 						}
@@ -179,9 +179,9 @@
 							var pageLi = "";
 
 							if (reviewPagingDto.page === i) {
-								pageLi = "<li class='active'><a data-page='" + i + "' class='question-page' href='javascript:;' onclick='productDetail.getReviewListFn(this)'>" + i + "</a></li>";
+								pageLi = "<li class='active'><a data-page='" + i + "' class='review-page' href='javascript:;' onclick='productDetail.getReviewListFn(this)'>" + i + "</a></li>";
 							} else {
-								pageLi = "<li class=''><a data-page='" + i + "' class='question-page' href='javascript:;' onclick='productDetail.getReviewListFn(this)'>" + i + "</a></li>";
+								pageLi = "<li class=''><a data-page='" + i + "' class='review-page' href='javascript:;' onclick='productDetail.getReviewListFn(this)'>" + i + "</a></li>";
 							}
 
 							$reviewPagination.append(pageLi);
@@ -189,7 +189,7 @@
 
 						if (reviewPagingDto.scaleEndPage !== reviewPagingDto.totPage) {
 							var nextLi =
-									"<li><a data-page='" + reviewPagingDto.nextPage + "' class='question-page' href='javascript:;' onclick='productDetail.normalUserQuestionListFn(this)' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li>"
+									"<li><a data-page='" + reviewPagingDto.nextPage + "' class='review-page' href='javascript:;' onclick='productDetail.getReviewListFn(this)' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li>"
 
 							$reviewPagination.append(nextLi);
 						}
@@ -207,7 +207,7 @@
 
 				$.ajax({
 					type : "GET",
-					url  : "/reviews/" + reviewId,
+					url  : "/review/" + reviewId,
 					contentType : "application/json",
 					beforeSend  : function (xhr) {
 						xhr.setRequestHeader(header, token);
@@ -230,11 +230,11 @@
 				$reviewDeatilTarget.empty();
 				$reviewDeatilTarget.hide();
 			},
-			getRelatedProductListFn : function(id, smallCatCd) {
+			getRelatedProductListFn : function(id, smallCat) {
 
 				$.ajax({
 					type : "GET",
-					url  : "/products/" + id + "/relation/" + smallCatCd,
+					url  : "/products/" + id + "/relation/" + smallCat,
 					contentType : "application/json",
 					success : function(data) {
 						var $relatedProductList = $("#related-product-list");
@@ -287,14 +287,6 @@
 		$(function() {
 			// 상품상세 페이지 로딩
 			productDetail.init();
-			// 일반유저 문의 생성하기
-			$("#questionModalBtn").on("click", callback.makeQuestionEventCb);
-
-			// 일반,소셜 유저 문의 수정,삭제 하기
-			$(".modal-btn").on("click", callback.modifyQuestionEventCb);
-
-			// 문의 메세지 길이 제한 함수
-			productDetail.remainingFn();
 		})
 	</script>
 	<section>

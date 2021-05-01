@@ -1,6 +1,7 @@
 package com.intea.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.intea.common.CommonEntity;
 import com.intea.domain.dto.ProductDisPriceResponseDto;
 import lombok.*;
 
@@ -35,7 +36,7 @@ public class ProductDisPrice extends CommonEntity implements Comparable<ProductD
     @JsonIgnore
     private Product product;
 
-    // 가격으로 내림차순 하기 위한 compareTo 재정의
+    // 가격으로 내림차순 하기 위함
     @Override
     public int compareTo(ProductDisPrice o) {
         return Integer.compare(o.disPrice, this.disPrice);

@@ -1,6 +1,5 @@
 package com.intea.config.auth;
 
-import com.intea.constant.Role;
 import com.intea.handler.CustomLoginFailureHandler;
 import com.intea.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;

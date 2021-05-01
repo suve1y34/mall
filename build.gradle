@@ -30,6 +30,8 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     implementation 'org.springframework.security:spring-security-core'
     implementation 'org.apache.commons:commons-lang3'
+    implementation 'com.amazonaws:aws-java-sdk-s3'
+
     implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.3.5'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.4.5'
 

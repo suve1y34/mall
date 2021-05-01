@@ -37,28 +37,9 @@ public class UserController extends UiUtils {
         return "user/member/myinfo";
     }
 
-    @GetMapping("/loginSucess")
-    public String loginSucess(HttpServletRequest req) throws Exception {
-        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        String redirectUrl = null;
-
-        HttpSession hs = req.getSession();
-
-        if(hs != null) {
-            redirectUrl = (String) hs.getAttribute("prePage");
-            hs.removeAttribute("prePage");
-        }
-
-        if(redirectUrl == null) {
-            redirectUrl = "/";
-        }
-
-        return "redirect:" + redirectUrl;
-    }
-
     // 로그아웃 결과 페이지
     @GetMapping("/signout")
-    public void logout() {
+    public String logout() {
+        return "/";
     }
 }

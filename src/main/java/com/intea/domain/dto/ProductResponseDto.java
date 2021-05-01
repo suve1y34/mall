@@ -1,6 +1,6 @@
 package com.intea.domain.dto;
 
-import com.intea.constant.ProductStatus;
+import com.intea.domain.enums.ProductStatus;
 import lombok.*;
 
 import java.io.Serializable;

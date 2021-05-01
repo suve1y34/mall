@@ -20,21 +20,21 @@ import java.util.UUID;
 public class UserRestController {
     private final UserService userService;
 
-    @ApiOperation(value = "회원 중복 확인")
+    @ApiOperation(value = "아이디 중복 확인")
     @GetMapping("/idChk")
     public ResponseEntity<?> duplicateCheck(@RequestParam String mem_id) {
 
         return ResponseEntity.ok(userService.idChk(mem_id));
     }
 
-    @ApiOperation(value = "회원 상세")
+    @ApiOperation(value = "회원 정보 조회")
     @GetMapping("/me/{id}")
     public ResponseEntity<?> getProfiles(@PathVariable UUID id) {
 
         return ResponseEntity.ok().body(userService.getProfiles(id));
     }
 
-    @ApiOperation(value = "회원 프로필 수정")
+    @ApiOperation(value = "회원 정보 수정")
     @PutMapping("/me/{id}")
     public ResponseEntity<String> modifyProfiles(HttpServletRequest request, @PathVariable UUID id,
                                                  @RequestBody @Valid MemberRequestDto memberRequestDto, BindingResult bindingResult) {

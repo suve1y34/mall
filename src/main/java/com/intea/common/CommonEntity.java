@@ -1,6 +1,5 @@
-package com.intea.domain.entity;
+package com.intea.common;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

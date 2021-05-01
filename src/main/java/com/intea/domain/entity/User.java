@@ -1,8 +1,8 @@
 package com.intea.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.intea.constant.Role;
-import com.intea.domain.dto.MemberRequestDto;
+import com.intea.common.CommonEntity;
+import com.intea.domain.enums.Role;
 import com.intea.domain.dto.UserResponseDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -57,7 +57,7 @@ public class User extends CommonEntity {
     private List<Review> reviewList;
 
 
-    public UserResponseDto toResDTO(User user) {
+    public UserResponseDto toResponseDto(User user) {
         return UserResponseDto.builder()
                 .id(user.getId())
                 .memId(user.getMemId())
@@ -72,7 +72,7 @@ public class User extends CommonEntity {
                 .build();
     }
 
-    public UserResponseDto.ReviewUserResponseDto toReviewResDTO() {
+    public UserResponseDto.ReviewUserResponseDto toReviewResponseDto() {
         return UserResponseDto.ReviewUserResponseDto.builder()
                 .userId(memId)
                 .build();

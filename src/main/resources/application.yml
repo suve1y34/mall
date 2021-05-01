@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAVVSVKM7T5ZD6TW4U
+      secretKey: YOUR_SECRET_KEY
+    s3:
+      bucket: choi-in-dev-springboot
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

@@ -23,14 +23,14 @@ public class ProductDiscountRestController {
 
     @ApiOperation(value = "할인 상품 조회(관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/product/{id}/discounts")
+    @GetMapping("/product/{id}/discount")
     public ResponseEntity<?> getProductDiscountList(@PathVariable Long id) {
         return ResponseEntity.ok().body(productDiscountService.getDisCountList(id));
     }
 
     @ApiOperation(value = "상품 할인 추가 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/discounts")
+    @PostMapping("/discount")
     public ResponseEntity<?> addProductDiscount(@RequestBody @Valid ProductDisPriceRequestDto productDisPriceRequestDto,
                                                 BindingResult bindingResult) {
 
@@ -45,7 +45,7 @@ public class ProductDiscountRestController {
     // 상품 할인 리스트 삭제 (관리자 권한)
     @ApiOperation(value = "상품 할인 삭제 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/discounts/{id}")
+    @DeleteMapping("/discount/{id}")
     public ResponseEntity<?> deleteProductDiscount(@PathVariable Long id) {
 
         return ResponseEntity.ok().body(productDiscountService.deleteProductDiscount(id));

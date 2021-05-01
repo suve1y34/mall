@@ -1,4 +1,4 @@
-package com.intea.constant;
+package com.intea.common;
 
 public class Const {
     public static final int ZERO = 0;
@@ -18,4 +18,5 @@ public class Const {
     public static final String LOGIN_USER = "loginUser";
 
     public static final String CATEGORY_LIST_KEY = "categoryList";
+    public static final String PRODUCT_UPLOAD_IMAGE = "product-upload-image";
 }

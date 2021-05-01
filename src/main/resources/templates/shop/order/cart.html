@@ -89,7 +89,7 @@
 											"<ul class=\"variation\">" +
 											"</ul></td>" +
 											"<td class=\"product-price\"><span class=\"amount\">" + element.salePrice + "</span></td>" +
-											"<td class=\"product-price\"><span class=\"amount\">" + element.productCount + "</span></td>" +
+											"<td class=\"product-price\"><span class=\"amount\">" + element.productCnt + "</span></td>" +
 											"<td class=\"product-subtotal\"><span class=\"amount\">" + amount + "</span></td>" +
 											"</tr>"
 
@@ -100,7 +100,7 @@
 								// Prev 페이지
 								if (cartPagingDto.scaleStartPage !== 1) {
 									var prevLi =
-											"<li><a data-page='" + cartPagingDto.prevPage + "' class='product-list-page' href='javascript:;' onclick='cartObj.getCartList(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
+											"<li><a data-page='" + cartPagingDto.prePage + "' class='product-list-page' href='javascript:;' onclick='cartObj.getCartList(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
 
 									$cartListPagination.append(prevLi);
 								}
@@ -146,7 +146,7 @@
 
 					$.ajax({
 						type : "DELETE",
-						url  : "/carts/" + cartId,
+						url  : "/cart/" + cartId,
 						contentType : "application/json",
 						beforeSend  : function(xhr) {
 							xhr.setRequestHeader(header, token);
@@ -200,7 +200,7 @@
 					amount : checkoutData.amount,           // 상품 가격
 					buyer_email : checkoutData.email,
 					buyer_name : checkoutData.name,
-					buyer_addr : $("input[name='roadAddr']").val() + " " + $("input[name='buildingName']").val() + " " +  $("input[name='detailAddr']").val()
+					buyer_addr : $("input[name='postCode']").val() + " " + $("input[name='address']").val() + " " +  $("input[name='de_address']").val()
 				}, function(rsp) {
 					var msg = "";
 					if (rsp.success) {
@@ -211,12 +211,12 @@
 							userId          : checkoutData.userId,
 							email           : checkoutData.email,
 							buyerName       : checkoutData.buyer_name,
-							orderNumber     : orderNumber,
-							orderName       : checkoutData.orderName,
-							deliveryMessage : checkoutData.deliveryMessage,
-							address         : $("input[name='roadAddr']").val() + " " + $("input[name='buildingName']").val() + " " +  $("input[name='detailAddr']").val(),
+							orderNum     : orderNumber,
+							orderNm       : checkoutData.orderName,
+							message : checkoutData.deliveryMessage,
+							address         : $("input[name='roadAddr']").val() + " " + $("input[name='buildingName']").val() + " " +  $("input[name='deAddress']").val(),
 							amount          : checkoutData.amount,
-							useSavings      : checkoutData.useSavings,
+							useSaving      : checkoutData.useSavings,
 							cartIdList      : checkoutData.cartId
 						}
 
@@ -287,9 +287,9 @@
 			addressChkBoxFnCb : function(obj) {
 
 				if (obj.checked) {
-					$("input[name='roadAddr']").val(checkoutData.roadAddr);
-					$("input[name='buildingName']").val(checkoutData.buildingName);
-					$("input[name='detailAddr']").val(checkoutData.detailAddr);
+					$("input[name='postCode']").val(checkoutData.roadAddr);
+					$("input[name='address']").val(checkoutData.buildingName);
+					$("input[name='deAddress']").val(checkoutData.detailAddr);
 				} else {
 					$(".addressDiv input").val("");
 				}
@@ -298,7 +298,7 @@
 				var $savingsTarget = $("#savings"),
 						savings = $savingsTarget.val(),
 						userSavings = Number($("#checkout-price").text().substring(7).split("원")[0]),
-						$userSavingsTarget = $(".savings p.user-savings");
+						$userSavingsTarget = $(".savings p.user-saving");
 
 				if (savings === "") {
 					alert("적립금으로 사용하실 금액을 적어주세요.");
@@ -322,19 +322,19 @@
 				checkoutData.amount = userSavings - Number(savings);
 				$("#checkout-price").text("결제금액 : " + checkoutData.amount + "원");
 
-				checkoutData.useSavings = savings;
+				checkoutData.useSaving = savings;
 			},
 			savingsCancelFn : function () {
 				var $savingsTarget = $("#savings");
 
 				$savingsTarget.val("");
-				$(".savings p.user-savings").text(checkoutData.userSavings + "원 보유 (5000원 이상 결제 시 사용가능)");
+				$(".savings p.user-savings").text(checkoutData.userSaving + "원 보유 (5000원 이상 결제 시 사용가능)");
 				$savingsTarget.removeAttr("disabled");
 
-				checkoutData.amount += Number(checkoutData.useSavings);
+				checkoutData.amount += Number(checkoutData.useSaving);
 				$("#checkout-price").text("결제금액 : " + checkoutData.amount + "원");
 
-				checkoutData.useSavings = 0;
+				checkoutData.useSaving = 0;
 			}
 		}
 
@@ -434,23 +434,4 @@
 		</div>
 	</section>
 </th:layout>
-<script>
-	$("#allChk").click(function() {
-		var chk = $("#allChk").prop("checked");
-		if(chk) {
-			$(".chkBox").prop("checked", true);
-		} else {
-			$(".chkBox").prop("checked", false);
-		}
-	});
-
-	$(".chkBox").click(function() {
-		$("#allChk").prop("checked", false);
-	});
-
-	$(".cancelBtn").click(function() {
-		$(".orderInfo").slideUp();
-		$(".orderOpen").slideDown();
-	})
-</script>
 </html>

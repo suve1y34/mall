@@ -22,6 +22,7 @@ public class OrdersResponseDto {
     private String postCode;
     private String address;
     private String deAddress;
+    private Character refundState;
     private String phone;
     private List<Cart> cartList;
 }

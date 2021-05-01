@@ -1,6 +1,7 @@
 package com.intea.domain.entity;
 
-import com.intea.constant.OrderStatus;
+import com.intea.common.CommonEntity;
+import com.intea.domain.enums.OrderStatus;
 import com.intea.domain.dto.OrdersResponseDto;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class Orders extends CommonEntity {
     private String postCode;
     private String address;
     private String deAddress;
+    private Character refundState;
     private String phone;
     private Integer amount;
 
@@ -45,7 +47,10 @@ public class Orders extends CommonEntity {
                 .orderNm(orderNm)
                 .message(message)
                 .status(status.getValue())
+                .refundState(refundState)
+                .postCode(postCode)
                 .address(address)
+                .deAddress(deAddress)
                 .amount(amount)
                 .insertTime(insertTime.getYear() + "." + insertTime.getMonthValue() + "."
                 +insertTime.getDayOfMonth() + " " + insertTime.getHour() + ":" + insertTime.getMinute() + ":" + insertTime.getSecond())

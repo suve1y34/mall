@@ -1,4 +1,4 @@
-package com.intea.constant;
+package com.intea.common;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -25,65 +25,81 @@
 					contentType : "application/json",
 					beforeSend	: function(xhr) {
 						xhr.setRequestHeader(header, token);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 					},
 					success : function(data) {
 						console.log(data);
 
 						if (data) {
-							var productOrderList      = data.productOrderList.content,
-									productOrderPagingDto = data.productOrderPagingDto,
-									$productOrderTableBody = $(".order-table-body"),
-									$productOrderPagination = $(".product-order-pagination");
+							var orderList      = data.orderList.content,
+									orderPagingDto = data.ordersPagingDto,
+									$orderTableBody = $(".order-table-body"),
+									$orderPagination = $(".product-order-pagination");
 
-							$productOrderTableBody.empty();
-							$productOrderPagination.empty();
+							$orderTableBody.empty();
+							$orderPagination.empty();
 
-							if (productOrderList.length > 0) {
+							if (orderList.length > 0) {
 
-								productOrderList.forEach(function(element) {
+								orderList.forEach(function(element) {
 
-									var cartListLength = element.carts.length;
+									var cartListLength = element.cartList.length;
 
-									var orderTr = "<tr class='cart_itme'>" +
-											"<td class=\"product-remove\"><a data-order-id='" + element.id + "' data-toggle=\"modal\" data-target=\".bs-order-modal-lg\" title=\"Remove this item\" class=\"remove\" href=\"#\" onclick='orderObj.getOrderDetail(this)'>" + element.orderNumber + "</a></td>" +
-											"<td class=\"product-thumbnail\"><a href='/productDetails?productId=" + element.carts[cartListLength - 1].product.id + "'><img alt=\"member\" src='" + element.carts[cartListLength - 1].product.titleImg + "'></a></td>" +
-											"<td class=\"product-name\"><span class=\"text-theme-colored\">" + element.orderName + "<span/>" +
+									var orderTr = "<tr class='cart_item'>" +
+											"<td class=\"product-remove\"><a data-order-id='" + element.id + "' data-toggle=\"modal\" data-target=\".bs-order-modal-lg\" title=\"Remove this item\" class=\"remove\" href=\"#\" onclick='orderObj.getOrderDetail(this)'>" + element.orderNum + "</a></td>" +
+											"<td class=\"product-thumbnail\"><a href='/productDetails?productId=" + element.cartList[cartListLength - 1].product.id + "'><img alt=\"member\" src='" + element.cartList[cartListLength - 1].product.titleImg + "'></a></td>" +
+											"<td class=\"product-name\"><span class=\"text-theme-colored\">" + element.orderNm + "<span/>" +
 											"<ul class=\"variation\">" +
 											"</ul></td>" +
 											"<td class=\"product-price\"><span class=\"amount\">" + element.amount + "</span></td>" +
-											"<td class=\"product-price\"><span class=\"amount\">" + element.orderStatus + "</span></td>" +
-											"<td class=\"product-name\"><span class=\"amount\">" + element.createdDate + "</span></td>" +
+											"<td class=\"product-price\"><span class=\"amount\">" + element.status + "</span></td>" +
+											"<td class=\"product-name\"><span class=\"amount\">" + element.insertTime + "</span></td>" +
 											"</tr>"
 
-									$productOrderTableBody.append(orderTr);
+									$orderTableBody.append(orderTr);
 								})
 
 								// 페이징 그리기
 								// Prev 페이지
 								if (productOrderPagingDto.scaleStartPage !== 1) {
 									var prevLi =
-											"<li><a data-page='" + productOrderPagingDto.prePage + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
+											"<li><a data-page='" + orderPagingDto.prePage + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
 
-									$productOrderPagination.append(prevLi);
+									$orderPagination.append(prevLi);
 								}
 
 								// 중간 페이지
-								for (var i = productOrderPagingDto.scaleStartPage; i <= productOrderPagingDto.scaleEndPage; i++) {
+								for (var i = orderPagingDto.scaleStartPage; i <= orderPagingDto.scaleEndPage; i++) {
 									var pageLi = "";
 
-									if (productOrderPagingDto.page === i) {
+									if (orderPagingDto.page === i) {
 										pageLi = "<li class='active'><a data-page='" + i + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)'>" + i + "</a></li>";
 									} else {
 										pageLi = "<li class=''><a data-page='" + i + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)'>" + i + "</a></li>";
 									}
 
-									$productOrderPagination.append(pageLi);
+									$orderPagination.append(pageLi);
 								}
 
 								// Next 페이지
-								if (productOrderPagingDto.scaleEndPage !== productOrderPagingDto.totPage) {
+								if (orderPagingDto.scaleEndPage !== orderPagingDto.totPage) {
 									var nextLi =
-											"<li><a data-page='" + productOrderPagingDto.nextPage + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li>"
+											"<li><a data-page='" + orderPagingDto.nextPage + "' class='product-list-page' href='#' onclick='orderObj.getOrderList(this)' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li>"
 
 									$productOrderPagination.append(nextLi);
 								}
@@ -112,21 +128,21 @@
 						$orderUl.empty();
 
 						var orderLi = "<li><strong>주문번호</strong></li>" +
-								"<li>" + data.order_num + "</li><hr>" +
+								"<li>" + data.orderNum + "</li><hr>" +
 								"<li><strong>주문명</strong></li>" +
-								"<li>" + data.order_name + "</li><hr>" +
+								"<li>" + data.orderNm + "</li><hr>" +
 								"<li><strong>결제금액</strong></li>" +
 								"<li>" + data.amount + "원</li><hr>" +
 								"<li><strong>주문상태</strong></li>" +
-								"<li>" + data.order_status + "</li><hr>" +
+								"<li>" + data.status + "</li><hr>" +
 								"<li><strong>배송주소</strong></li>" +
 								"<li>" + data.address + "</li><hr>" +
 								"<li><strong>배송메세지</strong></li>" +
 								"<li>" + data.message + "</li><hr>" +
 								"<li><strong>주문상품 (최대 16개 까지만 표시됩니다.)</strong></li>";
 
-						for (var i = 0; i < data.carts.length; i++) {
-							orderLi += "<img width='100px' height='100px' alt=\"member\" src='" + data.cart[i].product.titl_img + "'>";
+						for (var i = 0; i < data.cartList.length; i++) {
+							orderLi += "<img width='100px' height='100px' alt=\"member\" src='" + data.cart[i].product.titleImg + "'>";
 
 							if (i === 15) {
 								orderLi += "<hr><li>외 " + (data.cart.length - (i + 1)) + "종류의 상품</li>"

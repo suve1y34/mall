@@ -57,7 +57,7 @@
 				})
 
 				if ($.isEmptyObject(newInputObj)) {
-					alert("수정한 곳이 없습니다!");
+					alert("수정 항목이 없습니다.");
 				} else {
 					$.ajax({
 						type: "PUT",
@@ -220,43 +220,25 @@
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6">
-									<label>Social Type</label>
-									<input name="socialType" class="form-control" th:value="${session.user.getSocialType()} + ' ' + '유저'" type="text" disabled>
-								</div>
-							</div>
-							<div class="row">
-								<div class="form-group col-md-6">
 									<label>우편번호</label>
-									<input name="roadAddr" class="form-control social-input" th:value="${session.user.getPostCode()}" type="text">
+									<input name="postCode" class="form-control social-input" th:value="${session.user.getPostCode()}" type="text">
 								</div>
 								<div class="form-group col-md-6">
 									<label>주소</label>
-									<input name="buildingName" class="form-control social-input" th:value="${session.user.getAddress()}" type="text">
+									<input name="address" class="form-control social-input" th:value="${session.user.getAddress()}" type="text">
 								</div>
 								<div class="form-group col-md-6">
 									<label>상세 주소</label>
-									<input name="detailAddr" class="form-control social-input" th:value="${session.user.getDeAddress()}" type="text">
+									<input name="deAddress" class="form-control social-input" th:value="${session.user.getDeAddress()}" type="text">
 								</div>
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6">
-									<button th:type="button" class="btn btn-success" th:onclick="registAddrObj.searchAddrFn()">우편번호 검색</button>
+									<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
 								</div>
 								<div class="form-group col-md-6">
 									<button class="btn btn-success btn-social-modify" type="button">프로필 수정</button>
 								</div>
-
-<!--								<th>주소</th>
-								<td>
-									<input type="text" name="postCode" id="postCode" th:value="${member.postCode}" placeholder="우편번호">
-									<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-									<input type="text" name="address" id="address" th:value="${member.address}" placeholder="주소">
-									<input type="text" name="de_address" id="de_address" th:value="${member.de_address}" placeholder="상세주소">
-									<input type="text" id="extraAddress" class="d_form" placeholder="참고항목">
-									<div id="wrap" style="display: none; border: 1px solid; width: 500px; height: 466px; margin: 5px 0px; position: relative;">
-										<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor: pointer; position: absolute; right: 0px; top:-1px; z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
-									</div>
-								</td>-->
 							</div>
 						</form>
 					</div>

@@ -1,6 +1,6 @@
 package com.intea.config;
 
-import com.intea.constant.Const;
+import com.intea.common.Const;
 import com.intea.interceptor.LoggerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

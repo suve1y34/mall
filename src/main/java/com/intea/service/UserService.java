@@ -1,7 +1,6 @@
 package com.intea.service;
 
 import com.intea.domain.dto.MemberRequestDto;
-import com.intea.domain.dto.UpdatePasswordRequestDto;
 import com.intea.domain.dto.UserResponseDto;
 import com.intea.domain.entity.User;
 import com.intea.domain.repository.UserRepository;
@@ -9,7 +8,6 @@ import com.intea.exception.IdCheckException;
 import com.intea.exception.NotExistUserException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -42,7 +40,7 @@ public class UserService {
 //        User updatedUser = user.update(memDto);
 //        user = userRepository.save(updatedUser);
 
-        return user.toResDTO(user);
+        return user.toResponseDto(user);
     }
 
     // 유저 비밀번호 변경

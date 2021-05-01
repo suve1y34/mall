@@ -1,5 +1,8 @@
 package com.intea.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.intea.common.AWSS3Utils;
+import com.intea.common.UploadFileUtils;
 import com.intea.domain.dto.PagingDto;
 import com.intea.domain.dto.ReviewRequestDto;
 import com.intea.domain.dto.ReviewResponseDto;
@@ -19,8 +22,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +35,7 @@ import java.util.List;
 @Service
 public class ReviewService {
 
+    private final AWSS3Utils awss3Utils;
     private final UserRepository userRepo;
     private final ReviewRepository reviewRepo;
     private final ProductRepository productRepo;
@@ -39,7 +45,7 @@ public class ReviewService {
         return product.getProductNm();
     }
 
-/*    public String uploadReviewImage(MultipartFile file, String dirName) throws IOException {
+    public String uploadReviewImage(MultipartFile file, String dirName) throws IOException {
         // S3와 연결할 client 얻기
         AmazonS3 s3Client = awss3Utils.getS3Client();
 
@@ -47,7 +53,7 @@ public class ReviewService {
         String saveFilePath = UploadFileUtils.getSaveFilePath(file, dirName);
 
         return awss3Utils.putObjectToS3AndGetUrl(s3Client, saveFilePath, file);
-    }*/
+    }
 
     @Transactional
     public void makeReview(ReviewRequestDto reviewRequestDto) {

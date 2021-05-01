@@ -1,5 +1,6 @@
 package com.intea.domain.entity;
 
+import com.intea.common.CommonEntity;
 import lombok.*;
 
 import javax.persistence.Entity;

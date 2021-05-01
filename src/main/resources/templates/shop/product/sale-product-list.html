@@ -63,7 +63,7 @@
                         // Prev 페이지
                         if (saleProductPagingDto.scaleStartPage !== 1) {
                             var prevLi =
-                                "<li><a data-page='" + saleProductPagingDto.prevPage + "' class='product-list-page' href='#' onclick='saleProductListObj.getSaleProductList(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
+                                "<li><a data-page='" + saleProductPagingDto.prePage + "' class='product-list-page' href='#' onclick='saleProductListObj.getSaleProductList(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
 
                             $saleProductListPagination.append(prevLi);
                         }

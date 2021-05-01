@@ -1,4 +1,4 @@
-package com.intea.adapter.aop;
+package com.intea.aop;
 
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
@@ -21,7 +21,7 @@ public class TransactionAspect {
     @Autowired
     private PlatformTransactionManager transactionManager;
 
-    private static final String EXPRESSION = "execution(* com.board..service.*Impl.*(..))";
+    private static final String EXPRESSION = "execution(* com.intea..service.*(..))";
 
     @Bean
     public TransactionInterceptor transactionAdvice() {

@@ -28,4 +28,12 @@ public class ProductController {
         model.addAttribute("productId", id);
         return "shop/product/product-list";
     }
+
+    @GetMapping("/saleProductList")
+    public String saleProductList(Model model) {
+        model.addAttribute("pageName", "saleProductList");
+        model.addAttribute("catMapList", categoryService.getCategoryList());
+
+        return "shop/product/sale-product-list";
+    }
 }

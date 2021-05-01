@@ -68,7 +68,7 @@
 				// Prev 페이지
 				if (productPagingDto.scaleStartPage !== 1) {
 					var prevLi =
-							"<li><a data-page='" + productPagingDto.prevPage + "' class='product-list-page' href='#' onclick='productListObj.getProductListByKeyword(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
+							"<li><a data-page='" + productPagingDto.prePage + "' class='product-list-page' href='#' onclick='productListObj.getProductListByKeyword(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
 
 					$productListPagination.append(prevLi);
 				}
@@ -98,7 +98,7 @@
 				// Prev 페이지
 				if (productPagingDto.scaleStartPage !== 1) {
 					var prevLi =
-							"<li><a data-page='" + productPagingDto.prevPage + "' class='product-list-page' href='#' onclick='productListObj.getProductListByKeyword(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
+							"<li><a data-page='" + productPagingDto.prePage + "' class='product-list-page' href='#' onclick='productListObj.getProductListByKeyword(this)' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
 
 					$productListPagination.append(prevLi);
 				}
@@ -127,12 +127,12 @@
 		},
 
 		getProductList  : function(obj) {
-			var catCd = [[${param.catCd}]][0],
+			var catCode = [[${param.catCode}]][0],
 					page = obj ? $(obj).data("page") : 1;
 
 			$.ajax({
 				type : "GET",
-				url  : "/products?catCd=" + catCd + "&page=" + page,
+				url  : "/products?catCd=" + catCode + "&page=" + page,
 				contentType : "application/json",
 				success : function(data) {
 					productListObj.getProductListCmmn(data);
@@ -142,9 +142,9 @@
 			})
 		},
 		makeCart    : function (obj) {
-			var user             = [[${session.user}]],
-					userId           = 0,
-					productId        = $(obj).data("productId");
+			var user = [[${session.user}]],
+					userId = 0,
+					productId = $(obj).data("productId");
 
 			if (!user) {
 				alert("로그인 후 장바구니에 추가할 수 있습니다.");
@@ -154,14 +154,14 @@
 			userId = user.id;
 
 			var data = {
-				"userId"       : userId,
-				"productId"    : productId,
-				"productCount" : 1
+				"userId" : userId,
+				"productId" : productId,
+				"productCnt" : 1
 			}
 
 			$.ajax({
 				type : "POST",
-				url  : "/carts",
+				url  : "/cart",
 				contentType : "application/json",
 				data        : JSON.stringify(data),
 				beforeSend  : function (xhr) {
@@ -177,22 +177,22 @@
 		},
 		getProductListByKeyword : function (obj) {
 			var page = obj ? $(obj).data("page") : 1,
-					catCd = $(":radio[name='catCd']:checked").val(),
+					catCode = $(":radio[name='catCode']:checked").val(),
 					sortCd = $(":radio[name='sortCd']:checked").val();
 
-			if (!catCd || !sortCd) {
+			if (!catCode || !sortCd) {
 				alert("상품 카테고리와 상품 정렬을 선택하세요.");
 				return;
 			}
 
 			$.ajax({
 				type : "GET",
-				url  : "/products?catCd=" + catCd + "&sortCd=" + sortCd + "&page=" + page,
+				url  : "/product?catCd=" + catCode + "&sortCd=" + sortCd + "&page=" + page,
 				contentType : "application/json",
 				success : function (data) {
 					productListObj.getProductListCmmn(data, "keyword");
 
-					$(".products p.product-sort").text($(":radio[name='catCd']:checked").closest("li").text() + ", " + $(":radio[name='sortCd']:checked").closest("li").text() + " 순");
+					$(".products p.product-sort").text($(":radio[name='catCode']:checked").closest("li").text() + ", " + $(":radio[name='sortCd']:checked").closest("li").text() + " 순");
 				},
 				error : function(e) {
 					alert(e.responseText);
@@ -232,7 +232,7 @@
 						<li class="btn_cate"><input type="radio" name="catCd" value="ALL" checked="checked"/>전체</li>
 						<th:block th:if="${#lists.size(catList_L)} > 0" th:each="catList_L : ${catMapList.get('mainCatList')}">
 							<li th:if="${catList_L.getCatLv() eq 1}" class="btn_cate">
-								<input type="radio" name="catCd" th:value="${catList_L.getCatCd()}" th:text="${catList_L.getCatNm()}" />
+								<input type="radio" name="catCd" th:value="${catList_L.getCatCode()}" th:text="${catList_L.getCatNm()}" />
 							</li>
 						</th:block>
 					</ul>
@@ -278,7 +278,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
 		</div>
 	</section>
 </th:layout>

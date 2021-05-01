@@ -1,5 +1,6 @@
 package com.intea.domain.entity;
 
+import com.intea.common.CommonEntity;
 import com.intea.domain.dto.ReviewResponseDto;
 import lombok.*;
 
@@ -35,7 +36,7 @@ public class Review extends CommonEntity {
 
         return ReviewResponseDto.builder()
                 .id(id)
-                .userId(user.toReviewResDTO())
+                .userId(user.toReviewResponseDto())
                 .title(title)
                 .rate(rate)
                 .insertTime(insertTime.getYear() + "-" + insertTime.getMonthValue() + "-" +

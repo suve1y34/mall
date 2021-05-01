@@ -1,9 +1,9 @@
 package com.intea.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.intea.constant.AWSS3Utils;
-import com.intea.constant.ProductStatus;
-import com.intea.constant.UploadFileUtils;
+import com.intea.common.AWSS3Utils;
+import com.intea.domain.enums.ProductStatus;
+import com.intea.common.UploadFileUtils;
 import com.intea.domain.dto.PagingDto;
 import com.intea.domain.dto.ProductRequestDto;
 import com.intea.domain.dto.ProductResponseDto;
@@ -65,21 +65,6 @@ public class ProductService {
         }
 
         return product.toResponseDTO(disPrice);
-    }
-
-    /**
-     * 인기 상위 10개의 상품 조회
-     */
-    public List<ProductResponseDto.MainProductResponseDto> getBestProductList() {
-        // 레디스 캐시(메모리) I/O
-//        Set<Object> result = zSetOperations.reverseRange(BEST10_PRODUCT_LIST_KEY, 0, 9);
-
-/*        if(isNull(result)) {
-            return null;
-        } else {
-            return result.stream().map(el -> (ProductResDTO.MainProductResDTO) el).collect(Collectors.toList());
-        }*/
-        return null;
     }
 
     /**
@@ -212,7 +197,7 @@ public class ProductService {
         product.setPrice(updateRequestDto.getPrice());
         product.setLargeCat(updateRequestDto.getLargeCtCode());
         product.setSmallCat(updateRequestDto.getSmallCtCode());
-//        product.setTotal_cnt(updateRequestDto.getTotal_cnt());
+        product.setTotalCnt(updateRequestDto.getTotalCnt());
 
         productRepository.save(product);
 
