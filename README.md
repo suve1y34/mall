@@ -1,15 +1,23 @@
 # Tea Shopping Mall
 
 ## 개발환경
-+ Intellij
-+ Spring Boot
-+ MySQL
-
-
-## 사용 기술
++ Spring boot
 + JAVA 8
 + Spring MVC
 + Spring Boot Security
 + Spring Data JPA
++ Spring AOP
++ Javascript
++ jQuery
+
+### Build Tool
 + Gradle
+
+### Database
 + MySQL
+
+### Template
++ Thymeleaf
+
+### AWS
++ S3
