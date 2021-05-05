@@ -285,12 +285,9 @@ public class ProductService {
     private Pageable getPageable(int realPage, String sortCd) {
         Pageable pageable;
 
-/*        switch (sortCd) {
+        switch (sortCd) {
             case "new":
                 pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "insert_time"));
-                break;
-            case "past":
-                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.ASC, "insert_time"));
                 break;
             case "highPrice":
                 pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "price", "insert_time"));
@@ -301,12 +298,9 @@ public class ProductService {
             case "highSell":
                 pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "purchase_cnt", "insert_time"));
                 break;
-            case "lowSell":
-                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.ASC, "purchase_cnt", "insert_time"));
-                break;
             default:
                 throw new NoValidProductSortException("유효하지 않은 상품 정렬입니다.");
-        }*/
+        }
         return null;
     }
 

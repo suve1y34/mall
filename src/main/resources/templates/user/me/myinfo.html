@@ -188,56 +188,65 @@
 		<div class="container">
 			<div class="section-content">
 				<div class="row">
-					<div class="col-sx-12 col-sm-4 col-md-4">
-						<div class="doctor-thumb">
-							<img th:if="${session.user.getProfileImage() == 'null'}" src="http://placehold.it/400x470" alt="">
-							<img th:unless="${session.user.getProfileImage() == 'null'}" th:src="${session.user.getProfileImage()}" alt="">
-						</div>
-						<div class="info p-20 bg-black-333">
-							<a class="btn btn-danger btn-flat mt-10 mb-sm-30" href="/logout">Logout</a>
-						</div>
-					</div>
 					<div class="col-xs-12 col-sm-8 col-md-8">
 						<form name="editprofile-form" method="post">
-							<div class="icon-box mb-0 p-0">
-								<a href="#" class="icon icon-bordered icon-rounded icon-sm pull-left mb-0 mr-10">
-									<i class="fa fa-user"></i>
-								</a>
-								<h4 class="text-gray pt-10 mt-0 mb-30">Social User Profile</h4>
-							</div>
-							<hr>
 							<div class="row">
 								<div class="form-group col-md-6">
-									<label>Name</label>
+									<label>아이디</label>
+									<input name="memId" class="form-control" th:value="${session.user.getMemId()}" type="text" disabled>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>비밀번호</label>
+									<input name="password" class="form-control" th:value="${session.user.getPassword()}" type="password">
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>비밀번호 확인</label>
+									<input name="passwordRe" class="form-control" type="password">
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>이름</label>
 									<input name="name" class="form-control" th:value="${session.user.getName()}" type="text" disabled>
 								</div>
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6">
-									<label>Email</label>
+									<label>이메일</label>
 									<input name="email" class="form-control" th:value="${session.user.getEmail()}" type="email" disabled>
 								</div>
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6">
-									<label>우편번호</label>
-									<input name="postCode" class="form-control social-input" th:value="${session.user.getPostCode()}" type="text">
-								</div>
-								<div class="form-group col-md-6">
-									<label>주소</label>
-									<input name="address" class="form-control social-input" th:value="${session.user.getAddress()}" type="text">
-								</div>
-								<div class="form-group col-md-6">
-									<label>상세 주소</label>
-									<input name="deAddress" class="form-control social-input" th:value="${session.user.getDeAddress()}" type="text">
+									<label>휴대전화</label>
+									<input name="phone" class="form-control" th:value="${session.user.getPhone()}" type="text">
 								</div>
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6">
+									<label>우편번호</label>
+									<input name="postCode" class="form-control" th:value="${session.user.getPostCode()}" type="text">
+								</div>
+								<div class="form-group col-md-6">
 									<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
 								</div>
 								<div class="form-group col-md-6">
-									<button class="btn btn-success btn-social-modify" type="button">프로필 수정</button>
+									<label>주소</label>
+									<input name="address" class="form-control" th:value="${session.user.getAddress()}" type="text">
+								</div>
+								<div class="form-group col-md-6">
+									<label>상세 주소</label>
+									<input name="deAddress" class="form-control" th:value="${session.user.getDeAddress()}" type="text">
+								</div>
+							</div>
+							<div class="row">
+
+								<div class="form-group col-md-6">
+									<button class="button primary" type="button">프로필 수정</button>
 								</div>
 							</div>
 						</form>

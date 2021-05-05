@@ -34,10 +34,10 @@
 
 					productDiv +=
 							"<div class='product-thumb'>" +
-							"<img alt='' src='" + element.titleImg + "' class='img-responsive img-fullwidth'>" +
+							"<img alt='' src='" + element.titleImg + "' class='img-thumbnail'>" +
 							"<div class='overlay'>" +
 							"<div class='btn-add-to-cart-wrapper'>" +
-							"<a data-product-id='" + element.id + "' class='btn btn-theme-colored btn-sm btn-flat pl-20 pr-20 btn-add-to-cart text-uppercase font-weight-700' href='javascript:;' onclick='productListObj.makeCart(this)'>Add To Cart</a>" +
+							"<a data-product-id='" + element.id + "' class='btn btn-theme-colored btn-sm btn-flat pl-20 pr-20 btn-add-to-cart text-uppercase font-weight-700' href='javascript:;' onclick='productListObj.makeCart(this)'>ADD CART</a>" +
 							"</div>" +
 							"<div class='btn-product-view-details'>" +
 							"<a class='btn btn-default btn-theme-colored btn-sm btn-flat pl-20 pr-20 btn-add-to-cart text-uppercase font-weight-700' href='/productDetails?productId=" + element.id + "'>Product detail</a>" +
@@ -52,7 +52,7 @@
 						salePrice = element.price * ((100 - element.disPrice) / 100);
 						productDiv +=  "<div class='price'><del><span class='amount'>" + element.price + "원</span></del><ins><span class='amount'><strong> " + salePrice + "원</strong></span></ins></div>";
 					} else
-						productDiv += "<div class='price'><ins><span class='amount'><strong> " + element.price + "원</strong></span></ins></div>";;
+						productDiv += "<div class='price'><ins><span class='amount'><strong> " + element.price + "원</strong></span></ins></div>";
 
 					productDiv +=
 							"</div>" +
@@ -222,36 +222,15 @@
 			</div>
 		</header>
 		<div class="container mt-30 mb-30 p-30">
-			<!-- 카테고리 -->
-			<ul class="cateWrap">
-				<li>
-					<div class="groupBox">
-						<p class="btn_group text-center">상품 카테고리</p>
-					</div>
-					<ul class="cateList">
-						<li class="btn_cate"><input type="radio" name="catCd" value="ALL" checked="checked"/>전체</li>
-						<th:block th:if="${#lists.size(catList_L)} > 0" th:each="catList_L : ${catMapList.get('mainCatList')}">
-							<li th:if="${catList_L.getCatLv() eq 1}" class="btn_cate">
-								<input type="radio" name="catCd" th:value="${catList_L.getCatCode()}" th:text="${catList_L.getCatNm()}" />
-							</li>
-						</th:block>
-					</ul>
-				</li>
-				<li>
-					<div class="groupBox centered">
-						<p class="btn_group">상품 정렬</p>
-					</div>
-					<ul class="cateList">
-						<li class="btn_cate"><input type="radio" name="sortCd" value="new" checked="checked"/>최신</li>
-						<li class="btn_cate"><input type="radio" name="sortCd" value="past" />과거</li>
-						<li class="btn_cate"><input type="radio" name="sortCd" value="highPrice" />높은 가격</li>
-						<li class="btn_cate"><input type="radio" name="sortCd" value="lowPrice" />낮은 가격</li>
-						<li class="btn_cate"><input type="radio" name="sortCd" value="highSell" />높은 판매율</li>
-						<li class="btn_cate"><input type="radio" name="sortCd" value="lowSell" />낮은 판매율</li>
-					</ul>
-				</li>
-			</ul>
-
+			<div class="col-3">
+				<select class="cateList col-3">
+					<option>-정렬 방식-</option>
+					<option class="btn_cate" name="sortCd" value="new" checked="checked">최신순</option>
+					<option class="btn_cate" name="sortCd" value="highPrice">높은가격</option>
+					<option class="btn_cate" name="sortCd" value="lowPrice">낮은가격</option>
+					<option class="btn_cate" name="sortCd" value="highSell">인기상품</option>
+				</select>
+			</div>
 			<div class="col-md-12">
 				<br>
 				<button type="button" data-type="search" class="btn btn-success pull-right" onclick="productListObj.getProductListByKeyword()">조회</button>
