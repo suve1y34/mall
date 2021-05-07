@@ -47,7 +47,7 @@
 											"</ul></td>" +
 											"<td class=\"product-price\"><span class=\"amount\">" + element.amount + "</span></td>" +
 											"<td class=\"product-price\"><span class=\"amount\">" + element.status + "</span></td>" +
-											"<td class=\"product-name\"><span class=\"amount\">" + element.inserTime + "</span></td>" +
+											"<td class=\"product-name\"><span class=\"amount\">" + element.insertTime + "</span></td>" +
 											"</tr>"
 
 									$orderTableBody.append(orderTr);
@@ -118,7 +118,7 @@
 								"<li>" + data.address + "</li><hr>" +
 								"<li><strong>배송메세지</strong></li>" +
 								"<li>" + data.message + "</li><hr>" +
-								"<li><strong>주문상품 (최대 16개 까지만 표시됩니다.)</strong></li>";
+								"<li><strong>주문상품</strong></li>";
 
 						for (var i = 0; i < data.cartList.length; i++) {
 							orderLi += "<img width='100px' height='100px' alt=\"member\" src='" + data.cartList[i].product.titleImg + "'>";
