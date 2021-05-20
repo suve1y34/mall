@@ -25,4 +25,5 @@ public class MemberRequestDto {
     private String postCode;
     private String address;
     private String deAddress;
+    private String phone;
 }

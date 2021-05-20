@@ -10,13 +10,5 @@ public class Const {
 
     public static final int FILESIZE = 1024;
 
-    public static final int FAIL = 0;
-    public static final int SUCCESS = 1;
-    public static final int NO_ID = 2;
-    public static final int NO_PW = 3;
-
-    public static final String LOGIN_USER = "loginUser";
-
-    public static final String CATEGORY_LIST_KEY = "categoryList";
     public static final String PRODUCT_UPLOAD_IMAGE = "product-upload-image";
 }

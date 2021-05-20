@@ -1,6 +1,5 @@
 package com.intea.config;
 
-import com.intea.config.auth.LoginUserArtgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

@@ -34,6 +34,6 @@ public class OrdersRestController {
     @GetMapping("user/{userId}/order/{page}")
     public ResponseEntity<?> getAllOrders(@PathVariable("userId") UUID user_id, @PathVariable("page") int page,
                                           @PageableDefault(size = 5, sort = "insert_time", direction = Sort.Direction.DESC)Pageable pageable) {
-        return ResponseEntity.ok().body(ordersService.getAllOrder(user_id, page, pageable));
+        return ResponseEntity.ok().body(ordersService.getAllOrder(user_id, page));
     }
 }

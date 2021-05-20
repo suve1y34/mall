@@ -24,7 +24,7 @@ public class UserController extends UiUtils {
     @GetMapping("/login")
     public String getLogin(HttpServletRequest req, Model model) {
         String referrer = req.getHeader("Referer");
-        req.getSession().setAttribute("prevPage", referrer);
+        req.getSession().setAttribute("prePage", referrer);
         model.addAttribute("catMapList", categoryService.getCategoryList());
         return "user/member/login";
     }

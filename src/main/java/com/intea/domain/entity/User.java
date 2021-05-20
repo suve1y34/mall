@@ -2,6 +2,7 @@ package com.intea.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intea.common.CommonEntity;
+import com.intea.domain.dto.MemberRequestDto;
 import com.intea.domain.enums.Role;
 import com.intea.domain.dto.UserResponseDto;
 import lombok.*;
@@ -41,6 +42,8 @@ public class User extends CommonEntity {
 
     private String picture;
 
+    private String authorities;
+
     @ColumnDefault("0")
     private Integer saving;
 
@@ -78,9 +81,12 @@ public class User extends CommonEntity {
                 .build();
     }
 
-    public User update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
+    public User update(MemberRequestDto memberRequestDto) {
+        this.phone = memberRequestDto.getPhone();
+        this.postCode = memberRequestDto.getPostCode();
+        this.address = memberRequestDto.getAddress();
+        this.deAddress = memberRequestDto.getDeAddress();
+        this.picture = memberRequestDto.getPicture();
 
         return this;
     }

@@ -40,10 +40,10 @@
 
 			makeCartFn  : function() {
 				var user             = [[${session.user}]],
-						userId           = 0,
-						productCount     = Number($("#product-count").val()),
-						limitCountText   = $(".limit-count").text(),
-						limitCount       = Number(limitCountText.split("개")[0]);
+					userId           = 0,
+					productCnt     = Number($("#product-count").val()),
+					limitCountText   = $(".limit-count").text(),
+					limitCount       = Number(limitCountText.split("개")[0]);
 
 				if (!user) {
 					alert("로그인 후 장바구니에 추가할 수 있습니다.");
@@ -52,12 +52,12 @@
 
 				userId = user.id;
 
-				if (productCount === 0) {
+				if (productCnt === 0) {
 					alert("수량이 0일 수 없습니다.");
 					return;
 				}
 
-				if (productCount > limitCount) {
+				if (productCnt > limitCount) {
 					alert("재고가 없습니다.")
 					return;
 				}
@@ -65,7 +65,7 @@
 				var data = {
 					"userId"       : userId,
 					"productId"    : [[${productId}]],
-					"productCnt" : productCount
+					"productCnt" : productCnt
 				}
 
 				$.ajax({
@@ -308,10 +308,8 @@
 								</div>
 								<div class="price detail-product-price">
 									<!--<del><span class="real-price amount">$165.00</span></del> -->
-									<ins><span class="sale-price amount">$160.00</span></ins>
+									<!--<ins><span class="sale-price amount">$160.00</span></ins>-->
 								</div>
-								<div class="category"><strong>재고:</strong> <span class="limit-count">Product Name</span></div>
-								<div class="category"><strong>구매 수:</strong> <span class="purchase-count">Product Name</span></div>
 								<div class="cart-form-wrapper mt-30">
 									<form enctype="multipart/form-data" method="post" class="cart">
 										<input type="hidden" value="productID" name="add-to-cart">

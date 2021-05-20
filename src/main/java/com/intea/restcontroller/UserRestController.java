@@ -58,7 +58,7 @@ public class UserRestController {
         return ResponseEntity.ok().body("탈퇴가 완료되었습니다.");
     }
 
-/*    @ApiOperation(value = "회원 비밀번호 수정")
+    @ApiOperation(value = "회원 비밀번호 수정")
     @PutMapping("/me/{id}/password")
     public ResponseEntity<String> updatePassword(@PathVariable UUID id,
                                                  @RequestBody @Valid UpdatePasswordRequestDto updatePasswordRequestDto,
@@ -72,5 +72,5 @@ public class UserRestController {
         userService.updatePassword(id, updatePasswordRequestDto);
 
         return ResponseEntity.ok().body("비밀번호 수정이 완료되었습니다.");
-    }*/
+    }
 }

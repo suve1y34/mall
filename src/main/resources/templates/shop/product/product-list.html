@@ -33,6 +33,7 @@
 					}
 
 					productDiv +=
+
 							"<div class='product-thumb'>" +
 							"<img alt='' src='" + element.titleImg + "' class='img-thumbnail'>" +
 							"<div class='overlay'>" +
@@ -45,7 +46,7 @@
 							"</div>" +
 							"</div>" +
 							"<div class='product-details text-center bg-lighter pt-15 pb-10'>" +
-							"<a href='/productDetails?productId=" + element.id + "'><h5 class='product-title mt-0'>" + element.productNm + "</h5></a>" +
+							"<a href='/productDetails?productId=" + element.id + "'><h4 class='product-title mt-0'>" + element.productNm + "</h4></a>" +
 							"<div class='star-rating' title='Rated 3.50 out of 5'><span style='width: " + element.rateAvg + "%;'>3.50</span></div>";
 
 					if (element.disPrice !== 0) {
@@ -213,13 +214,6 @@
 	<!-- Section -->
 	<section>
 		<header class="main">
-			<div class="row-gtr-200">
-				<div class="col-6 col-12-medium">
-					<ul class="actions">
-						<a th:href="@{/admin/pd-regmod}" class="button primary">pd reg</a>
-					</ul>
-				</div>
-			</div>
 		</header>
 		<div class="container mt-30 mb-30 p-30">
 			<div class="col-3">
@@ -240,9 +234,7 @@
 				<div class="row multi-row-clearfix">
 					<div class="col-md-10 col-md-offset-1">
 						<div class="products">
-							<h2>Product List</h2>
 							<p class="product-sort"></p>
-							<hr>
 							<div class="product-list">
 
 							</div>

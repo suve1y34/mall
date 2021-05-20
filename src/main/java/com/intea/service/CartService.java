@@ -61,25 +61,25 @@ public class CartService {
 
     //리스트 뿌리기
     @Transactional
-    public HashMap<String, Object> getCartList(UUID user_id, int page, Pageable pageable) {
+    public HashMap<String, Object> getCartList(UUID userId, int page, Pageable pageable) {
         int realPage = page - 1;
         pageable = PageRequest.of(realPage, 5);
 
-        Page<Cart> cartList = cartRepo.findAllByUserIdAndUseYnOrderByInsertTimeDesc(user_id, 'Y', pageable);
+        Page<Cart> cartList = cartRepo.findAllByUserIdAndUseYnOrderByInsertTimeDesc(userId, 'Y', pageable);
 
         if(cartList.getTotalElements() > 0) {
-            List<CartResponseDto> cartResDTOList = new ArrayList<>();
+            List<CartResponseDto> cartResDtoList = new ArrayList<>();
 
             for(Cart cart : cartList) {
-                cartResDTOList.add(cart.toResponseDto(getDisPrice(cart)));
+                cartResDtoList.add(cart.toResponseDto(getDisPrice(cart)));
             }
 
-            PageImpl<CartResponseDto> cartLists = new PageImpl<>(cartResDTOList, pageable, cartList.getTotalElements());
+            PageImpl<CartResponseDto> cartLists = new PageImpl<>(cartResDtoList, pageable, cartList.getTotalElements());
 
             PagingDto cartPagingDto = new PagingDto();
             cartPagingDto.setPagingInfo(cartLists);
 
-            List<Cart> carts = cartRepo.findAllByUserIdAndUseYnOrderByInsertTimeDesc(user_id, 'Y');
+            List<Cart> carts = cartRepo.findAllByUserIdAndUseYnOrderByInsertTimeDesc(userId, 'Y');
             int chkoutPrice = 0;
             List<Long> cartIdList = new ArrayList<>();
 
