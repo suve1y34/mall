@@ -35,7 +35,6 @@ import java.util.List;
 @Service
 public class ReviewService {
 
-    private final AWSS3Utils awss3Utils;
     private final UserRepository userRepo;
     private final ReviewRepository reviewRepo;
     private final ProductRepository productRepo;
@@ -43,16 +42,6 @@ public class ReviewService {
     public String insReview(Long product_id) {
         Product product = productRepo.findById(product_id).orElseThrow(() -> new NotExistProductException("존재하지 않는 상품입니다."));
         return product.getProductNm();
-    }
-
-    public String uploadReviewImage(MultipartFile file, String dirName) throws IOException {
-        // S3와 연결할 client 얻기
-        AmazonS3 s3Client = awss3Utils.getS3Client();
-
-        // S3에 저장할 파일 경로 얻기
-        String saveFilePath = UploadFileUtils.getSaveFilePath(file, dirName);
-
-        return awss3Utils.putObjectToS3AndGetUrl(s3Client, saveFilePath, file);
     }
 
     @Transactional

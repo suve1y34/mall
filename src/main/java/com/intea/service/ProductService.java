@@ -16,6 +16,7 @@ import com.intea.exception.ProductListException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +36,6 @@ public class ProductService {
 
     private final AWSS3Utils awss3Utils;
     private final ProductRepository productRepository;
-//    private final ZSetOperations<String, Object> zSetOperations;
 
     // 전체 상품 혹은 카테고리로 상품 조회
     public HashMap<String, Object> getProductList(String catCd, String sortCd, int page) throws Exception {
@@ -65,21 +65,6 @@ public class ProductService {
         }
 
         return product.toResponseDTO(disPrice);
-    }
-
-    /**
-     * 최신 상위 8개 상품 조회
-     */
-    public List<ProductResponseDto.MainProductResponseDto> getNewProductList() {
-/*        // 레디스 캐시(메모리) I/O
-        Set<Object> result = zSetOperations.reverseRange(NEW8_PRODUCT_LIST_KEY, 0, 7);
-
-        if(isNull(result)) {
-            return null;
-        } else {
-            return result.stream().map(el -> (ProductResponseDto.MainProductResponseDto) el).collect(Collectors.toList());
-        }*/
-        return null;
     }
 
     public HashMap<String, Object> getAdminProductList(int page) {
@@ -287,16 +272,16 @@ public class ProductService {
 
         switch (sortCd) {
             case "new":
-                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "insert_time"));
+                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "insertTime"));
                 break;
             case "highPrice":
-                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "price", "insert_time"));
+                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "price", "insertTime"));
                 break;
             case "lowPrice":
-                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.ASC, "price", "insert_time"));
+                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.ASC, "price", "insertTime"));
                 break;
             case "highSell":
-                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "purchase_cnt", "insert_time"));
+                pageable = PageRequest.of(realPage, 9, new Sort(Sort.Direction.DESC, "purchaseCnt", "insertTime"));
                 break;
             default:
                 throw new NoValidProductSortException("유효하지 않은 상품 정렬입니다.");

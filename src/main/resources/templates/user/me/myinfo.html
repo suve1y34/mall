@@ -250,6 +250,36 @@
 								</div>
 							</div>
 						</form>
+
+						<form name="password-modify-form" th:action="@{/password}">
+							<div class="icon-box mb-0 p-0">
+								<a href="#" class="icon icon-bordered icon-rounded icon-sm pull-left mb-0 mr-10">
+									<i class="fa fa-key"></i>
+								</a>
+								<h4 class="text-gray pt-10 mt-0 mb-30">Change Password</h4>
+							</div>
+							<hr>
+							<p class="text-gray">비밀번호는 영문/숫자/특수문자 조합 8자리~15자리</p>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>기존 비밀번호</label>
+									<input name="oldPassword" data-name="기존 비밀번호" class="form-control password-modify-input" type="password">
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label>새 비밀번호</label>
+									<input name="newPassword" data-name="새 비밀번호" class="form-control password-modify-input" type="password">
+								</div>
+								<div class="form-group col-md-6">
+									<label>새 비밀번호 재입력</label>
+									<input name="rePassword" data-name="비밀번호 확인" class="form-control password-modify-input" type="password">
+								</div>
+							</div>
+							<div class="form-group">
+								<button class="btn btn-success btn-password-modify" type="button">수정</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>

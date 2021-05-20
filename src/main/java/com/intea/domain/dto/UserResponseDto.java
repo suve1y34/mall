@@ -26,6 +26,6 @@ public class UserResponseDto {
     @Builder
     @ToString
     public static class ReviewUserResponseDto {
-        private String userId;
+        private String memId;
     }
 }
