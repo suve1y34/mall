@@ -1,7 +1,5 @@
 package com.intea.config.auth;
 
-import com.intea.handler.CustomLoginFailureHandler;
-import com.intea.handler.CustomLoginSuccessHandler;
 import com.intea.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
@@ -24,43 +25,28 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final CustomUserDetailService customUserDetailService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/user/**"/*, "/shop/order/**", "/user/me/**"*/).hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                .anyRequest().permitAll()
+                .csrf().disable()
+                .headers().frameOptions().disable()
                 .and()
-                    .exceptionHandling()
-                    .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/user/signin"))
-                    //.accessDeniedPage()
+                    .authorizeRequests()
+                    .antMatchers("/user/**", "/shop/order/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                    .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                    .anyRequest().permitAll()
                 .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .loginProcessingUrl("/loginProcess")
-                    .successHandler(successHandler())
-                    .failureHandler(failureHandler())
+                    .logout().logoutSuccessUrl("/").invalidateHttpSession(true)
                 .and()
-                    .logout().logoutUrl("/signout").logoutSuccessUrl("/").invalidateHttpSession(true)
-                .and()
-                    .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
-                    .headers().frameOptions().disable();
+                    .oauth2Login()
+                    .userInfoEndpoint()
+                    .userService(customUserDetailService);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-        return new CustomLoginSuccessHandler("/");
-    }
-
-    @Bean
-    public AuthenticationFailureHandler failureHandler() { return new CustomLoginFailureHandler(); }
-
 }
