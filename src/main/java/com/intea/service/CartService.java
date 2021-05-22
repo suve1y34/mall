@@ -91,7 +91,7 @@ public class CartService {
 
             HashMap<String, Object> resultMap = new HashMap<>();
             resultMap.put("cartList", cartLists);
-            resultMap.put("cartPagingDTO", cartPagingDto);
+            resultMap.put("cartPagingDto", cartPagingDto);
             resultMap.put("chkoutPrice", chkoutPrice);
 
             return resultMap;

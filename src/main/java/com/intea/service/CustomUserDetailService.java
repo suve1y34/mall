@@ -22,7 +22,7 @@ import static java.util.Objects.nonNull;
 public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    // 사용자가 입력한 identifier을 통해 디비에 저장된 유저 객체를 가져와서 UserDetails 객체로 변환하여 돌려주는 메소드
+    // 사용자가 입력한 id를 통해 디비에 저장된 유저 객체를 가져와서 UserDetails 객체로 변환하여 돌려주는 메소드
     @Override
     public UserDetails loadUserByUsername(String memId) throws UsernameNotFoundException {
         User user = userRepository.findByMemId(memId).orElseThrow(()

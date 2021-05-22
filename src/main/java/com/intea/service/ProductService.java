@@ -16,7 +16,6 @@ import com.intea.exception.ProductListException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,46 +62,7 @@ public class ProductService {
         if (product.getProductDisPrcList().size() > 0) {
             disPrice = getDisPrice(product);
         }
-
-        return product.toResponseDTO(disPrice);
-    }
-
-    public HashMap<String, Object> getAdminProductList(int page) {
-        int realPage = page - 1;
-        PageRequest pageable = PageRequest.of(realPage, 10, Sort.by("insertTime")/*new Sort(Sort.Direction.DESC, "insertTime")*/);
-
-        Page<Product> productPage = productRepository.findAll(pageable);
-
-        if (productPage.getTotalElements() > 0) {
-            return getAdminProductListMap(productPage, pageable);
-        }
-
-        return null;
-    }
-
-    // 1차 카테고리 코드와 2차 카테고리 코드로 상품 리스트 조회하기
-    @Transactional
-    public HashMap<String, Object> getProductListByCatCd(int page, String firstCatCd, String secondCatCd) {
-        int realPage = page - 1;
-        PageRequest pageable = PageRequest.of(realPage, 10, Sort.by("insertTime")/*new Sort(Sort.Direction.DESC, "insertTime")*/);
-
-        Page<Product> productPage = null;
-
-        if (firstCatCd.equals("ALL") && secondCatCd.equals("ALL")) {
-            productPage = productRepository.findAll(pageable);
-        } else if (!firstCatCd.equals("ALL") && secondCatCd.equals("ALL")) {
-            productPage = productRepository.findAllByLargeCat(firstCatCd, pageable);
-        } else if (!firstCatCd.equals("ALL")) {
-            productPage = productRepository.findByLargeCatAndSmallCatOrderByInsertTimeDesc(firstCatCd, secondCatCd, pageable);
-        } else {
-            throw new ProductListException("상품 리스트를 가져올 수 없습니다.");
-        }
-
-        if (productPage.getTotalElements() > 0) {
-            return getAdminProductListMap(productPage, pageable);
-        }
-
-        return null;
+        return product.toResponseDto(disPrice);
     }
 
     // 상품 추가
@@ -205,7 +165,7 @@ public class ProductService {
             if (product.getProductDisPrcList().size() > 0) {
                 disPrice = getDisPrice(product);
             }
-            productResponseDtoList.add(product.toResponseDTO(disPrice));
+            productResponseDtoList.add(product.toResponseDto(disPrice));
         }
 
         return productResponseDtoList;
@@ -229,42 +189,6 @@ public class ProductService {
         }
         // 카테고리, 정렬기준으로 상품 조회
         return productRepository.findAllByLargeCat(catCd, pageable);
-    }
-
-    private List<ProductResponseDto.MainProductResponseDto> getMainProductResponseDto(List<Product> products) {
-        List<ProductResponseDto.MainProductResponseDto> productResponseDtoList = new ArrayList<>();
-
-        for (Product product : products) {
-            int disPrice = 0;
-            if (product.getProductDisPrcList().size() > 0) {
-                disPrice = getDisPrice(product);
-            }
-            productResponseDtoList.add(product.toMainProductResDTO(disPrice));
-        }
-
-        return productResponseDtoList;
-    }
-
-    // adminProductListDto 조회 공통
-    private HashMap<String, Object> getAdminProductListMap(Page<Product> productPage, PageRequest pageable) {
-        List<ProductResponseDto.AdminProductResponseDto> productResponseDtoList = new ArrayList<>();
-
-        for (Product product : productPage) {
-            int disPrice = 0;
-            productResponseDtoList.add(product.toAdminProductResDTO(disPrice));
-        }
-
-        PageImpl<ProductResponseDto.AdminProductResponseDto> adminProductResponseDtoPage
-                = new PageImpl<>(productResponseDtoList, pageable, productPage.getTotalElements());
-
-        PagingDto adminProductPagingDto = new PagingDto();
-        adminProductPagingDto.setPagingInfo(adminProductResponseDtoPage);
-
-        HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("adminProductList", adminProductResponseDtoPage);
-        resultMap.put("adminProductPagingDto", adminProductPagingDto);
-
-        return resultMap;
     }
 
     private Pageable getPageable(int realPage, String sortCd) {
@@ -316,22 +240,6 @@ public class ProductService {
 
         // PageImpl 객체를 반환
         return resultMap;
-    }
-
-    private ProductResponseDto.SaleProductResponseDto mapToDto(Map<String, Object> map) {
-
-        Product saleProduct = (Product) map.get("product");
-        Integer disPrice = (Integer) map.get("disPrc");
-
-        return ProductResponseDto.SaleProductResponseDto.builder()
-                .productId(saleProduct.getId())
-                .productNm(saleProduct.getProductNm())
-                .price(saleProduct.getPrice())
-                .titleImg(saleProduct.getTitleImg())
-                .rateAvg(saleProduct.getRateAvg())
-                .disPrice(disPrice)
-                .salePrice((int)((((float) 100 - (float) disPrice) / (float)100) * saleProduct.getPrice()))
-                .build();
     }
 
     public String uploadProductImage(MultipartFile file, String dirName) throws IOException {

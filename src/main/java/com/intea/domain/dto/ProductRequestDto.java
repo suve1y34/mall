@@ -44,7 +44,7 @@ public class ProductRequestDto {
         @NotBlank(message = "하위 카테고리를 입력해 주세요.")
         private String smallCtCode;
 
-        @NotNull(message = "상품 재고를 이볅해 주세요.")
+        @NotNull(message = "상품 재고를 입력해 주세요.")
         private Integer totalCnt;
     }
 }

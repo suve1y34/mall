@@ -22,13 +22,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public boolean idChk(String id) {
-        if(userRepository.existsByMemId(id)) {
-            throw new IdCheckException("이미 등록된 아이디 입니다.");
-        }
-        return true;
-    }
-
     // 유저 프로필 조회
     public int getProfiles(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));

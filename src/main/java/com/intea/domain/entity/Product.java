@@ -55,7 +55,7 @@ public class Product extends CommonEntity {
     @JsonIgnore
     private List<Review> reviewList;
 
-    public ProductResponseDto toResponseDTO(int disPrice) {
+    public ProductResponseDto toResponseDto(int disPrice) {
         return ProductResponseDto.builder()
                 .id(id)
                 .productNm(productNm)
@@ -68,32 +68,6 @@ public class Product extends CommonEntity {
                 .totalCnt(totalCnt)
                 .status(productStatus)
                 .titleImg(titleImg)
-                .rateAvg(rateAvg)
-                .build();
-    }
-
-    public ProductResponseDto.MainProductResponseDto toMainProductResDTO(int disPrice) {
-        return ProductResponseDto.MainProductResponseDto.builder()
-                .id(id)
-                .productNm(productNm)
-                .titleImg(titleImg)
-                .price(price)
-                .disPrice(disPrice)
-                .salePrice((int)((((float) 100 - (float) disPrice) / (float)100) * price))
-                .timestamp(Timestamp.valueOf(this.getInsertTime()).getTime())
-                .purchaseCnt(purchaseCnt)
-                .build();
-    }
-
-    public ProductResponseDto.AdminProductResponseDto toAdminProductResDTO(int disPrice) {
-        return ProductResponseDto.AdminProductResponseDto.builder()
-                .id(id)
-                .productNm(productNm)
-                .titleImg(titleImg)
-                .price(price)
-                .disPrice(disPrice)
-                .purchaseCnt(purchaseCnt)
-                .totalCnt(totalCnt)
                 .rateAvg(rateAvg)
                 .build();
     }
