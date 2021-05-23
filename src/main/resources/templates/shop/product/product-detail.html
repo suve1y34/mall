@@ -70,7 +70,7 @@
 
 				$.ajax({
 					type : "POST",
-					url  : "/carts",
+					url  : "/cart",
 					contentType : "application/json",
 					data        : JSON.stringify(data),
 					beforeSend  : function (xhr) {
@@ -108,7 +108,7 @@
 					},
 					success : function (data) {
 
-						location.href = "/review?userId=" + userId + "&" + "productId=" + [[${productId}]];
+						location.href = "/review?userId=" + userId + "&productId=" + [[${productId}]];
 					},
 					error   : function (e) {
 						alert(e.responseText);

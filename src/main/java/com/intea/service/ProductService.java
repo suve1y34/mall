@@ -109,6 +109,7 @@ public class ProductService {
             disStartDate = disDateList.get(0);
             disEndDate = disDateList.get(1);
 
+            //두자리가 아니면 앞에 0 붙이기 01~09
             startMonthStr = disStartDate.getMonthValue() < 10 ? "0" + disStartDate.getMonthValue() : "" + disStartDate.getMonthValue();
             startDayStr = disStartDate.getDayOfMonth() < 10 ? "0" + disStartDate.getDayOfMonth() : "" + disStartDate.getDayOfMonth();
             endMonthStr = disEndDate.getMonthValue() < 10 ? "0" + disEndDate.getMonthValue() : "" + disEndDate.getMonthValue();
@@ -157,6 +158,19 @@ public class ProductService {
         return getResultMap(productResponseDtoPage);
     }
 
+    private HashMap<String, Object> getResultMap(PageImpl<ProductResponseDto> products) {
+
+        PagingDto productPagingDto = new PagingDto();
+        productPagingDto.setPagingInfo(products);
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("productList", products);
+        resultMap.put("productPagingDto", productPagingDto);
+
+        // PageImpl 객체를 반환
+        return resultMap;
+    }
+
     private List<ProductResponseDto> getProductResponseDtoList(Page<Product> products) {
         List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
 
@@ -169,6 +183,22 @@ public class ProductService {
         }
 
         return productResponseDtoList;
+    }
+
+    private int getDisPrice(Product product) {
+        List<ProductDisPrice> disPriceList
+                = product.getProductDisPrcList().stream()
+                .filter(productDisPrice -> {
+                    LocalDateTime now = LocalDateTime.now();
+
+                    return now.isAfter(productDisPrice.getStartDate()) && now.isBefore(productDisPrice.getEndDate());
+                }).sorted().limit(1).collect(Collectors.toList());
+
+        if(disPriceList.size() > 0) {
+            return disPriceList.get(0).getDisPrice();
+        }
+
+        return 0;
     }
 
     private Page<Product> getProductsByCategory(String catCd, Pageable pageable) {
@@ -211,35 +241,6 @@ public class ProductService {
                 throw new NoValidProductSortException("유효하지 않은 상품 정렬입니다.");
         }
         return null;
-    }
-
-    private int getDisPrice(Product product) {
-        List<ProductDisPrice> disPriceList
-                = product.getProductDisPrcList().stream()
-                .filter(productDisPrice -> {
-                    LocalDateTime now = LocalDateTime.now();
-
-                    return now.isAfter(productDisPrice.getStartDate()) && now.isBefore(productDisPrice.getEndDate());
-                }).sorted().limit(1).collect(Collectors.toList());
-
-        if(disPriceList.size() > 0) {
-            return disPriceList.get(0).getDisPrice();
-        }
-
-        return 0;
-    }
-
-    private HashMap<String, Object> getResultMap(PageImpl<ProductResponseDto> products) {
-
-        PagingDto questionPagingDto = new PagingDto();
-        questionPagingDto.setPagingInfo(products);
-
-        HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("productList", products);
-        resultMap.put("productPagingDto", questionPagingDto);
-
-        // PageImpl 객체를 반환
-        return resultMap;
     }
 
     public String uploadProductImage(MultipartFile file, String dirName) throws IOException {
