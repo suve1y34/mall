@@ -1,4 +1,4 @@
-package com.intea.config;
+package com.intea.config.auth.dto;
 
 import com.intea.domain.entity.User;
 import lombok.Getter;

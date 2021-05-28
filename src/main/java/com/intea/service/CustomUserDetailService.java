@@ -1,6 +1,6 @@
 package com.intea.service;
 
-import com.intea.config.SecurityUser;
+import com.intea.config.auth.dto.SecurityUser;
 import com.intea.config.auth.dto.OAuthAttributes;
 import com.intea.config.auth.dto.SessionUser;
 import com.intea.domain.dto.MemberRequestDto;

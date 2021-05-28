@@ -1,4 +1,4 @@
-package com.intea.config.auth;
+package com.intea.config;
 
 import com.intea.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
