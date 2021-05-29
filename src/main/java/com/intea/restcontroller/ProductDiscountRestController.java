@@ -46,7 +46,7 @@ public class ProductDiscountRestController {
     @ApiOperation(value = "상품 할인 삭제 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/discount/{id}")
-    public ResponseEntity<?> deleteProductDiscount(@PathVariable Long id) {
+    public ResponseEntity<?> delProductDiscount(@PathVariable Long id) {
 
         return ResponseEntity.ok().body(productDiscountService.deleteProductDiscount(id));
     }

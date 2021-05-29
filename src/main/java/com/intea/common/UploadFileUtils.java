@@ -9,9 +9,6 @@ import java.util.UUID;
 @Slf4j
 public class UploadFileUtils {
 
-    public static final String PRODUCT_UPLOAD_IMAGE = "product-upload-image";
-    public static final String REVIEW_UPLOAD_IMAGE = "review-upload-image";
-
     // 유일한 파일명 생성
     public static String getSaveFilePath(MultipartFile file, String productUploadImage) {
         String random = UUID.randomUUID().toString();

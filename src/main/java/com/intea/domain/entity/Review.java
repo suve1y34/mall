@@ -31,7 +31,7 @@ public class Review extends CommonEntity {
     private String content;
     private int rate;
 
-    public ReviewResponseDto toResponseDTO() {
+    public ReviewResponseDto toResponseDto() {
         LocalDateTime insertTime = this.getInsertTime();
 
         return ReviewResponseDto.builder()

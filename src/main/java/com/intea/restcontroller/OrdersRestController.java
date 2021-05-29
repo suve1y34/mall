@@ -25,8 +25,8 @@ public class OrdersRestController {
     @ApiOperation(value = "주문 상세")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<?> getOrderDetail(@PathVariable Long order_id) {
-        return ResponseEntity.ok().body(ordersService.getOrderDetails(order_id));
+    public ResponseEntity<?> getOrdersDetail(@PathVariable Long order_id) {
+        return ResponseEntity.ok().body(ordersService.getOrderDetail(order_id));
     }
 
     @ApiOperation(value = "전체 주문 조회")

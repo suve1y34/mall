@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Slf4j @AllArgsConstructor
 @Controller
-public class UserController extends UiUtils {
+public class UserController {
     private final CategoryService categoryService;
     private final UserService userService;
 

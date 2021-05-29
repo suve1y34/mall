@@ -26,7 +26,7 @@ public class ProductController {
     public String productDetail(Model model, @RequestParam("productId") Long id) {
         model.addAttribute("catMapList", categoryService.getCategoryList());
         model.addAttribute("productId", id);
-        return "shop/product/product-list";
+        return "shop/product/product-detail";
     }
 
     @GetMapping("/saleProductList")

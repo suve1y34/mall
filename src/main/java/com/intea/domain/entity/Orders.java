@@ -38,7 +38,7 @@ public class Orders extends CommonEntity {
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<Cart> cartList;
 
-    public OrdersResponseDto toResponseDTO() {
+    public OrdersResponseDto toResponseDto() {
         LocalDateTime insertTime = this.getInsertTime();
 
         return OrdersResponseDto.builder()

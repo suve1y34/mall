@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class OrdersController {
     private final CategoryService categoryService;
 
-    @GetMapping("/shop/new-order")
+    @GetMapping("/shop/order")
     public String getOrders(Model model) {
         model.addAttribute("pageName", "order");
         model.addAttribute("catMapList", categoryService.getCategoryList());
 
-        return "shop/order/new-order";
+        return "shop/order/order-detail";
     }
 }

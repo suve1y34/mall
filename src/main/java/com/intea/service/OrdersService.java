@@ -3,17 +3,13 @@ package com.intea.service;
 import com.intea.domain.dto.OrdersResponseDto;
 import com.intea.domain.dto.PagingDto;
 import com.intea.domain.entity.Orders;
-import com.intea.domain.repository.CartRepository;
 import com.intea.domain.repository.OrdersRepository;
-import com.intea.domain.repository.ProductRepository;
-import com.intea.domain.repository.UserRepository;
 import com.intea.exception.NotExistOrdersException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,14 +21,14 @@ public class OrdersService {
 
     private OrdersRepository ordersRepository;
 
-    public OrdersResponseDto getOrderDetails(Long order_id) {
+    public OrdersResponseDto getOrderDetail(Long order_id) {
 
         Optional<Orders> orderOpt = ordersRepository.findById(order_id);
 
         if (!orderOpt.isPresent())
             throw new NotExistOrdersException("존재하지 않는 주문입니다.");
 
-        return orderOpt.get().toResponseDTO();
+        return orderOpt.get().toResponseDto();
     }
 
     public HashMap<String, Object> getAllOrder(UUID user_id, int page) {
@@ -45,7 +41,7 @@ public class OrdersService {
             List<OrdersResponseDto> productOrderResponseDtoList = new ArrayList<>();
 
             for (Orders productOrder : productOrderPage) {
-                productOrderResponseDtoList.add(productOrder.toResponseDTO());
+                productOrderResponseDtoList.add(productOrder.toResponseDto());
             }
 
             PageImpl<OrdersResponseDto> productOrderResponseDTOs

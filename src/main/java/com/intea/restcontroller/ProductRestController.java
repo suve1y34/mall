@@ -34,18 +34,9 @@ public class ProductRestController {
 
     @ApiOperation(value = "상품 상세")
     @GetMapping("/product/{id}")
-    public ResponseEntity<?> getProductDetails(@PathVariable Long id) {
+    public ResponseEntity<?> getProductDetail(@PathVariable Long id) {
 
         return ResponseEntity.ok().body(productService.getProductDetails(id));
-    }
-
-    // 상품 리스트 조회 (관리자 권한)
-    @ApiOperation(value = "상품 전체 조회 (관리자 권한)")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/productList/{page}")
-    public ResponseEntity<?> getAdminProductList(@PathVariable int page) {
-
-        return ResponseEntity.ok().body(productService.getAdminProductList(page));
     }
 
     // 1차 카테고리 코드와 2차 카테고리 코드로 상품 리스트 조회하기 (관리자 권한)
@@ -53,9 +44,9 @@ public class ProductRestController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/productList/{page}/firstCategory/{firstCatCd}/secondCategory/{secondCatCd}")
     public ResponseEntity<?> getProductListByCatCd(@PathVariable("page") int page, @PathVariable("firstCatCd") String firstCatCd,
-                                                   @PathVariable("secondCatCd") String secondCatCd) {
+                                                   @PathVariable("secondCatCd") String secondCatCd) throws Exception {
 
-        return ResponseEntity.ok().body(productService.getProductListByCatCd(page, firstCatCd, secondCatCd));
+        return ResponseEntity.ok().body(productService.getProductList(firstCatCd,secondCatCd, page));
     }
 
     // 상품 타이틀 이미지 업로드 (관리자 권한)
@@ -86,7 +77,7 @@ public class ProductRestController {
     @ApiOperation(value = "상품 상세 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/product/{id}")
-    public ResponseEntity<?> getAdminProductDetails(@PathVariable Long id) {
+    public ResponseEntity<?> getAdminProductDetail(@PathVariable Long id) {
 
         return ResponseEntity.ok().body(productService.getAdminProductDetails(id));
     }

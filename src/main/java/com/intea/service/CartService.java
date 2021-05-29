@@ -31,19 +31,19 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class CartService {
-    private UserRepository userRepo;
-    private ProductRepository productRepo;
-    private CartRepository cartRepo;
+    private UserRepository userRepository;
+    private ProductRepository productRepository;
+    private CartRepository cartRepository;
 
     //카트담기
     public void getCart(CartRequestDto cartRequestDto) {
-        Optional<User> user = userRepo.findById(cartRequestDto.getUserId());
+        Optional<User> user = userRepository.findById(cartRequestDto.getUserId());
 
         if(!user.isPresent()) {
             throw new NotExistUserException("존재하지 않는 회원입니다.");
         }
 
-        Optional<Product> productOptional = productRepo.findById(cartRequestDto.getProductId());
+        Optional<Product> productOptional = productRepository.findById(cartRequestDto.getProductId());
 
         if(!productOptional.isPresent()) {
             throw new NotExistUserException("존재하지 않는 상품입니다.");
@@ -53,7 +53,7 @@ public class CartService {
 
         if(product.getLimitCnt() < cartRequestDto.getCount()) throw new ProductLimitCountException("재고가 없는 상품입니다.");
 
-        cartRepo.save(Cart.builder()
+        cartRepository.save(Cart.builder()
                 .user(user.get())
                 .product(product)
                 .build());
@@ -65,21 +65,21 @@ public class CartService {
         int realPage = page - 1;
         pageable = PageRequest.of(realPage, 5);
 
-        Page<Cart> cartList = cartRepo.findAllByUserIdAndUseYnOrderByInsertTimeDesc(userId, 'Y', pageable);
+        Page<Cart> cartList = cartRepository.findAllByUserIdAndUseYnOrderByInsertTimeDesc(userId, 'Y', pageable);
 
         if(cartList.getTotalElements() > 0) {
-            List<CartResponseDto> cartResDtoList = new ArrayList<>();
+            List<CartResponseDto> cartResponseDtoList = new ArrayList<>();
 
             for(Cart cart : cartList) {
-                cartResDtoList.add(cart.toResponseDto(getDisPrice(cart)));
+                cartResponseDtoList.add(cart.toResponseDto(getDisPrice(cart)));
             }
 
-            PageImpl<CartResponseDto> cartLists = new PageImpl<>(cartResDtoList, pageable, cartList.getTotalElements());
+            PageImpl<CartResponseDto> cartLists = new PageImpl<>(cartResponseDtoList, pageable, cartList.getTotalElements());
 
             PagingDto cartPagingDto = new PagingDto();
             cartPagingDto.setPagingInfo(cartLists);
 
-            List<Cart> carts = cartRepo.findAllByUserIdAndUseYnOrderByInsertTimeDesc(userId, 'Y');
+            List<Cart> carts = cartRepository.findAllByUserIdAndUseYnOrderByInsertTimeDesc(userId, 'Y');
             int chkoutPrice = 0;
             List<Long> cartIdList = new ArrayList<>();
 
@@ -102,13 +102,13 @@ public class CartService {
     //카트 삭제
     @Transactional
     public void delCart(Long id) {
-        Optional<Cart> cartOpt = cartRepo.findById(id);
+        Optional<Cart> cartOpt = cartRepository.findById(id);
 
         if(!cartOpt.isPresent()) {
             throw new NotExistCartException("존재하지 않는 장바구니 입니다.");
         }
 
-        cartRepo.delete(cartOpt.get());
+        cartRepository.delete(cartOpt.get());
     }
 
     //리뷰 권한 체크
@@ -117,7 +117,7 @@ public class CartService {
         UUID userId = UUID.fromString(paramMap.get("userId").toString());
         Long productId = Long.parseLong(paramMap.get("productId").toString());
 
-        List<Cart> cartList = cartRepo.findAllByUserIdAndProductId(userId, productId);
+        List<Cart> cartList = cartRepository.findAllByUserIdAndProductId(userId, productId);
 
         if (cartList.size() > 0) {
             for (Cart cart : cartList) {
@@ -135,11 +135,11 @@ public class CartService {
         int disPrice = 0;
 
         if(cart.getProduct().getProductDisPrcList().size() > 0) {
-            List<ProductDisPrice> disprcList
+            List<ProductDisPrice> dispriceList
                     = cart.getProduct().getProductDisPrcList().stream().filter(productDisPrice -> LocalDateTime.now().isAfter(productDisPrice.getStartDate())
                     && LocalDateTime.now().isBefore(productDisPrice.getEndDate())).sorted().limit(1).collect(Collectors.toList());
-            if(disprcList.size() > 0) {
-                disPrice = disprcList.get(0).getDisPrice();
+            if(dispriceList.size() > 0) {
+                disPrice = dispriceList.get(0).getDisPrice();
             }
         }
         return disPrice;

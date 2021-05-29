@@ -1,8 +1,5 @@
 package com.intea.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.intea.common.AWSS3Utils;
-import com.intea.common.UploadFileUtils;
 import com.intea.domain.dto.PagingDto;
 import com.intea.domain.dto.ReviewRequestDto;
 import com.intea.domain.dto.ReviewResponseDto;
@@ -22,10 +19,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +66,7 @@ public class ReviewService {
         List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
 
         for (Review review : reviewPage) {
-            reviewResponseDtoList.add(review.toResponseDTO());
+            reviewResponseDtoList.add(review.toResponseDto());
         }
 
         PageImpl<ReviewResponseDto> reviewResponseDtos

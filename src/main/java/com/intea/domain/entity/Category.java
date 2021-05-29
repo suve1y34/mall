@@ -26,7 +26,7 @@ public class Category {
     private Character useYn;
     private String cnntUrl;
 
-    public CategoryResponseDto.SmallCategory toSmallCategoryDTO() {
+    public CategoryResponseDto.SmallCategory toSmallCategoryDto() {
         return CategoryResponseDto.SmallCategory.builder()
                 .id(id)
                 .catCode(catCode)
