@@ -191,7 +191,7 @@
 
 				var IMP = window.IMP; // 생략가능
 				IMP.init('imp33593557');
-dd
+
 				IMP.request_pay({
 					pg : 'kakaopay',
 					pay_method : 'card',
@@ -249,37 +249,6 @@ dd
 					}
 				});
 			},
-			remainingFn   : function() {
-				// 댓글 사이즈 제한하기
-				$(".remaining").each(function() {
-					// count 정보 및 count 정보와 관련된 textarea/input 요소를 찾아내서 변수에 저장한다.
-					var $count = $(".count", this);
-					var $input = $(this).prev();
-					// .text()가 문자열을 반환하기에 이 문자를 숫자로 만들기 위해 1을 곱한다.
-					var maximumCount = $count.text() * 1;
-					// update 함수는 keyup, paste, input 이벤트에서 호출한다.
-					var update = function() {
-						var before = $count.text() * 1;
-						var now = maximumCount - $input.val().length;
-						// 사용자가 입력한 값이 제한 값을 초과하는지를 검사한다.
-						if (now < 0) {
-							var str = $input.val();
-							alert("글자 입력수가 초과하였습니다.");
-							$input.val(str.substr(0, maximumCount));
-							now = 0;
-						}
-						// 필요한 경우 DOM을 수정한다.
-						if (before !== now) {
-							$count.text(now);
-						}
-					};
-					// input, keyup, paste 이벤트와 update 함수를 바인드한다
-					$input.bind("input keyup paste", function() {
-						setTimeout(update, 0)
-					});
-					update();
-				});
-			}
 		}
 
 		var cartListEventObj = {
@@ -293,48 +262,6 @@ dd
 				} else {
 					$(".addressDiv input").val("");
 				}
-			},
-			savingsUseFn    : function () {
-				var $savingsTarget = $("#savings"),
-						savings = $savingsTarget.val(),
-						userSavings = Number($("#checkout-price").text().substring(7).split("원")[0]),
-						$userSavingsTarget = $(".savings p.user-saving");
-
-				if (savings === "") {
-					alert("적립금으로 사용하실 금액을 적어주세요.");
-					return;
-				}
-				if (savings > Number($userSavingsTarget.text().split("원")[0])) {
-					alert("보유중인 적립금보다 많은 적립금을 사용할 수 없습니다.");
-					return;
-				}
-				if (userSavings < 5000) {
-					alert("5000원 이상 결제 시 적립금 사용이 가능합니다.")
-					return;
-				}
-
-				$savingsTarget.attr("disabled", true);
-
-				var remainSavings = Number($userSavingsTarget.text().split("원")[0]) - Number(savings);
-
-				$userSavingsTarget.text(remainSavings + "원 보유 (5000원 이상 결제 시 사용가능)");
-
-				checkoutData.amount = userSavings - Number(savings);
-				$("#checkout-price").text("결제금액 : " + checkoutData.amount + "원");
-
-				checkoutData.useSaving = savings;
-			},
-			savingsCancelFn : function () {
-				var $savingsTarget = $("#savings");
-
-				$savingsTarget.val("");
-				$(".savings p.user-savings").text(checkoutData.userSaving + "원 보유 (5000원 이상 결제 시 사용가능)");
-				$savingsTarget.removeAttr("disabled");
-
-				checkoutData.amount += Number(checkoutData.useSaving);
-				$("#checkout-price").text("결제금액 : " + checkoutData.amount + "원");
-
-				checkoutData.useSaving = 0;
 			}
 		}
 
